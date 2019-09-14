@@ -1,0 +1,78 @@
+ext {
+
+    isApplication = false  //false:作为Lib组件存在， true:作为application存在，这个不建议改
+    isFingerApplication = false  //指静脉模块开关，false:作为Lib组件存在， true:作为application存在
+    isFaceApplication = false  //人脸模块开关，false:作为Lib组件存在， true:作为application存在
+    isIDCardApplication = false  //身份证验证模块开关，false:作为Lib组件存在， true:作为application存在
+    isPWApplication = false//密码验证模块开关，false:作为Lib组件存在， true:作为application存在
+    isDAOApplication = false  //数据存储模块开关，false:作为Lib组件存在， true:作为application存在
+
+    android = [
+            compileSdkVersion: 28,
+            buildToolsVersion: '28.0.3',
+            minSdkVersion    : 17,
+            targetSdkVersion : 27,
+            versionCode      : 1,
+            versionName      : '1.0'
+    ]
+
+    version = [
+            androidSupportSdkVersion: "28.0.0",
+            multidexVersion         : "1.0.2",
+            constaint               : "1.1.0",
+            greendao                : "3.2.2",
+            appJointCore            : "1.7",
+            router                  : "1.4.1",
+            routerCompile           : "1.2.2",
+            glide                   : "4.9.0",
+            eventbus                : "3.0.0",
+            retrofit2               : "2.4.0",
+            gson                    : "2.8.5",
+            rxandroid               : "2.1.0",
+            rxjava                  : "2.2.2",
+            converterGson           : "2.4.0",
+            adapterRxJava2          : "2.4.0",
+            rxlifecycle             : "2.1.0",
+            okhttp3Version          : "1.5.0",
+            androidPickerView       : "4.1.8"
+    ]
+
+    dependencies = [
+            //support
+            "appcompat-v7"          : "com.android.support:appcompat-v7:${version["androidSupportSdkVersion"]}",
+            "design"                : "com.android.support:design:${version["androidSupportSdkVersion"]}",
+            "multidex"              : "com.android.support:multidex:${version["multidexVersion"]}",
+            "constaint"             : "com.android.support.constraint:constraint-layout:${version["constaint"]}",
+            "percent"               : "com.android.support:percent:${version["androidSupportSdkVersion"]}",
+            "dynamic"               : "com.android.support:support-dynamic-animation:${version["androidSupportSdkVersion"]}",
+            "annotations"           : "com.android.support:support-annotations:${version["androidSupportSdkVersion"]}",
+
+            //greenDao
+            "greendao"              : "org.greenrobot:greendao:${version["greendao"]}",
+            "debug-db"              : "com.amitshekhar.android:debug-db:1.0.0",
+            //ARouter
+            "router"                : "com.alibaba:arouter-api:${version["router"]}",
+            "router-compiler"       : "com.alibaba:arouter-compiler:${version["routerCompile"]}",
+            //glide
+            "glide"                 : "com.github.bumptech.glide:glide:${version["glide"]}",
+            "glide-compiler"        : "com.github.bumptech.glide:compiler:${version["glide"]}",
+            "glide-transformations" : "jp.wasabeef:glide-transformations:3.3.0",
+            //tool
+            "eventbus"              : "org.greenrobot:eventbus:${version["eventbus"]}",
+            "androidPickerView"     : "com.contrarywind:Android-PickerView:${version["androidPickerView"]}",
+            "logger"                : "com.orhanobut:logger:1.15",
+            //RxJava
+            "rxandroid"             : "io.reactivex.rxjava2:rxandroid:${version["rxandroid"]}",
+            "rxjava"                : "io.reactivex.rxjava2:rxjava:${version["rxjava"]}",
+            "converterGson"         : "com.squareup.retrofit2:converter-gson:${version["converterGson"]}",
+            "adapterRxJava2"        : "com.squareup.retrofit2:adapter-rxjava2:${version["adapterRxJava2"]}",
+            "loggingInterceptor"    : "com.squareup.okhttp3:logging-interceptor:3.8.1",
+            //Retrofit
+            "retrofit2"             : "com.squareup.retrofit2:retrofit:${version["retrofit2"]}",
+            "gson"                  : "com.google.code.gson:gson:${version["gson"]}",
+            "rxlifecycle"           : "com.trello.rxlifecycle2:rxlifecycle:${version["rxlifecycle"]}",
+            "rxlifecycle-android"   : "com.trello.rxlifecycle2:rxlifecycle-android:${version["rxlifecycle"]}",
+            "rxlifecycle-components": "com.trello.rxlifecycle2:rxlifecycle-components:${version["rxlifecycle"]}",
+            "stetho-okhttp3"        : "com.facebook.stetho:stetho-okhttp3:${version["okhttp3Version"]}"
+    ]
+}
