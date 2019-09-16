@@ -17,7 +17,7 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        if (rootProject.ext.isApplication) {
+        if (rootProject.ext.isFingerApplication) {
             applicationId "com.finger"
         }
         //如果是集成模式下，则设置ARouter的配置，用于组件间通信的实现

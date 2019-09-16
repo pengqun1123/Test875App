@@ -1,9 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.pw">
 
-    <application  android:allowBackup="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon">
+    <application>
         <activity android:name=".activity.PWActivity" />
     </application>
 </manifest>

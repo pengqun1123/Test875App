@@ -2,9 +2,12 @@
 apply from: "test.gradle"
 
 buildscript {
-        repositories {
+    repositories {
         google()
         jcenter()
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
         mavenCentral() // add repository
     }
     dependencies {
@@ -20,6 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 

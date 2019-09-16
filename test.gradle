@@ -2,7 +2,7 @@ ext {
 
     isApplication = false  //false:作为Lib组件存在， true:作为application存在，这个不建议改
     isFingerApplication = false  //指静脉模块开关，false:作为Lib组件存在， true:作为application存在
-    isFaceApplication = false  //人脸模块开关，false:作为Lib组件存在， true:作为application存在
+    isFaceApplication = false//人脸模块开关，false:作为Lib组件存在， true:作为application存在
     isIDCardApplication = false  //身份证验证模块开关，false:作为Lib组件存在， true:作为application存在
     isPWApplication = false//密码验证模块开关，false:作为Lib组件存在， true:作为application存在
     isDAOApplication = false  //数据存储模块开关，false:作为Lib组件存在， true:作为application存在
@@ -61,6 +61,7 @@ ext {
             "eventbus"              : "org.greenrobot:eventbus:${version["eventbus"]}",
             "androidPickerView"     : "com.contrarywind:Android-PickerView:${version["androidPickerView"]}",
             "logger"                : "com.orhanobut:logger:1.15",
+            "imageWatcher"          : "com.github.iielse:ImageWatcher:1.1.5",
             //RxJava
             "rxandroid"             : "io.reactivex.rxjava2:rxandroid:${version["rxandroid"]}",
             "rxjava"                : "io.reactivex.rxjava2:rxjava:${version["rxjava"]}",

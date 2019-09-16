@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.id_card">
+
+    <application>
+        <activity android:name=".activity.IDCardActivity"/>
+    </application>
+</manifest>

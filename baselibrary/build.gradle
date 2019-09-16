@@ -111,6 +111,7 @@ dependencies {
     api rootProject.ext.dependencies["gson"]
     api rootProject.ext.dependencies["glide"]
     api rootProject.ext.dependencies["logger"]
+    api rootProject.ext.dependencies["imageWatcher"]
     //依赖去重
     api(rootProject.ext.dependencies["glide-transformations"]) {
         exclude module: 'glide'

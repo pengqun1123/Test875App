@@ -1,1 +1,1 @@
-include ':app', ':finger', ':baselibrary', ':pw'
+include ':app', ':finger', ':baselibrary', ':pw', ':idcard', ':face'
