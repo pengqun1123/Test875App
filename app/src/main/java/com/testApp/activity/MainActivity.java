@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Button skipFrag = findViewById(R.id.skipFrag);
 
         skipAct.setOnClickListener(view -> {
-                    TestBean testBean = new TestBean("小哥", 24);
+                    TestBean testBean = new TestBean("小", 24);
                     ARouter.getInstance().build(ARouterConstrant.FINGER_ACTIVITY
                             , ARouterConstrant.GROUP_FINGER)
                             .withString("Address", "杭州市西湖区昌接任大姐")
