@@ -1,7 +1,7 @@
 ext {
 
     isApplication = false  //false:作为Lib组件存在， true:作为application存在，这个不建议改
-    isFingerApplication = false  //指静脉模块开关，false:作为Lib组件存在， true:作为application存在
+    isFingerApplication = true  //指静脉模块开关，false:作为Lib组件存在， true:作为application存在
     isFaceApplication = false//人脸模块开关，false:作为Lib组件存在， true:作为application存在
     isIDCardApplication = true  //身份证验证模块开关，false:作为Lib组件存在， true:作为application存在
     isPWApplication = false//密码验证模块开关，false:作为Lib组件存在， true:作为application存在

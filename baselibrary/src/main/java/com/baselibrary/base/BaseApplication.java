@@ -15,15 +15,22 @@ import com.orhanobut.logger.Logger;
  */
 public class BaseApplication extends Application {
 
+    private static DBUtil dbUtil;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Logger.init("UE875==>: ");
         //初始化数据库
-        DBUtil.instance().initDB(this);
+        dbUtil = DBUtil.getInstance(this);
+//        DBUtil.instance().initDB(this);
         //APP的相关配置初始化
         AppConfig.INSTANCE.initConfig(this);
         //
+    }
+
+    public static DBUtil getDbUtil(){
+        return dbUtil;
     }
 
     @Override
@@ -39,7 +46,7 @@ public class BaseApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         ARouterUtil.destroyARouter();
-        DBUtil.instance().closeData();
+        DBUtil.getInstance(this).closeData();
     }
 
     /**

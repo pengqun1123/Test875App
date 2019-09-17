@@ -158,6 +158,7 @@ android {
 }
 
 dependencies {
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation('com.alibaba.android:vlayout:1.2.2@aar') {
         transitive = true
