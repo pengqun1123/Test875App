@@ -17,4 +17,7 @@ public class ARouterConstrant {
 
     public static final String PW_METHOD = "/method/pw_test";
 
+    //idcard 模块相关的方法
+    public static final String Service_IdCard="/idcard/service";
+
 }

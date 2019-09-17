@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.id_card">
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/id_card_ic_launcher"
@@ -10,8 +11,8 @@
         android:roundIcon="@mipmap/id_card_ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/id_card_AppTheme"
-        tools:replace="android:theme,label"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:theme,label">
         <activity android:name=".activity.IDCardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

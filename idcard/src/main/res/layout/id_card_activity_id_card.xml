@@ -2,15 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
+    <TextView android:text="Hello World!"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="IDCardActivity"
-        android:textSize="16sp"
-        android:textColor="@color/colorAccent"
-        android:textStyle="italic|bold" />
+        android:id="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open"
+        android:id="@+id/button"
+        android:onClick="OnBnOpen" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:id="@+id/button2"
+        android:onClick="OnBnClose" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAMID"
+        android:id="@+id/button3"
+        android:onClick="OnBnGetSamID" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UID"
+        android:id="@+id/button5"
+        android:onClick="OnBnUID" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read"
+        android:id="@+id/button6"
+        android:onClick="OnBnRead" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+       />
 </LinearLayout>
