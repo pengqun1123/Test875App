@@ -1,18 +1,27 @@
 package com.id_card.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.baselibrary.pojo.IdCard;
 import com.id_card.R;
+import com.id_card.service.IdCardService;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -44,10 +53,20 @@ public class IDCardActivity extends AppCompatActivity {
     private final String idSerialName = "/dev/ttyUSB0";
     private final int idBaudrate = 115200;
 
+    private static final int ACTION_REQUEST_PERMISSIONS = 0x001;
+    /**
+     * 所需的所有权限信息
+     */
+    private static final String[] NEEDED_PERMISSIONS = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+    };
     private IDCardReader idCardReader = null;
     private TextView textView = null;
     private ImageView imageView = null;
     private boolean bopen = false;
+    private IdCardService instance;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +74,28 @@ public class IDCardActivity extends AppCompatActivity {
         setContentView(R.layout.id_card_activity_id_card);
         textView = (TextView) findViewById(R.id.textView);
         imageView = (ImageView)findViewById(R.id.imageView);
-        startIDCardReader();
+        if (!checkPermissions(NEEDED_PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
+        }else {
+            instance = IdCardService.getInstance(this);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == ACTION_REQUEST_PERMISSIONS) {
+            boolean isAllGranted = true;
+            for (int grantResult : grantResults) {
+                isAllGranted &= (grantResult == PackageManager.PERMISSION_GRANTED);
+            }
+            if (isAllGranted) {
+               startIDCardReader();
+            } else {
+                Toast.makeText(this, R.string.id_card_permission_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void startIDCardReader() {
@@ -107,6 +147,17 @@ public class IDCardActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkPermissions(String[] neededPermissions) {
+        if (neededPermissions == null || neededPermissions.length == 0) {
+            return true;
+        }
+        boolean allGranted = true;
+        for (String neededPermission : neededPermissions) {
+            allGranted &= ContextCompat.checkSelfPermission(this, neededPermission) == PackageManager.PERMISSION_GRANTED;
+        }
+        return allGranted;
+    }
+
     public void OnBnClose(View view)
     {
         try {
@@ -142,25 +193,31 @@ public class IDCardActivity extends AppCompatActivity {
 
     public void OnBnUID(View view)
     {
-        try {
-            if (!bopen) {
-                textView.setText("请先连接设备");
-            }
-            byte mode = (byte)0x52;//寻卡模式 0x52一次可以操作多张卡，0x26一次只对一张卡操作
-            byte halt = (byte)0x01;//0x00不需要执行halt命令，0x01读写器执行halt命令
-            byte[] physicalCardNum = new byte[1024];//读出的数据
-            boolean ret=  idCardReader.MF_GET_NIDCardNum(index, mode, halt, physicalCardNum);
-            if (ret) {
-                byte[] NIDCardNum = new byte[8];
-                System.arraycopy(physicalCardNum, 0, NIDCardNum, 0, 8);
-                textView.setText("UID:"+ ToolUtils.bytesToHexString(NIDCardNum));
-            }
-        }
-        catch (IDCardReaderException e)
-        {
+        String uCardNum = instance.getUCardNum();
+        if (uCardNum!=null){
+            textView.setText(uCardNum);
+        }else{
             textView.setText("获取身份证物理卡号失败");
-            LogHelper.d("获取身份证物理卡号失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
         }
+//        try {
+//            if (!bopen) {
+//                textView.setText("请先连接设备");
+//            }
+//            byte mode = (byte)0x52;//寻卡模式 0x52一次可以操作多张卡，0x26一次只对一张卡操作
+//            byte halt = (byte)0x01;//0x00不需要执行halt命令，0x01读写器执行halt命令
+//            byte[] physicalCardNum = new byte[1024];//读出的数据
+//            boolean ret=  idCardReader.MF_GET_NIDCardNum(index, mode, halt, physicalCardNum);
+//            if (ret) {
+//                byte[] NIDCardNum = new byte[8];
+//                System.arraycopy(physicalCardNum, 0, NIDCardNum, 0, 8);
+//                textView.setText("UID:"+ ToolUtils.bytesToHexString(NIDCardNum));
+//            }
+//        }
+//        catch (IDCardReaderException e)
+//        {
+//            textView.setText("获取身份证物理卡号失败");
+//            LogHelper.d("获取身份证物理卡号失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
+//        }
     }
 
     private void showMessage(String string)
@@ -203,70 +260,82 @@ public class IDCardActivity extends AppCompatActivity {
 
     public void OnBnRead(View view)
     {
-        try {
-            if (!bopen) {
-                textView.setText("请先连接设备");
-            }
-
-            long nTickStart = System.currentTimeMillis();
-            Authenticate();
-            int ret = idCardReader.readCardEx(0, 1);
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
+        IdCard cardInfo = instance.getCardInfo();
+        if (cardInfo!=null) {
+            textView.setText("姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，,身份证号：" + cardInfo.getId());
+            imageView.setImageBitmap(instance.getBitmap());
+        }else {
+            textView.setText("获取信息失败!");
+        }
+//        try {
+//            if (!bopen) {
+//                textView.setText("请先连接设备");
+//            }
 //
+//            long nTickStart = System.currentTimeMillis();
+//            Authenticate();
+//            int ret = idCardReader.readCardEx(0, 1);
+////            new Thread(new Runnable() {
+////                @Override
+////                public void run() {
+////
+////                }
+////            });
+//
+//            long nTickRead = System.currentTimeMillis();
+//            if (1 == ret)
+//            {
+//                IDCardInfo idCardInfo = idCardReader.getLastIDCardInfo();
+//                textView.setText("timeSet:"+ (nTickRead-nTickStart) + "姓名：" + idCardInfo.getName() + "，民族：" + idCardInfo.getNation() + "，住址：" + idCardInfo.getAddress() + ",身份证号：" + idCardInfo.getId());
+//                if (idCardInfo.getPhotolength() > 0){
+//                    byte[] buf = new byte[WLTService.imgLength];
+//                    nTickStart = System.currentTimeMillis();
+//                    if(1 == WLTService.wlt2Bmp(idCardInfo.getPhoto(), buf))
+//                    {
+//                        System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
+//                        Bitmap bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
+//                        int byteCount = bitmap.getByteCount();
+//                        Log.d("===byte",byteCount+"");
+//                        imageView.setImageBitmap(bitmap);
+//                        try {
+//                            String s = Environment.getExternalStorageDirectory() + "/idcard/";
+//                            File file = new File(s,"ttt.jpg");
+//                            if (!file.exists()){
+//                                file.getParentFile().mkdirs();
+//                                file.createNewFile();
+//                            }
+//                            FileOutputStream out =new FileOutputStream(file);
+//                            out.write(buf);
+//                           // bitmap.compress(Bitmap.CompressFormat.JPEG,100,buf);
+//                            out.flush();
+//                            out.close();
+//                            Log.d("===","保存成功！");
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
 //                }
-//            });
-
-            long nTickRead = System.currentTimeMillis();
-            if (1 == ret)
-            {
-                IDCardInfo idCardInfo = idCardReader.getLastIDCardInfo();
-                textView.setText("timeSet:"+ (nTickRead-nTickStart) + "姓名：" + idCardInfo.getName() + "，民族：" + idCardInfo.getNation() + "，住址：" + idCardInfo.getAddress() + ",身份证号：" + idCardInfo.getId());
-                if (idCardInfo.getPhotolength() > 0){
-                    byte[] buf = new byte[WLTService.imgLength];
-                    nTickStart = System.currentTimeMillis();
-                    if(1 == WLTService.wlt2Bmp(idCardInfo.getPhoto(), buf))
-                    {
-                        System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
-                        imageView.setImageBitmap(IDPhotoHelper.Bgr2Bitmap(buf));
-                        String s = Environment.getExternalStorageDirectory() + "/idcard/";
-                        File file = new File(s,nTickRead+".jpg");
-                        if (!file.exists()){
-                            file.mkdirs();
-                        }
-                        try {
-                            FileOutputStream out =new FileOutputStream(file);
-                            out.write(buf);
-                            out.flush();
-                            out.close();
-                            Log.d("===","保存成功！");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-            else if (2 == ret)
-            {
-                IDPRPCardInfo idprpCardInfo = idCardReader.getLastPRPIDCardInfo();
-                textView.setText("timeSet:"+ (nTickRead-nTickStart) + "英文名：" + idprpCardInfo.getEnName() + "，中文名：" + idprpCardInfo.getCnName() +
-                        "，国家：" + idprpCardInfo.getCountry() +  ",证件号：" + idprpCardInfo.getId());
-                if (idprpCardInfo.getPhotolength() > 0){
-                    byte[] buf = new byte[WLTService.imgLength];
-                    nTickStart = System.currentTimeMillis();
-                    if(1 == WLTService.wlt2Bmp(idprpCardInfo.getPhoto(), buf))
-                    {
-                        System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
-                        imageView.setImageBitmap(IDPhotoHelper.Bgr2Bitmap(buf));
-                    }
-                }
-            }
-        }
-        catch (IDCardReaderException e)
-        {
-            textView.setText("读卡失败");
-            LogHelper.d("读卡失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
-        }
+//            }
+//            else if (2 == ret)
+//            {
+//                IDPRPCardInfo idprpCardInfo = idCardReader.getLastPRPIDCardInfo();
+//                textView.setText("timeSet:"+ (nTickRead-nTickStart) + "英文名：" + idprpCardInfo.getEnName() + "，中文名：" + idprpCardInfo.getCnName() +
+//                        "，国家：" + idprpCardInfo.getCountry() +  ",证件号：" + idprpCardInfo.getId());
+//                if (idprpCardInfo.getPhotolength() > 0){
+//                    byte[] buf = new byte[WLTService.imgLength];
+//                    nTickStart = System.currentTimeMillis();
+//                    if(1 == WLTService.wlt2Bmp(idprpCardInfo.getPhoto(), buf))
+//                    {
+//                        System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
+//                        imageView.setImageBitmap(IDPhotoHelper.Bgr2Bitmap(buf));
+//                    }
+//                }
+//            }
+//        }
+//        catch (IDCardReaderException e)
+//        {
+//            textView.setText("读卡失败");
+//            LogHelper.d("读卡失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
+//        }
     }
 }

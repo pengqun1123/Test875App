@@ -1,3 +1,4 @@
 <resources>
     <string name="id_card_app_name">id_card</string>
+    <string name="id_card_permission_denied">权限被拒绝！</string>
 </resources>
