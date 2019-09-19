@@ -1,13 +1,16 @@
 package com.id_card.service;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
-
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.baselibrary.ARouter.ARouterConstrant;
 import com.baselibrary.pojo.IdCard;
+import com.id_card.callback.CardInfoListener;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
@@ -20,10 +23,17 @@ import com.zkteco.android.biometric.module.idcard.exception.IDCardReaderExceptio
 import com.zkteco.android.biometric.module.idcard.meta.IDCardInfo;
 import com.zkteco.android.biometric.module.idcard.meta.IDPRPCardInfo;
 
-import org.greenrobot.greendao.annotation.Id;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by wangyu on 2019/9/17.
@@ -43,10 +53,15 @@ public class IdCardService {
     private Context mContext;
     private IDCardReader idCardReader;
     private Bitmap bitmap;
+    private HandlerThread handlerThread;
+    private Handler mHandler;
+
+    private int GET_CardInfo=0x001;
 
     private IdCardService(Context context) {
         this.mContext=context;
         startIDCardReader();
+        initHandler();
     }
 
     public static IdCardService  getInstance(Context context){
@@ -61,60 +76,109 @@ public class IdCardService {
        }
 
        //获取身份证信息
-       public IdCard getCardInfo(){
+       public void getCardInfo(ObservableEmitter<IdCard> emitter){
            IdCard idCard =null;
            try {
                if (idCardReader == null) {
                    startIDCardReader();
                }
                if (!bopen) {
-                   idCardReader.open(0);
+                   try {
+                       idCardReader.open(0);
+                   } catch (IDCardReaderException e) {
+                       e.printStackTrace();
+                   }
                    bopen=true;
                }
+
                long nTickStart = System.currentTimeMillis();
-               Authenticate();
-               int ret = idCardReader.readCardEx(0, 1);
-               long nTickRead = System.currentTimeMillis();
-               if (1 == ret) {
-                   IDCardInfo idCardInfo = idCardReader.getLastIDCardInfo();
-                   idCard=new IdCard();
-                   idCard.setName(idCardInfo.getName());
-                   idCard.setId(idCardInfo.getId());
-                   idCard.setNation(idCardInfo.getNation());
-                   idCard.setSex(idCardInfo.getSex());
-                   idCard.setBirthday(idCardInfo.getBirth());
-                   if (idCardInfo.getPhotolength() > 0) {
-                       byte[] buf = new byte[WLTService.imgLength];
-                       nTickStart = System.currentTimeMillis();
-                       if (1 == WLTService.wlt2Bmp(idCardInfo.getPhoto(), buf)) {
-                           System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
-                           bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
+               boolean card = idCardReader.findCard(0);
+               Log.d("===c",card+"");
+               if (card) {
+                   idCardReader.selectCard(0);
+                   int ret = idCardReader.readCardEx(0, 1);
+                   long nTickRead = System.currentTimeMillis();
+                   if (1 == ret) {
+                       IDCardInfo idCardInfo = idCardReader.getLastIDCardInfo();
+                       idCard = new IdCard();
+                       idCard.setName(idCardInfo.getName());
+                       idCard.setId(idCardInfo.getId());
+                       idCard.setNation(idCardInfo.getNation());
+                       idCard.setSex(idCardInfo.getSex());
+                       idCard.setBirthday(idCardInfo.getBirth());
+                       if (idCardInfo.getPhotolength() > 0) {
+                           byte[] buf = new byte[WLTService.imgLength];
+                           nTickStart = System.currentTimeMillis();
+                           if (1 == WLTService.wlt2Bmp(idCardInfo.getPhoto(), buf)) {
+                               System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
+                               bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
+                           }
                        }
-                   }
-               }else if (2 == ret) {
-                   idCard=new IdCard();
-                   IDPRPCardInfo idprpCardInfo = idCardReader.getLastPRPIDCardInfo();
-                   idCard.setName(idprpCardInfo.getCnName());
-                   idCard.setId(idprpCardInfo.getId());
-                   idCard.setNation(idprpCardInfo.getCountry());
-                   idCard.setSex(idprpCardInfo.getSex());
-                   idCard.setBirthday(idprpCardInfo.getBirth());
-                   if (idprpCardInfo.getPhotolength() > 0) {
-                       byte[] buf = new byte[WLTService.imgLength];
-                       nTickStart = System.currentTimeMillis();
-                       if (1 == WLTService.wlt2Bmp(idprpCardInfo.getPhoto(), buf)) {
-                           System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
-                           bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
+                       emitter.onNext(idCard);
+
+                   } else if (2 == ret) {
+                       idCard = new IdCard();
+                       IDPRPCardInfo idprpCardInfo = idCardReader.getLastPRPIDCardInfo();
+                       idCard.setName(idprpCardInfo.getCnName());
+                       idCard.setId(idprpCardInfo.getId());
+                       idCard.setNation(idprpCardInfo.getCountry());
+                       idCard.setSex(idprpCardInfo.getSex());
+                       idCard.setBirthday(idprpCardInfo.getBirth());
+                       if (idprpCardInfo.getPhotolength() > 0) {
+                           byte[] buf = new byte[WLTService.imgLength];
+                           nTickStart = System.currentTimeMillis();
+                           if (1 == WLTService.wlt2Bmp(idprpCardInfo.getPhoto(), buf)) {
+                               System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
+                               bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
+                           }
                        }
+                       emitter.onNext(idCard);
                    }
                }
            } catch (Exception e) {
               e.printStackTrace();
             }
-            return idCard;
+
        }
 
+       public void  verify_IdCard(CardInfoListener cardInfoListener){
+           Observable.create(new ObservableOnSubscribe<IdCard>() {
+               @Override
+               public void subscribe(ObservableEmitter<IdCard> emitter) throws Exception {
+                   getCardInfo(emitter);
+               }
+           }) .subscribeOn(Schedulers.computation())
+              .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<IdCard>() {
+               @Override
+               public void onSubscribe(Disposable d) {
 
+               }
+
+               @Override
+               public void onNext(IdCard idCard) {
+                cardInfoListener.onGetCardInfo(idCard);
+               }
+
+               @Override
+               public void onError(Throwable e) {
+
+               }
+
+               @Override
+               public void onComplete() {
+
+               }
+           });
+
+           Message obtain = Message.obtain();
+           obtain.obj=cardInfoListener;
+           obtain.what=GET_CardInfo;
+           mHandler.sendMessageDelayed(obtain,1000);
+       }
+
+       public void redister_IdCard(){
+
+       }
        //获取身份证物理卡号
        public String getUCardNum(){
            String cardNum=null;
@@ -171,6 +235,7 @@ public class IdCardService {
             idCardReader.findCard(0);
             idCardReader.selectCard(0);
         } catch (IDCardReaderException e) {
+            Log.d("===find",e.getMessage());
             e.printStackTrace();
         }
     }
@@ -192,5 +257,21 @@ public class IdCardService {
         idCardReader = IDCardReaderFactory.createIDCardReader(mContext, TransportType.SERIALPORT, idrparams);
     }
 
+    private void initHandler() {
+        handlerThread = new HandlerThread("card");
+        handlerThread.start();
+        mHandler = new Handler(handlerThread.getLooper(), mCallback);
+    }
+
+    Handler.Callback mCallback = new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what==GET_CardInfo){
+                CardInfoListener cardInfoListener= (CardInfoListener) message.obj;
+                verify_IdCard(cardInfoListener);
+            }
+            return false;
+        }
+    };
 
 }

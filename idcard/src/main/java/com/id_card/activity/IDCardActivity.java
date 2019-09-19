@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.baselibrary.pojo.IdCard;
 import com.id_card.R;
+import com.id_card.callback.CardInfoListener;
 import com.id_card.service.IdCardService;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
@@ -229,6 +230,7 @@ public class IDCardActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(
                                     DialogInterface dialoginterface, int i){
+                                dialoginterface.dismiss();
                             }
                         }).show();
     }
@@ -260,13 +262,38 @@ public class IDCardActivity extends AppCompatActivity {
 
     public void OnBnRead(View view)
     {
-        IdCard cardInfo = instance.getCardInfo();
-        if (cardInfo!=null) {
-            textView.setText("姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，,身份证号：" + cardInfo.getId());
-            imageView.setImageBitmap(instance.getBitmap());
-        }else {
-            textView.setText("获取信息失败!");
-        }
+      //  IdCard cardInfo = instance.getCardInfo();
+        instance.verify_IdCard(new CardInfoListener() {
+            @Override
+            public void onGetCardInfo(IdCard cardInfo) {
+                if (cardInfo!=null) {
+                            String s="姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，,身份证号：" + cardInfo.getId();
+                            textView.setText("姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，身份证号：" + cardInfo.getId());
+                            Bitmap bitmap = instance.getBitmap();
+                            imageView.setImageBitmap(bitmap);
+                            showMessage(s);
+                            try {
+                            String path = Environment.getExternalStorageDirectory() + "/idcard/";
+                            File file = new File(path,"4445.jpg");
+                            if (!file.exists()){
+                                file.getParentFile().mkdirs();
+                                file.createNewFile();
+                            }
+                            FileOutputStream out =new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+                            out.flush();
+                            out.close();
+                            Log.d("===","保存成功！");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                }else {
+                    textView.setText("获取信息失败!");
+                }
+            }
+        });
+
 //        try {
 //            if (!bopen) {
 //                textView.setText("请先连接设备");
