@@ -14,22 +14,16 @@ import org.greenrobot.greendao.annotation.Unique;
 public class User {
     @Id(autoincrement = true)
     Long uId;
-    @Unique
-    int studentNo;
-    int age;
-    @Property
+
+    String workNum;
     String name;
-    String sex;
-    String telPhone;
-    @Generated(hash = 253787512)
-    public User(Long uId, int studentNo, int age, String name, String sex,
-                String telPhone) {
+    String section;
+    @Generated(hash = 2052126289)
+    public User(Long uId, String workNum, String name, String section) {
         this.uId = uId;
-        this.studentNo = studentNo;
-        this.age = age;
+        this.workNum = workNum;
         this.name = name;
-        this.sex = sex;
-        this.telPhone = telPhone;
+        this.section = section;
     }
     @Generated(hash = 586692638)
     public User() {
@@ -40,17 +34,11 @@ public class User {
     public void setUId(Long uId) {
         this.uId = uId;
     }
-    public int getStudentNo() {
-        return this.studentNo;
+    public String getWorkNum() {
+        return this.workNum;
     }
-    public void setStudentNo(int studentNo) {
-        this.studentNo = studentNo;
-    }
-    public int getAge() {
-        return this.age;
-    }
-    public void setAge(int age) {
-        this.age = age;
+    public void setWorkNum(String workNum) {
+        this.workNum = workNum;
     }
     public String getName() {
         return this.name;
@@ -58,28 +46,20 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    public String getSex() {
-        return this.sex;
+    public String getSection() {
+        return this.section;
     }
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-    public String getTelPhone() {
-        return this.telPhone;
-    }
-    public void setTelPhone(String telPhone) {
-        this.telPhone = telPhone;
+    public void setSection(String section) {
+        this.section = section;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "uId=" + uId +
-                ", studentNo=" + studentNo +
-                ", age=" + age +
+                ", workNum='" + workNum + '\'' +
                 ", name='" + name + '\'' +
-                ", sex='" + sex + '\'' +
-                ", telPhone='" + telPhone + '\'' +
+                ", section='" + section + '\'' +
                 '}';
     }
 }

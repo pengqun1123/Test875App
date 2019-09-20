@@ -9,7 +9,11 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+
+import com.baselibrary.base.BaseApplication;
+import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.IdCard;
+import com.baselibrary.pojo.User;
 import com.id_card.callback.CardInfoListener;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
@@ -24,6 +28,7 @@ import com.zkteco.android.biometric.module.idcard.meta.IDCardInfo;
 import com.zkteco.android.biometric.module.idcard.meta.IDPRPCardInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -76,7 +81,7 @@ public class IdCardService {
        }
 
        //获取身份证信息
-       public void getCardInfo(ObservableEmitter<IdCard> emitter){
+       private void getCardInfo(ObservableEmitter<IdCard> emitter){
            IdCard idCard =null;
            try {
                if (idCardReader == null) {
@@ -136,19 +141,34 @@ public class IdCardService {
                    }
                }
            } catch (Exception e) {
+               if (e instanceof IDCardReaderException){
+                   IDCardReaderException  exception=(IDCardReaderException) e;
+                   LogHelper.d("获取SAM模块失败, 错误码：" + exception.getErrorCode() + "\n错误信息：" + exception.getMessage() + "\n 内部错误码=" + exception.getInternalErrorCode());
+               }
               e.printStackTrace();
             }
 
        }
 
+       //验证
        public void  verify_IdCard(CardInfoListener cardInfoListener){
+
+         process_IdCard(cardInfoListener,2);
+       }
+
+       //type用来区分是注册还是验证 1:表示注册 2表示验证
+       private void process_IdCard(CardInfoListener cardInfoListener,int type){
+
+           if (mHandler.hasMessages(GET_CardInfo)){
+               mHandler.removeMessages(GET_CardInfo);
+           }
            Observable.create(new ObservableOnSubscribe<IdCard>() {
                @Override
                public void subscribe(ObservableEmitter<IdCard> emitter) throws Exception {
                    getCardInfo(emitter);
                }
            }) .subscribeOn(Schedulers.computation())
-              .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<IdCard>() {
+                   .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<IdCard>() {
                @Override
                public void onSubscribe(Disposable d) {
 
@@ -156,7 +176,15 @@ public class IdCardService {
 
                @Override
                public void onNext(IdCard idCard) {
-                cardInfoListener.onGetCardInfo(idCard);
+                   if (idCard!=null){
+                       if (type==1) {
+                           //注册
+                           DBUtil dbUtil = BaseApplication.getDbUtil();
+                           User user = new User();
+                           dbUtil.insert(idCard);
+                       }
+                       cardInfoListener.onGetCardInfo(idCard);
+                   }
                }
 
                @Override
@@ -176,9 +204,20 @@ public class IdCardService {
            mHandler.sendMessageDelayed(obtain,1000);
        }
 
-       public void redister_IdCard(){
+       public void stopScanIdCard(){
+           if (mHandler!=null){
+               mHandler.removeMessages(GET_CardInfo);
+           }
+       }
+
+
+       public void register_IdCard(CardInfoListener cardInfoListener){
+
+          process_IdCard(cardInfoListener,1);
 
        }
+
+
        //获取身份证物理卡号
        public String getUCardNum(){
            String cardNum=null;
@@ -268,10 +307,14 @@ public class IdCardService {
         public boolean handleMessage(Message message) {
             if (message.what==GET_CardInfo){
                 CardInfoListener cardInfoListener= (CardInfoListener) message.obj;
-                verify_IdCard(cardInfoListener);
+                register_IdCard(cardInfoListener);
             }
             return false;
         }
     };
 
+       public void queryAll(){
+           List<IdCard> idCards = BaseApplication.getDbUtil().queryAll(IdCard.class);
+
+       }
 }
