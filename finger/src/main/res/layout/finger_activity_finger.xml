@@ -46,7 +46,7 @@
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="插入User" />
+        android:text="调用跨组件的方法" />
 
     <Button
         android:id="@+id/btn2"

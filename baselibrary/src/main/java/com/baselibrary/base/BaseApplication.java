@@ -22,14 +22,15 @@ public class BaseApplication extends Application {
         super.onCreate();
         Logger.init("UE875==>: ");
         //初始化数据库
-        dbUtil = DBUtil.getInstance(this);
+        if (dbUtil == null)
+            dbUtil = DBUtil.getInstance(this);
 //        DBUtil.instance().initDB(this);
         //APP的相关配置初始化
         AppConfig.INSTANCE.initConfig(this);
         //
     }
 
-    public static DBUtil getDbUtil(){
+    public static DBUtil getDbUtil() {
         return dbUtil;
     }
 

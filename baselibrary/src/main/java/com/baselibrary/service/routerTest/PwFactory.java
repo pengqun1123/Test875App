@@ -1,7 +1,7 @@
-package com.baselibrary.service.factory;
+package com.baselibrary.service.routerTest;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.baselibrary.service.pwService.PwTestService;
+import com.baselibrary.service.routerTest.PwTestService;
 
 /**
  * Created By pq

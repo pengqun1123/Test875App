@@ -10,8 +10,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.baselibrary.ARouter.ARouterConstrant;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.dao.db.DBUtil;
@@ -19,10 +18,9 @@ import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.model.TestBean;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
-import com.baselibrary.service.ExecuteMethod;
-import com.baselibrary.service.factory.PwFactory;
-import com.baselibrary.service.pwService.PwTestService;
+import com.baselibrary.service.routerTest.PwFactory;
 import com.finger.R;
+import com.finger.test.RouterTest;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -35,7 +33,7 @@ import java.util.Random;
  * Created By pq
  * on 2019/9/11
  */
-@Route(path = ARouterConstrant.FINGER_ACTIVITY, group = ARouterConstrant.GROUP_FINGER)
+@Route(path = ARouterConstant.FINGER_ACTIVITY, group = ARouterConstant.GROUP_FINGER)
 public class FingerActivity extends AppCompatActivity {
 
     @Autowired(name = "Address")
@@ -66,8 +64,8 @@ public class FingerActivity extends AppCompatActivity {
         TextView params = findViewById(R.id.params);
 
         //接收上个页面传递过来的数据
-//        params.setText(MessageFormat.format("姓名：{0}  年龄：{1}  地址：{2}"
-//                , testBean.getName(), testBean.getAge(), Address));
+        params.setText(MessageFormat.format("姓名：{0}  年龄：{1}  地址：{2}"
+                , testBean.getName(), testBean.getAge(), Address));
 
 //        btn7.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -84,14 +82,13 @@ public class FingerActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(FingerActivity.this, "跨组件调用方法"
-//                        , Toast.LENGTH_SHORT).show();
-//
-////                params.setText(MessageFormat.format("内容：{0}",
-////                        PwFactory.getUserAddress("李二狗:")));
-//
-//                params.setText(ExecuteMethod.executeAimMethod());
-                insert();
+                Toast.makeText(FingerActivity.this, "跨组件调用方法"
+                        , Toast.LENGTH_SHORT).show();
+
+                String s = RouterTest.routerModuleCommuni("<李二狗>");
+                params.setText(MessageFormat.format("内容：{0}", s));
+
+//                insert();
             }
         });
         btn2.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +115,7 @@ public class FingerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //删除User
-                dbUtil.deleteById(User.class,2);
+                dbUtil.deleteById(User.class, 2);
             }
         });
         btn6.setOnClickListener(new View.OnClickListener() {
@@ -136,16 +133,9 @@ public class FingerActivity extends AppCompatActivity {
         for (int i = 50; i < 60; i++) {
             User user = new User();
             int age = new Random().nextInt(10) + 10;
-            user.setAge(age);
             String name = name();
             user.setName(name);
-            if (i % 2 == 0) {
-                user.setSex("男");
-            } else {
-                user.setSex("女");
-            }
-            user.setStudentNo(i);
-            user.setTelPhone(telNo());
+
             //daoSession.insert(user);
             //插入或替换
             // daoSession.insertOrReplace(user);

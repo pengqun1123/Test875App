@@ -73,7 +73,7 @@ android {
     }
 
     greendao {
-        schemaVersion 2 //数据库版本号
+        schemaVersion 3 //数据库版本号
         daoPackage 'com.baselibrary.dao.db'
         // 设置DaoMaster、DaoSession、Dao 包名
         targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录,请注意，这里路径用.不要用/
@@ -89,10 +89,10 @@ static def releaseTime() {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api(rootProject.ext.dependencies["appcompat-v7"]) {
-        exclude module: "support-v4"
-        exclude module: "support-annotations"
-    }
+//    api(rootProject.ext.dependencies["appcompat-v7"]) {
+//        exclude module: "support-v4"
+//        exclude module: "support-annotations"
+//    }
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

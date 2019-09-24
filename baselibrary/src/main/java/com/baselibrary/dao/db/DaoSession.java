@@ -9,10 +9,12 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.baselibrary.pojo.IdCard;
+import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
 
 import com.baselibrary.dao.db.IdCardDao;
+import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.dao.db.StudentDao;
 import com.baselibrary.dao.db.UserDao;
 
@@ -26,10 +28,12 @@ import com.baselibrary.dao.db.UserDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig idCardDaoConfig;
+    private final DaoConfig pwDaoConfig;
     private final DaoConfig studentDaoConfig;
     private final DaoConfig userDaoConfig;
 
     private final IdCardDao idCardDao;
+    private final PwDao pwDao;
     private final StudentDao studentDao;
     private final UserDao userDao;
 
@@ -40,6 +44,9 @@ public class DaoSession extends AbstractDaoSession {
         idCardDaoConfig = daoConfigMap.get(IdCardDao.class).clone();
         idCardDaoConfig.initIdentityScope(type);
 
+        pwDaoConfig = daoConfigMap.get(PwDao.class).clone();
+        pwDaoConfig.initIdentityScope(type);
+
         studentDaoConfig = daoConfigMap.get(StudentDao.class).clone();
         studentDaoConfig.initIdentityScope(type);
 
@@ -47,22 +54,29 @@ public class DaoSession extends AbstractDaoSession {
         userDaoConfig.initIdentityScope(type);
 
         idCardDao = new IdCardDao(idCardDaoConfig, this);
+        pwDao = new PwDao(pwDaoConfig, this);
         studentDao = new StudentDao(studentDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
 
         registerDao(IdCard.class, idCardDao);
+        registerDao(Pw.class, pwDao);
         registerDao(Student.class, studentDao);
         registerDao(User.class, userDao);
     }
     
     public void clear() {
         idCardDaoConfig.clearIdentityScope();
+        pwDaoConfig.clearIdentityScope();
         studentDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
     }
 
     public IdCardDao getIdCardDao() {
         return idCardDao;
+    }
+
+    public PwDao getPwDao() {
+        return pwDao;
     }
 
     public StudentDao getStudentDao() {

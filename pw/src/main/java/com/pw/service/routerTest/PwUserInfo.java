@@ -1,4 +1,4 @@
-package com.pw.service;
+package com.pw.service.routerTest;
 
 /**
  * Created By pq
@@ -17,7 +17,7 @@ public class PwUserInfo {
     String userInfo;
 
     public String getUserInfo() {
-        return userInfo + "嘿嘿，这是经过PW组件加工后的内容";
+        return userInfo + "嘿嘿，这是经过 <PW> 组件加工后的内容";
     }
 
     public void setUserInfo(String userInfo) {
