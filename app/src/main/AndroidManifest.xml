@@ -11,16 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:ignore=",AllowBackup,GoogleAppIndexingWarning,RtlEnabled"
         tools:replace="android:name"
-        tools:ignore=",GoogleAppIndexingWarning,RtlEnabled"
         tools:targetApi="donut">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/activityPublicStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.AppRegisterActivity"
+            android:theme="@style/activityPublicStyle" />
+
     </application>
 
 </manifest>

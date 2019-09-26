@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/inputPwTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_pw_bg_select"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
+        android:text="@string/please_input_pw"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <com.baselibrary.custom.CEditText
+        android:id="@+id/inputPw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputPwTitle"
+        android:layout_marginTop="@dimen/dp_25"
+        android:inputType="numberPassword"
+        app:circleColor="@color/blue_6"
+        app:circleRadius="@dimen/dp_3"
+        app:count="8"
+        app:focusLineColor="@color/pink_6"
+        app:height="@dimen/dp_45"
+        app:isDrawCircle="true"
+        app:isDrawLine="true"
+        app:lineColor="@color/blue_6"
+        app:lineWidth="@dimen/dp_1"
+        app:spaceWidth="@dimen/dp_10"
+        app:textColor="@color/pink_6"
+        app:textSize="@dimen/sp_16" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/dismissBtn"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_6"
+        android:layout_marginEnd="3dp"
+        android:padding="@dimen/dp_3"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_delete"
+        tools:ignore="VectorDrawableCompat" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputPw"
+        android:layout_marginTop="@dimen/dp_25"
+        android:background="@drawable/dialog_btn_bg"
+        android:text="@string/next"
+        android:textColor="@color/blue_6"
+        android:textSize="@dimen/sp_15" />
+
+    <LinearLayout
+        android:id="@+id/btnParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputPw"
+        android:layout_marginTop="@dimen/dp_25"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@drawable/dialog_btn_bg"
+            android:text="@string/cancel"
+            android:textColor="@color/blue_6"
+            android:textSize="@dimen/sp_15" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/positiveBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@drawable/dialog_btn_bg"
+            android:text="@string/positive"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/sp_15" />
+    </LinearLayout>
+</RelativeLayout>

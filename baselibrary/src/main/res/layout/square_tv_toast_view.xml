@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/square_tv_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@drawable/toast_bg"
+        android:gravity="center"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_13"
+        android:paddingEnd="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_13"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="请检查号码位数" />
+</RelativeLayout>

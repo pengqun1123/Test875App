@@ -16,10 +16,12 @@ import com.orhanobut.logger.Logger;
 public class BaseApplication extends Application {
 
     private static DBUtil dbUtil;
+    public static BaseApplication INSTANCE;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
         Logger.init("UE875==>: ");
         //初始化数据库
         if (dbUtil == null)

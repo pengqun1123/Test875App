@@ -4,7 +4,7 @@ ext {
     isFingerApplication = false//指静脉模块开关，false:作为Lib组件存在， true:作为application存在
     isFaceApplication = false//人脸模块开关，false:作为Lib组件存在， true:作为application存在
     isIDCardApplication = false//身份证验证模块开关，false:作为Lib组件存在， true:作为application存在
-    isPWApplication = true//密码验证模块开关，false:作为Lib组件存在， true:作为application存在
+    isPWApplication = false//密码验证模块开关，false:作为Lib组件存在， true:作为application存在
     isDAOApplication = false  //数据存储模块开关，false:作为Lib组件存在， true:作为application存在
 
     android = [

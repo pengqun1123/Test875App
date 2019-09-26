@@ -35,6 +35,10 @@ public class ActManager {
         activityStack.add(activity);
     }
 
+    public Stack<Activity> getActivityStack(){
+        return activityStack;
+    }
+
     /**
      * 返回栈顶的Activity
      *

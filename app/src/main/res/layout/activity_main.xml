@@ -7,22 +7,158 @@
     android:orientation="vertical"
     tools:context="com.testApp.activity.MainActivity">
 
-    <Button
-        android:id="@+id/btn1"
-        android:text="增加数据"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <include layout="@layout/normal_toolbar" />
 
-    <Button
-        android:id="@+id/skipAct"
-        android:text="路由跳转页面Act"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="@string/select_verify_model"
+        android:textColor="@color/blue_15"
+        android:textSize="@dimen/sp_17"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
-    <Button
-        android:id="@+id/skipFrag"
-        android:text="路由跳转页面frag"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fingerModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/finger"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/faceModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/face"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_17" />
+
+            <TextView
+                android:id="@+id/idCardModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/idCard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/pwModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/passWard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/fingerIdCardModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/fingerIdCard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/faceIdCardModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/faceIdCard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/fingerFaceModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/fingerFace"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/fingerPwModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/fingerPassWard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/facePwModel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:layout_marginTop="@dimen/dp_0_5"
+                android:background="@drawable/wave_border_less_ripple"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical|start"
+                android:padding="@dimen/dp_10"
+                android:text="@string/facePassWard"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>

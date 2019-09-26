@@ -26,8 +26,10 @@
     <color name="white_alpha_F0">#F0FFFFFF</color>
     <color name="white_alpha">#9BFFFFFF</color>
     <color name="white_grey">#e6e6e6</color>
+    <color name="white_divider">#c1bdbd</color>
     <color name="white_grey_1">#FAFAFA</color>
     <color name="toast_bg_color">#E0616161</color>
+    <color name="toast_bg_color_1">#84101010</color>
     <color name="refresh_bg_color">#444444</color>
     <color name="black_alpha_color">#33919191</color>
 
@@ -139,7 +141,10 @@
     <color name="blue_2">#0000CD</color>
     <color name="blue_3">#0000FF</color>
     <color name="blue_4">#1C54B3</color>
+    <color name="blue_40">#1D94B3</color>
+    <color name="blue_16">#1F7BB3</color>
     <color name="blue_5">#1E90FF</color>
+    <color name="blue_15">#6F97FF</color>
     <color name="blue_6">#00BFFF</color>
     <color name="blue_7">#87CEEB</color>
     <color name="blue_7_alpha">#3787CEEB</color>

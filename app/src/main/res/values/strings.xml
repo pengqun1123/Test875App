@@ -1,3 +1,36 @@
 <resources>
     <string name="app_name">TestApp</string>
+    <string name="select_verify_model">请选择验证模式</string>
+    <string name="finger">指静脉验证</string>
+    <string name="face">人脸验证</string>
+    <string name="idCard">身份证验证</string>
+    <string name="passWard">密码验证</string>
+    <string name="fingerIdCard">指静脉+身份证验证</string>
+    <string name="faceIdCard">人脸+身份证验证</string>
+    <string name="fingerFace">指静脉+人脸验证</string>
+    <string name="fingerPassWard">指静脉+密码验证</string>
+    <string name="facePassWard">人脸+密码验证</string>
+    <string name="app_test">首页测试</string>
+    <string name="pw_verify_model_tip">
+        手动输入密码的方式进行注册及验证!
+    </string>
+    <string name="name">姓名</string>
+    <string name="sex">性别</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
+    <string name="age">年龄</string>
+    <string name="pw_register">密码注册</string>
+    <string name="company_name">公司名称</string>
+    <string name="phone_name">手机号码</string>
+    <string name="department_name">部门名称</string>
+    <string name="passWard_1">输入密码</string>
+    <string name="positive">确定</string>
+    <string name="register_password">录入密码</string>
+    <string name="please_input_pw">请输入密码</string>
+    <string name="please_input_8_pw">请输入8位密码</string>
+    <string name="next">下一步</string>
+    <string name="check_pw">确认密码</string>
+    <string name="pw_register_success">密码注册成功!</string>
+    <string name="pw_register_no_eq">前后两次的密码不一致，请检查!</string>
+    <string name="please_input_name">请填写姓名</string>
 </resources>
