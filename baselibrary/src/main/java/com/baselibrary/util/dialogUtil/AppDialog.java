@@ -1,4 +1,4 @@
-package com.testApp;
+package com.baselibrary.util.dialogUtil;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -6,9 +6,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 
-import com.baselibrary.util.dialogUtil.DialogCallBack;
-import com.baselibrary.util.dialogUtil.DialogUtils;
-
+import com.baselibrary.R;
 /**
  * Created By pq
  * on 2019/9/25

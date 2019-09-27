@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Property;
  */
 @Entity
 public class Pw {
-    @Id
+    @Id(autoincrement = true)
     Long uId;
     @Property(nameInDb = "password")
     String password;

@@ -41,7 +41,7 @@ public class PwDao extends AbstractDao<Pw, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PW\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: uId
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
                 "\"password\" TEXT);"); // 1: password
     }
 

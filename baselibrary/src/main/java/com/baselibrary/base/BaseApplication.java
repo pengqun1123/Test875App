@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.ARouter.ARouterUtil;
+import com.baselibrary.util.AudioProvider;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
@@ -17,6 +18,7 @@ public class BaseApplication extends Application {
 
     private static DBUtil dbUtil;
     public static BaseApplication INSTANCE;
+    public static AudioProvider AP;
 
     @Override
     public void onCreate() {
@@ -26,6 +28,8 @@ public class BaseApplication extends Application {
         //初始化数据库
         if (dbUtil == null)
             dbUtil = DBUtil.getInstance(this);
+        if (AP == null)
+            AP = getAP(this);
 //        DBUtil.instance().initDB(this);
         //APP的相关配置初始化
         AppConfig.INSTANCE.initConfig(this);
@@ -34,6 +38,10 @@ public class BaseApplication extends Application {
 
     public static DBUtil getDbUtil() {
         return dbUtil;
+    }
+
+    private AudioProvider getAP(Context context) {
+        return AudioProvider.getInstance(context);
     }
 
     @Override

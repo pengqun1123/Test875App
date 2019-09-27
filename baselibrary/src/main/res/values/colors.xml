@@ -42,6 +42,7 @@
     <color name="white_alpha_5">#73FFFFFF</color>
     <color name="white_alpha_6">#80FFFFFF</color>
     <color name="white_alpha_7">#5CFFFFFF</color>
+    <color name="white_alpha_8">#1FFFFFFF</color>
 
     <color name="purple_70_alpha">#7DD499FD</color>
     <color name="tint_green_50alpha">#2A78F9D8</color>

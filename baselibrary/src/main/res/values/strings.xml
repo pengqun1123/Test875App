@@ -4,4 +4,14 @@
     <string name="cancel">取消</string>
     <string name="resume">允许</string>
     <string name="exit_tip">再按一次退出程序</string>
+
+    <string name="please_input_6_pw">请输入6位密码</string>
+    <string name="check_pw">确认密码</string>
+    <string name="pw_register_no_eq">前后两次的密码不一致，请检查!</string>
+    <string name="please_input_pw">请输入密码</string>
+    <string name="next">下一步</string>
+    <string name="positive">确定</string>
+    <string name="vault">跳过</string>
+    <string name="verify_model">验证方式</string>
+    <string name="complete">完成</string>
 </resources>

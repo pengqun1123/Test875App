@@ -39,7 +39,7 @@ public class DBUtil {
         if (dbUtil == null) {
             synchronized (DBUtil.class) {
                 if (dbUtil == null) {
-                    dbUtil = new DBUtil(application,DB_NAME,DEFAULT_DB_PASSWORD);
+                    dbUtil = new DBUtil(application, DB_NAME, DEFAULT_DB_PASSWORD);
 //                    dbUtil = new DBUtil();
                 }
             }
@@ -47,9 +47,9 @@ public class DBUtil {
         return dbUtil;
     }
 
-//    初始化数据库
+    //    初始化数据库
     public void initDB(Context context) {
-        devOpenHelper = new MyGreenDaoDbHelper(context,DB_NAME);
+        devOpenHelper = new MyGreenDaoDbHelper(context, DB_NAME);
 //        devOpenHelper = new DaoMaster.DevOpenHelper(context, DB_NAME);
         SQLiteDatabase database = devOpenHelper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(database);
@@ -63,7 +63,7 @@ public class DBUtil {
     //初始化数据库
     private DBUtil(Application application, String dbName, String passWord) {
         if (devOpenHelper == null) {
-            devOpenHelper = new MyGreenDaoDbHelper(application,dbName);
+            devOpenHelper = new MyGreenDaoDbHelper(application, dbName);
 //            devOpenHelper = new DaoMaster.DevOpenHelper(application, dbName);
         }
         DaoMaster daoMaster;
@@ -465,8 +465,10 @@ public class DBUtil {
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
                     mCallBack.onNotification(true);
+                    mCallBack.onSuccess(entity);
                 } else if (operation.isFailed() && mCallBack != null) {
                     mCallBack.onNotification(false);
+                    mCallBack.onFailed();
                 }
             }
         });
@@ -489,8 +491,10 @@ public class DBUtil {
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
                     mCallBack.onNotification(true);
+                    mCallBack.onSuccess(userList);
                 } else if (operation.isFailed() && mCallBack != null) {
                     mCallBack.onNotification(false);
+                    mCallBack.onFailed();
                 }
             }
         });
@@ -515,8 +519,10 @@ public class DBUtil {
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
                     mCallBack.onNotification(true);
+                    mCallBack.onSuccess(entry);
                 } else if (operation.isFailed() && mCallBack != null) {
                     mCallBack.onNotification(false);
+                    mCallBack.onFailed();
                 }
             }
         });

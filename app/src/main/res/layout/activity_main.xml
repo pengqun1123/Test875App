@@ -33,132 +33,79 @@
 
             <TextView
                 android:id="@+id/fingerModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/finger"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/finger" />
 
             <TextView
                 android:id="@+id/faceModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/face"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_17" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/face" />
 
             <TextView
                 android:id="@+id/idCardModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/idCard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/idCard" />
 
             <TextView
                 android:id="@+id/pwModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/passWard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/passWard" />
 
             <TextView
                 android:id="@+id/fingerIdCardModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/fingerIdCard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/fingerIdCard" />
 
             <TextView
                 android:id="@+id/faceIdCardModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/faceIdCard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/faceIdCard" />
 
             <TextView
                 android:id="@+id/fingerFaceModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/fingerFace"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/fingerFace" />
 
             <TextView
                 android:id="@+id/fingerPwModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
-                android:padding="@dimen/dp_10"
-                android:text="@string/fingerPassWard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/fingerPassWard" />
 
             <TextView
                 android:id="@+id/facePwModel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
-                android:layout_marginTop="@dimen/dp_0_5"
-                android:background="@drawable/wave_border_less_ripple"
-                android:drawableEnd="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/dp_10"
-                android:gravity="center_vertical|start"
+                style="@style/item_style"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:text="@string/facePassWard" />
+
+            <Button
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:padding="@dimen/dp_10"
-                android:text="@string/facePassWard"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_16" />
+                android:text="声音加"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp_15" />
+
+            <Button
+                android:id="@+id/lose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/dp_10"
+                android:text="声音减"
+                android:textColor="@color/red"
+                android:textSize="@dimen/sp_15" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 
 </LinearLayout>

@@ -1,22 +1,29 @@
 package com.testApp.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.base.BaseApplication;
+import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.model.TestBean;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.dialogUtil.DialogCallBack;
-import com.testApp.AppDialog;
+import com.baselibrary.util.dialogUtil.AppDialog;
 import com.testApp.R;
 import com.testApp.constant.AppConstant;
 
@@ -64,6 +71,8 @@ public class MainActivity extends BaseActivity {
         bindViewWithClick(R.id.fingerFaceModel, true);
         bindViewWithClick(R.id.fingerPwModel, true);
         bindViewWithClick(R.id.facePwModel, true);
+        bindViewWithClick(R.id.add, true);
+        bindViewWithClick(R.id.lose, true);
 
 
     }
@@ -109,20 +118,40 @@ public class MainActivity extends BaseActivity {
                 ToastUtils.showSquareTvToast(this, "人脸+密码验证");
 
                 break;
-
+            case R.id.add:
+                //声音加
+                BaseApplication.AP.increaceVolume();
+                BaseApplication.AP.play_di();
+                break;
+            case R.id.lose:
+                //声音减
+                BaseApplication.AP.decreaseVolume();
+                BaseApplication.AP.play_di();
+                break;
         }
     }
 
     private void showAskDialog(Integer msgRes, Integer flag) {
-        AppDialog.showAskDialog(this, msgRes, new DialogCallBack() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.tip_dialog_view, null);
+        AppCompatTextView inputPwTitle = dialogView.findViewById(R.id.inputPwTitle);
+        AppCompatTextView tip = dialogView.findViewById(R.id.tip);
+        LinearLayout btnParent = dialogView.findViewById(R.id.btnParent);
+        AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
+        inputPwTitle.setText(getString(R.string.verify_model));
+        tip.setText(msgRes);
+        btnParent.setVisibility(View.VISIBLE);
+        Dialog dialog = AppDialog.gmDialog(this, dialogView, true);
+        cancelBtn.setOnClickListener(new OnceClickListener() {
             @Override
-            public void positiveClick(DialogInterface dialog) {
-                routerSkip(flag);
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
             }
-
+        });
+        positiveBtn.setOnClickListener(new OnceClickListener() {
             @Override
-            public void negativeClick(DialogInterface dialog) {
-
+            public void onNoDoubleClick(View v) {
+                routerSkip(flag);
             }
         });
     }

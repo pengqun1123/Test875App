@@ -8,6 +8,8 @@ import java.util.List;
  */
 public interface DbCallBack<T> {
 
+    void onSuccess(T result);
+
     void onSuccess(List<T> result);
 
     void onFailed();

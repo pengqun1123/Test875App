@@ -3,7 +3,7 @@ package com.finger.test;
 import android.os.Bundle;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.baselibrary.service.routerTest.PwFactory;
+import com.baselibrary.service.factory.PwFactory;
 
 /**
  * Created By pq

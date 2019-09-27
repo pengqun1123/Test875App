@@ -65,6 +65,11 @@ public class DaoTest {
         WhereCondition whereCondition = UserDao.Properties.Name.eq("里哈哈");
         dbUtil.setDbCallBack(new DbCallBack<User>() {
             @Override
+            public void onSuccess(User result) {
+
+            }
+
+            @Override
             public void onSuccess(List<User> result) {
                 //返回的结果
             }
@@ -93,6 +98,11 @@ public class DaoTest {
         QueryBuilder<T> queryBuilder = dbUtil.getQueryBuilder(clazz);
         dbUtil.setDbCallBack(new DbCallBack<T>() {
             @Override
+            public void onSuccess(T result) {
+
+            }
+
+            @Override
             public void onSuccess(List<T> result) {
 
             }
@@ -116,6 +126,11 @@ public class DaoTest {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         QueryBuilder<User> userQueryBuilder = dbUtil.getDaoSession().getUserDao().queryBuilder();
         dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
+
+            }
+
             @Override
             public void onSuccess(List<User> result) {
 
@@ -141,6 +156,11 @@ public class DaoTest {
     public static void asyncInsert(List<User> users) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
+
+            }
+
             @Override
             public void onSuccess(List<User> result) {
 

@@ -28,7 +28,7 @@
         android:inputType="numberPassword"
         app:circleColor="@color/blue_6"
         app:circleRadius="@dimen/dp_3"
-        app:count="8"
+        app:count="6"
         app:focusLineColor="@color/pink_6"
         app:height="@dimen/dp_45"
         app:isDrawCircle="true"
@@ -58,37 +58,11 @@
         android:layout_below="@+id/inputPw"
         android:layout_marginTop="@dimen/dp_25"
         android:background="@drawable/dialog_btn_bg"
+        android:gravity="center"
         android:text="@string/next"
         android:textColor="@color/blue_6"
-        android:textSize="@dimen/sp_15" />
+        android:textSize="@dimen/sp_16" />
 
-    <LinearLayout
-        android:id="@+id/btnParent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inputPw"
-        android:layout_marginTop="@dimen/dp_25"
-        android:orientation="horizontal"
-        android:visibility="gone">
+    <include layout="@layout/cancel_positive_view" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/cancelBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:background="@drawable/dialog_btn_bg"
-            android:text="@string/cancel"
-            android:textColor="@color/blue_6"
-            android:textSize="@dimen/sp_15" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/positiveBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:background="@drawable/dialog_btn_bg"
-            android:text="@string/positive"
-            android:textColor="@color/blue_5"
-            android:textSize="@dimen/sp_15" />
-    </LinearLayout>
 </RelativeLayout>

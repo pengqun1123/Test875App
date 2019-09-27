@@ -3,8 +3,10 @@ package com.baselibrary.pojo;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.DaoException;
+
 import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.dao.db.UserDao;
@@ -17,65 +19,133 @@ import com.baselibrary.dao.db.UserDao;
 public class User {
     @Id(autoincrement = true)
     Long uId;
-
-    String workNum;
+    @Property(nameInDb = "name")
     String name;
+    @Property(nameInDb = "age")
+    String age;
+    @Property(nameInDb = "sex")
+    String sex;
+    @Property(nameInDb = "phone")
+    String phone;
+    @Property(nameInDb = "organizName")
+    String organizName;
+    @Property(nameInDb = "section")
     String section;
+    @Property(nameInDb = "workNum")
+    String workNum;
+    @Property(nameInDb = "pwId")
     Long pwId;
     @ToOne(joinProperty = "pwId")
     Pw pw;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1507654846)
     private transient UserDao myDao;
-    @Generated(hash = 1091611460)
-    public User(Long uId, String workNum, String name, String section, Long pwId) {
+
+    @Generated(hash = 472694883)
+    public User(Long uId, String name, String age, String sex, String phone,
+                String organizName, String section, String workNum, Long pwId) {
         this.uId = uId;
-        this.workNum = workNum;
         this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.phone = phone;
+        this.organizName = organizName;
         this.section = section;
+        this.workNum = workNum;
         this.pwId = pwId;
     }
+
     @Generated(hash = 586692638)
     public User() {
     }
+
     public Long getUId() {
         return this.uId;
     }
+
     public void setUId(Long uId) {
         this.uId = uId;
     }
-    public String getWorkNum() {
-        return this.workNum;
-    }
-    public void setWorkNum(String workNum) {
-        this.workNum = workNum;
-    }
+
     public String getName() {
         return this.name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getAge() {
+        return this.age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getSex() {
+        return this.sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getOrganizName() {
+        return this.organizName;
+    }
+
+    public void setOrganizName(String organizName) {
+        this.organizName = organizName;
+    }
+
     public String getSection() {
         return this.section;
     }
+
     public void setSection(String section) {
         this.section = section;
     }
+
+    public String getWorkNum() {
+        return this.workNum;
+    }
+
+    public void setWorkNum(String workNum) {
+        this.workNum = workNum;
+    }
+
     public Long getPwId() {
         return this.pwId;
     }
+
     public void setPwId(Long pwId) {
         this.pwId = pwId;
     }
+
     @Generated(hash = 534339714)
     private transient Long pw__resolvedKey;
-    /** To-one relationship, resolved on first access. */
+
+    /**
+     * To-one relationship, resolved on first access.
+     */
     @Generated(hash = 1794411686)
     public Pw getPw() {
         Long __key = this.pwId;
@@ -93,7 +163,10 @@ public class User {
         }
         return pw;
     }
-    /** called by internal mechanisms, do not call yourself. */
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1209702503)
     public void setPw(Pw pw) {
         synchronized (this) {
@@ -102,6 +175,7 @@ public class User {
             pw__resolvedKey = pwId;
         }
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -113,6 +187,7 @@ public class User {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -124,6 +199,7 @@ public class User {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -135,7 +211,10 @@ public class User {
         }
         myDao.update(this);
     }
-    /** called by internal mechanisms, do not call yourself. */
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 2059241980)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
@@ -147,9 +226,13 @@ public class User {
     public String toString() {
         return "User{" +
                 "uId=" + uId +
-                ", workNum='" + workNum + '\'' +
                 ", name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", sex='" + sex + '\'' +
+                ", phone='" + phone + '\'' +
+                ", organizName='" + organizName + '\'' +
                 ", section='" + section + '\'' +
+                ", workNum='" + workNum + '\'' +
                 ", pwId=" + pwId +
                 ", pw=" + pw +
                 ", daoSession=" + daoSession +

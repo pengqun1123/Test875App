@@ -64,5 +64,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="item_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_60</item>
+        <item name="android:background">@drawable/wave_border_less_ripple</item>
+        <item name="android:drawableEnd">@drawable/ic_arrow_down</item>
+        <item name="android:drawablePadding">@dimen/dp_10</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:padding">@dimen/dp_10</item>
+        <item name="android:textColor">@color/black_0</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+    </style>
 
 </resources>

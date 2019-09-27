@@ -26,7 +26,8 @@
         <activity
             android:name=".activity.AppRegisterActivity"
             android:theme="@style/activityPublicStyle" />
-
+        <activity android:name=".activity.DefaultRegisterActivity"
+            android:theme="@style/activityPublicStyle"/>
     </application>
 
 </manifest>

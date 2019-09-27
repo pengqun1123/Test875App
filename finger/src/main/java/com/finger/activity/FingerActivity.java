@@ -18,7 +18,6 @@ import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.model.TestBean;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
-import com.baselibrary.service.routerTest.PwFactory;
 import com.finger.R;
 import com.finger.test.RouterTest;
 import com.orhanobut.logger.Logger;

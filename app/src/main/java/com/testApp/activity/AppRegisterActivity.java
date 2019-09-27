@@ -1,7 +1,7 @@
 package com.testApp.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -12,37 +12,44 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
-import com.baselibrary.custom.CEditText;
-import com.baselibrary.listener.OnceClickListener;
+import com.baselibrary.callBack.PwCallBack;
+import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.pojo.Pw;
-import com.baselibrary.util.EtClearUtil;
+import com.baselibrary.pojo.User;
+import com.baselibrary.service.factory.PwFactory;
+import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
-import com.testApp.AppDialog;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
+import com.testApp.constant.AppConstant;
+
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
+
+import java.util.List;
+
 
 /**
  * 该注册页面以公司考勤应用场景为例
  */
 public class AppRegisterActivity extends BaseActivity {
 
-    private AppCompatEditText nameEt;
-    private AppCompatEditText ageEt;
-    private AppCompatEditText phoneEt;
-    private AppCompatEditText companyNameEt;
-    private AppCompatEditText departmentEt;
+    private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
+    private AppCompatTextView fingerModel, faceModel, idCardModel, pwModel, rightTv;
     private AppCompatButton pwBtn;
-    private AppCompatButton inputPwBtn;
-    private View nameBottomLine;
+    private View nameBottomLine, ageBottomLine, phoneEtLine, companyNameLine, departmentLine, staffNoLine;
+    //    private long pwId = 0L;
+    private String sex;
 
     @Override
     protected Integer contentView() {
@@ -56,17 +63,36 @@ public class AppRegisterActivity extends BaseActivity {
         phoneEt = bindViewWithClick(R.id.phoneEt, false);
         companyNameEt = bindViewWithClick(R.id.companyNameEt, false);
         departmentEt = bindViewWithClick(R.id.departmentEt, false);
-        inputPwBtn = bindViewWithClick(R.id.inputPwBtn, true);
+        staffNoEt = bindViewWithClick(R.id.staffNoEt, false);
         pwBtn = bindViewWithClick(R.id.pwBtn, true);
-        nameBottomLine = bindViewWithClick(R.id.nameBottomLine, true);
+        fingerModel = bindViewWithClick(R.id.fingerModel, true);
+        faceModel = bindViewWithClick(R.id.faceModel, true);
+        idCardModel = bindViewWithClick(R.id.idCardModel, true);
+        pwModel = bindViewWithClick(R.id.pwModel, true);
+        AppCompatImageView backBtn = bindViewWithClick(R.id.backBtn, true);
+        rightTv = bindViewWithClick(R.id.rightTv, true);
+        nameBottomLine = bindViewWithClick(R.id.nameBottomLine, false);
+        ageBottomLine = bindViewWithClick(R.id.ageBottomLine, false);
+        phoneEtLine = bindViewWithClick(R.id.ageBottomLine, false);
+        companyNameLine = bindViewWithClick(R.id.companyNameLine, false);
+        departmentLine = bindViewWithClick(R.id.departmentLine, false);
+        staffNoLine = bindViewWithClick(R.id.staffNoLine, false);
         SoftInputKeyboardUtils.hiddenKeyboard(nameEt);
         spinnerListener();
 
-//        etChangeListener(nameEt);
-//        etChangeListener(ageEt);
-//        etChangeListener(phoneEt);
-//        etChangeListener(companyNameEt);
-//        etChangeListener(departmentEt);
+        backBtn.setVisibility(View.VISIBLE);
+        rightTv.setVisibility(View.VISIBLE);
+
+//        etChangeListener(nameEt, nameBottomLine);
+//        etChangeListener(ageEt, ageBottomLine);
+//        etChangeListener(phoneEt, phoneEtLine);
+//        etChangeListener(companyNameEt, companyNameLine);
+//        etChangeListener(departmentEt, departmentLine);
+//        etChangeListener(staffNoEt, staffNoLine);
+
+        //设置音量
+        float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
+        BaseApplication.AP.setVolume((int) streamVolumeMax);
     }
 
     @Override
@@ -90,18 +116,78 @@ public class AppRegisterActivity extends BaseActivity {
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.inputPwBtn:
+            case R.id.pwBtn:
+                String pwBtnText = pwBtn.getText().toString().trim();
+                if (pwBtnText.equals(getString(R.string.register))) {
+                    registerUser();
+                } else if (pwBtnText.equals(getString(R.string.complete))) {
+                    //跳转人脸识别的界面(只要开启了人脸)
+                    if (AppConstant.OPEN_FACE) {
+
+                    } else {
+                        //跳转默认的识别页面(没有开启人脸)
+                        SkipActivityUtil.skipActivity(this,DefaultRegisterActivity.class);
+                    }
+                }
+                break;
+            case R.id.fingerModel:
+                pwBtn.setText(getString(R.string.register));
+
+                break;
+            case R.id.faceModel:
+                pwBtn.setText(getString(R.string.register));
+
+                break;
+            case R.id.idCardModel:
+                pwBtn.setText(getString(R.string.register));
+
+                break;
+            case R.id.pwModel:
+                pwBtn.setText(getString(R.string.register));
                 pwRegister();
                 break;
-            case R.id.pwBtn:
-                String userName = nameEt.getText().toString().trim();
-                if (TextUtils.isEmpty(userName)) {
-                    nameBottomLine.setBackgroundColor(R.color.red);
-                    ToastUtils.showSingleToast(this, getString(R.string.please_input_name));
-                    return;
+            case R.id.backBtn:
+                AppRegisterActivity.this.finish();
+                break;
+            case R.id.rightTv:
+                //跳转下一页
+                //跳转人脸识别的界面(只要开启了人脸)
+                if (AppConstant.OPEN_FACE) {
+
+                } else {
+                    //跳转默认的识别页面(没有开启人脸)
+                    SkipActivityUtil.skipActivity(this,DefaultRegisterActivity.class);
                 }
                 break;
         }
+    }
+
+
+    private void queryUser(DBUtil dbUtil, String params) {
+        WhereCondition whereCondition = UserDao.Properties.Name.eq(params);
+        dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
+                //返回的结果
+                Logger.d("注册的结果：" + result);
+            }
+
+            @Override
+            public void onSuccess(List<User> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+                //查询失败
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+                //true 查询成功的通知  false  查询失败的通知
+
+            }
+        }).queryAsync(User.class, whereCondition);
     }
 
     private void spinnerListener() {
@@ -112,9 +198,9 @@ public class AppRegisterActivity extends BaseActivity {
                 TextView textView = (TextView) view;
                 String selectItem = textView.getText().toString();
                 if (selectItem.equals(getString(R.string.sex))) {
-
+                    sex = "";
                 } else {
-
+                    sex = selectItem;
                 }
             }
 
@@ -126,7 +212,7 @@ public class AppRegisterActivity extends BaseActivity {
     }
 
     //监听EdiText的变化
-    private void etChangeListener(AppCompatEditText et) {
+    private void etChangeListener(AppCompatEditText et, View line) {
         et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -142,91 +228,152 @@ public class AppRegisterActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {
                 boolean b = editable.length() > 0;
                 if (b) {
-                    et.setVisibility(View.GONE);
-                } else {
-                    et.setVisibility(View.VISIBLE);
+                    line.setBackgroundColor(R.color.blue_5);
                 }
             }
         });
     }
 
+    private void registerUser() {
+        String userName = nameEt.getText().toString().trim();
+        if (TextUtils.isEmpty(userName)) {
+            nameBottomLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_name));
+            return;
+        }
+        String userAge = ageEt.getText().toString().trim();
+        if (TextUtils.isEmpty(userAge)) {
+            ageBottomLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_age));
+            return;
+        }
+        String userPhone = phoneEt.getText().toString().trim();
+        if (TextUtils.isEmpty(userPhone)) {
+            phoneEtLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_phone));
+            return;
+        }
+        String companyName = companyNameEt.getText().toString().trim();
+        if (TextUtils.isEmpty(companyName)) {
+            companyNameLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_company));
+            return;
+        }
+        String department = departmentEt.getText().toString().trim();
+        if (TextUtils.isEmpty(department)) {
+            departmentLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_department));
+            return;
+        }
+        String staffNo = staffNoEt.getText().toString().trim();
+        if (TextUtils.isEmpty(staffNo)) {
+            staffNoLine.setBackgroundColor(R.color.red);
+            ToastUtils.showSingleToast(this, getString(R.string.please_input_staff_no));
+            return;
+        }
+        if (sex.equals("")) {
+            ToastUtils.showSingleToast(this, getString(R.string.please_select_sex));
+            return;
+        }
+        insertUser(userName, userAge, userPhone, companyName, department, staffNo);
+    }
+
+    private void insertUser(String userName, String userAge, String userPhone,
+                            String companyName, String department, String staffNo) {
+        if (AppRegisterActivity.this.pw != null) {
+            Long pwId = AppRegisterActivity.this.pw.getUId();
+            User user = new User();
+            user.setName(userName);
+            user.setAge(userAge);
+            user.setSex(sex);
+            user.setPhone(userPhone);
+            user.setOrganizName(companyName);
+            user.setSection(department);
+            user.setWorkNum(staffNo);
+            user.setPwId(pwId);
+            user.setPw(AppRegisterActivity.this.pw);
+            DBUtil dbUtil = BaseApplication.getDbUtil();
+            dbUtil.setDbCallBack(new DbCallBack<User>() {
+                @Override
+                public void onSuccess(User result) {
+                    QueryBuilder<User> userQueryBuilder = dbUtil.getDaoSession().getUserDao().queryBuilder();
+                    List<User> list = userQueryBuilder.list();
+                    for (User user1 : list) {
+                        Logger.d(" 查询user：" + user1);
+                    }
+                }
+
+                @Override
+                public void onSuccess(List<User> result) {
+
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+
+                @Override
+                public void onNotification(boolean result) {
+                    if (result) {
+                        ToastUtils.showSquareImgToast(AppRegisterActivity.this,
+                                getString(R.string.pw_register_success),
+                                ActivityCompat.getDrawable(AppRegisterActivity.this,
+                                        R.drawable.ic_emoje));
+                        BaseApplication.AP.play_checkInSuccess();
+                        pwModel.setVisibility(View.GONE);
+                        pwBtn.setText(getString(R.string.complete));
+                    } else {
+                        ToastUtils.showSquareImgToast(AppRegisterActivity.this,
+                                getString(R.string.pw_register_fail),
+                                ActivityCompat.getDrawable(AppRegisterActivity.this,
+                                        R.drawable.cry_icon));
+                        BaseApplication.AP.play_checkInFail();
+                    }
+                }
+            }).insertAsyncSingle(user);
+
+        } else {
+            ToastUtils.showSingleToast(this, getString(R.string.please_select_register_model));
+        }
+    }
+
+    private Pw pw;
+
     private void pwRegister() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.input_pw_view, null);
-        CEditText inputPw = dialogView.findViewById(R.id.inputPw);
-        AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
-        LinearLayout btnParent = dialogView.findViewById(R.id.btnParent);
-        AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
-        AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
-        AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
-        AppCompatTextView inputPwTitle = dialogView.findViewById(R.id.inputPwTitle);
-        final String[] pw1 = new String[1];
-        nextBtn.setOnClickListener(new OnceClickListener() {
+        PwFactory.createPw(this, new PwCallBack() {
+            @Override
+            public void pwCallBack(Pw pw) {
+                insertOrReplacePw(pw);
+            }
+        });
+    }
+
+    private void insertOrReplacePw(Pw pw) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        dbUtil.setDbCallBack(new DbCallBack<Pw>() {
+            @Override
+            public void onSuccess(List<Pw> result) {
+
+            }
 
             @Override
-            public void onNoDoubleClick(View v) {
-                String pw = inputPw.getText().toString().trim();
-                if (pw.length() < 8) {
-                    ToastUtils.showSquareTvToast(
-                            AppRegisterActivity.this, getString(R.string.please_input_8_pw));
-                    return;
-                }
-                pw1[0] = pw;
-                inputPw.getText().clear();
-                inputPwTitle.setText(getString(R.string.check_pw));
-                nextBtn.setVisibility(View.GONE);
-                btnParent.setVisibility(View.VISIBLE);
+            public void onSuccess(Pw result) {
+                Logger.d("Pw成功插入：" + result);
+                AppRegisterActivity.this.pw = result;
             }
-        });
-        Dialog dialog = AppDialog.gmDialog(this, dialogView, false);
-        dismissBtn.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
-                pw1[0] = null;
-                dialog.dismiss();
-            }
-        });
-        cancelBtn.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
-                pw1[0] = null;
-                dialog.dismiss();
-            }
-        });
-        positiveBtn.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
-                String pw = inputPw.getText().toString().trim();
-                if (pw.length() < 8) {
-                    ToastUtils.showSquareTvToast(
-                            AppRegisterActivity.this, getString(R.string.please_input_8_pw));
-                    return;
-                }
-                if (pw.equals(pw1[0])) {
-                    //存储密码，注册成功
-                    long pwId = System.currentTimeMillis();
-                    Pw pwData = new Pw();
-                    pwData.setUId(pwId);
-                    pwData.setPassword(pw);
-                    BaseApplication.getDbUtil().getDaoSession().getPwDao().insertOrReplace(pwData);
 
-                    ToastUtils.showSquareImgToast(AppRegisterActivity.this,
-                            getString(R.string.pw_register_success),
-                            ActivityCompat.getDrawable(AppRegisterActivity.this,
-                                    R.drawable.ic_emoje));
-                    pw1[0] = null;
-                    inputPwBtn.setVisibility(View.GONE);
-                    pwBtn.setVisibility(View.VISIBLE);
-                    dialog.dismiss();
-                } else {
-                    ToastUtils.showSquareImgToast(
-                            AppRegisterActivity.this,
-                            getString(R.string.pw_register_no_eq),
-                            ActivityCompat.getDrawable(AppRegisterActivity.this,
-                                    R.drawable.cry_icon)
-                    );
-                }
+            @Override
+            public void onFailed() {
+                Logger.d("Pw插入失败：");
             }
-        });
+
+            @Override
+            public void onNotification(boolean result) {
+                Logger.d("插入Pw成功:" + result);
+
+            }
+        }).insertAsyncSingle(pw);
     }
 
 }
