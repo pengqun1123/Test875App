@@ -24,6 +24,10 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+
+        flatDir {
+            dirs '../finger/libs','libs'//相对路径查找libs
+        }
     }
 }
 

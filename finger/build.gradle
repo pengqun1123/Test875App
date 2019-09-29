@@ -50,7 +50,7 @@ android {
             } else {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
             }
-            jniLibs.srcDirs = ['libs']
+            //jniLibs.srcDirs = ['libs']
         }
     }
 
@@ -58,11 +58,17 @@ android {
         abortOnError false
     }
 
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(name: 'TGFinger661J-release', ext: 'aar')
     implementation project(':baselibrary')
     annotationProcessor rootProject.ext.dependencies["router-compiler"]
-
 }
