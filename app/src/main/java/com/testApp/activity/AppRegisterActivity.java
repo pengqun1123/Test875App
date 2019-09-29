@@ -23,13 +23,20 @@ import com.baselibrary.callBack.PwCallBack;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.dao.db.UserDao;
+import com.baselibrary.pojo.Finger3;
+import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.service.factory.PwFactory;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
+import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
+import com.sd.tgfinger.CallBack.RegisterCallBack;
+import com.sd.tgfinger.CallBack.Verify1_NCallBack;
+import com.sd.tgfinger.pojos.Msg;
+import com.sd.tgfinger.utils.ToastUtil;
 import com.testApp.R;
 import com.testApp.constant.AppConstant;
 
@@ -126,13 +133,25 @@ public class AppRegisterActivity extends BaseActivity {
 
                     } else {
                         //跳转默认的识别页面(没有开启人脸)
-                        SkipActivityUtil.skipActivity(this,DefaultRegisterActivity.class);
+                        SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
                     }
                 }
                 break;
             case R.id.fingerModel:
                 pwBtn.setText(getString(R.string.register));
-
+                FingerApi.register(this, null, 0, new RegisterCallBack() {
+                    @Override
+                    public void registerResult(Msg msg) {
+                        Integer result = msg.getResult();
+                        if (result == 8) {
+                            byte[] fingerData = msg.getFingerData();
+                            Finger6 finger6 = new Finger6();
+                            finger6.setFinger6Feature(fingerData);
+                            insertOrReplaceFinger(finger6);
+//                            verifyFinger(fingerData, 1);
+                        }
+                    }
+                });
                 break;
             case R.id.faceModel:
                 pwBtn.setText(getString(R.string.register));
@@ -156,7 +175,7 @@ public class AppRegisterActivity extends BaseActivity {
 
                 } else {
                     //跳转默认的识别页面(没有开启人脸)
-                    SkipActivityUtil.skipActivity(this,DefaultRegisterActivity.class);
+                    SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
                 }
                 break;
         }
@@ -333,12 +352,67 @@ public class AppRegisterActivity extends BaseActivity {
                 }
             }).insertAsyncSingle(user);
 
+        } else if (AppRegisterActivity.this.fg6 != null || AppRegisterActivity.this.fg3 != null) {
+            Long fg6Id = AppRegisterActivity.this.fg6.getFinger6Id();
+            User user = new User();
+            user.setName(userName);
+            user.setAge(userAge);
+            user.setSex(sex);
+            user.setPhone(userPhone);
+            user.setOrganizName(companyName);
+            user.setSection(department);
+            user.setWorkNum(staffNo);
+            user.setFinger6Id(fg6Id);
+            user.setFinger6(AppRegisterActivity.this.fg6);
+            DBUtil dbUtil = BaseApplication.getDbUtil();
+            dbUtil.setDbCallBack(new DbCallBack<User>() {
+                @Override
+                public void onSuccess(User result) {
+                    QueryBuilder<User> userQueryBuilder = dbUtil.getDaoSession().getUserDao().queryBuilder();
+                    List<User> list = userQueryBuilder.list();
+                    for (User user1 : list) {
+                        Logger.d(" 查询user：" + user1);
+                    }
+
+                }
+
+                @Override
+                public void onSuccess(List<User> result) {
+
+                }
+
+                @Override
+                public void onFailed() {
+
+                }
+
+                @Override
+                public void onNotification(boolean result) {
+                    if (result) {
+                        ToastUtils.showSquareImgToast(AppRegisterActivity.this,
+                                getString(R.string.pw_register_success),
+                                ActivityCompat.getDrawable(AppRegisterActivity.this,
+                                        R.drawable.ic_emoje));
+                        BaseApplication.AP.play_checkInSuccess();
+                        pwModel.setVisibility(View.GONE);
+                        pwBtn.setText(getString(R.string.complete));
+                    } else {
+                        ToastUtils.showSquareImgToast(AppRegisterActivity.this,
+                                getString(R.string.pw_register_fail),
+                                ActivityCompat.getDrawable(AppRegisterActivity.this,
+                                        R.drawable.cry_icon));
+                        BaseApplication.AP.play_checkInFail();
+                    }
+                }
+            }).insertAsyncSingle(user);
         } else {
             ToastUtils.showSingleToast(this, getString(R.string.please_select_register_model));
         }
     }
 
     private Pw pw;
+    private Finger6 fg6;
+    private Finger3 fg3;
 
     private void pwRegister() {
         PwFactory.createPw(this, new PwCallBack() {
@@ -376,4 +450,70 @@ public class AppRegisterActivity extends BaseActivity {
         }).insertAsyncSingle(pw);
     }
 
+    private void insertOrReplaceFinger(Finger6 fg) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        dbUtil.setDbCallBack(new DbCallBack<Finger6>() {
+            @Override
+            public void onSuccess(Finger6 result) {
+                Logger.d("Fg6成功插入：" + result);
+                AppRegisterActivity.this.fg6 = result;
+            }
+
+            @Override
+            public void onSuccess(List<Finger6> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+                Logger.d("Fg6插入失败：");
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).insertAsyncSingle(fg);
+    }
+
+    private void insertOrReplaceFinger(Finger3 fg) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        dbUtil.setDbCallBack(new DbCallBack<Finger3>() {
+            @Override
+            public void onSuccess(Finger3 result) {
+                Logger.d("Fg6成功插入：" + result);
+                AppRegisterActivity.this.fg3 = result;
+            }
+
+            @Override
+            public void onSuccess(List<Finger3> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).insertAsyncSingle(fg);
+    }
+
+    //验证指静脉
+    private void verifyFinger(byte[] fingerData, Integer fingerSize) {
+        FingerApi.verifyN(this, fingerData, fingerSize, new Verify1_NCallBack() {
+            @Override
+            public void verify1_NCallBack(Msg msg) {
+                Integer result = msg.getResult();
+                if (result == 8) {
+                    ToastUtils.showSingleToast(AppRegisterActivity.this, "验证成功");
+                } else {
+                    ToastUtils.showSingleToast(AppRegisterActivity.this, "验证失败");
+                }
+            }
+        });
+    }
 }

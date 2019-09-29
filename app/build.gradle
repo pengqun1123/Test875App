@@ -181,6 +181,7 @@ dependencies {
     //每个需要用到Router的组件都要依赖路由的注解
     annotationProcessor rootProject.ext.dependencies["router-compiler"]
     implementation project(':baselibrary')
+    implementation(name: 'TGFinger661J-release', ext: 'aar')
 }
 
 static def releaseTime() {

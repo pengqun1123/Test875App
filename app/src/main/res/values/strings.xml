@@ -46,5 +46,9 @@
     <string name="please_select_register_model">请注册验证方式</string>
     <string name="pw_register_fail">密码注册失败</string>
     <string name="pw_verify">密码验证</string>
+    <string name="finger_n_verify">指静脉验证N</string>
+    <string name="finger_1_verify">指静脉验证1</string>
+    <string name="card_verify">身份证验证</string>
+
 
 </resources>

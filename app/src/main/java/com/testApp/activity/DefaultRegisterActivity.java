@@ -37,6 +37,9 @@ public class DefaultRegisterActivity extends BaseActivity {
     @Override
     protected void initView() {
         AppCompatTextView pwVerify = bindViewWithClick(R.id.pwVerify, true);
+        AppCompatTextView fingerNVerify = bindViewWithClick(R.id.fingerNVerify, true);
+        AppCompatTextView finger1Verify = bindViewWithClick(R.id.finger1Verify, true);
+        AppCompatTextView cardVerify = bindViewWithClick(R.id.cardVerify, true);
 
     }
 
@@ -62,6 +65,15 @@ public class DefaultRegisterActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.pwVerify:
                 pwInputVerify();
+                break;
+            case R.id.fingerNVerify:
+
+                break;
+            case R.id.finger1Verify:
+
+                break;
+            case R.id.cardVerify:
+
                 break;
         }
     }
@@ -143,6 +155,8 @@ public class DefaultRegisterActivity extends BaseActivity {
             }
         }).queryAsyncAll(Pw.class, pwQueryBuilder);
     }
+
+
 
 
 }

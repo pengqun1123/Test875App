@@ -75,26 +75,25 @@ public class CompareTwoActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_select1:
-                showFileChooser("选择第一张图片", IMAGE1_OPEN_REQUEST_CODE);
-                break;
-            case R.id.btn_select2:
-                showFileChooser("选择第二张图片", IMAGE2_OPEN_REQUEST_CODE);
-                break;
-            case R.id.btn_cmp:
-                if (feature1 != null && feature2 != null) {
-                    //特征比对
-                    double sim = 0;
-                    sim = Tool.calcSimilarity(FaceConfig.getInstance().getOriginalSimilarityThreshold(), feature1, feature2);
-                    DecimalFormat format = new DecimalFormat("#.######");
-                    tvSim.setText("相似度: " + format.format(sim));
-                } else {
-                    Toast.makeText(this, "有图片抽取特征失败", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-                break;
+        int i = v.getId();
+        if (i == R.id.btn_select1) {
+            showFileChooser("选择第一张图片", IMAGE1_OPEN_REQUEST_CODE);
+
+        } else if (i == R.id.btn_select2) {
+            showFileChooser("选择第二张图片", IMAGE2_OPEN_REQUEST_CODE);
+
+        } else if (i == R.id.btn_cmp) {
+            if (feature1 != null && feature2 != null) {
+                //特征比对
+                double sim = 0;
+                sim = Tool.calcSimilarity(FaceConfig.getInstance().getOriginalSimilarityThreshold(), feature1, feature2);
+                DecimalFormat format = new DecimalFormat("#.######");
+                tvSim.setText("相似度: " + format.format(sim));
+            } else {
+                Toast.makeText(this, "有图片抽取特征失败", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
         }
     }
 

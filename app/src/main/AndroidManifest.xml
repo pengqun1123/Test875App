@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.testApp">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".base.TestApplication"
         android:allowBackup="true"
@@ -17,17 +20,23 @@
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/activityPublicStyle">
+
+        </activity>
+        <activity
+            android:name=".activity.AppRegisterActivity"
+            android:theme="@style/activityPublicStyle" />
+        <activity
+            android:name=".activity.DefaultRegisterActivity"
+            android:theme="@style/activityPublicStyle" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/activityPublicStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.AppRegisterActivity"
-            android:theme="@style/activityPublicStyle" />
-        <activity android:name=".activity.DefaultRegisterActivity"
-            android:theme="@style/activityPublicStyle"/>
     </application>
 
 </manifest>

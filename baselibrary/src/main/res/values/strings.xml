@@ -14,4 +14,7 @@
     <string name="vault">跳过</string>
     <string name="verify_model">验证方式</string>
     <string name="complete">完成</string>
+    <string name="permissions">应用需要以下权限，请同意!</string>
+    <string name="dev_open">设备已经打开</string>
+
 </resources>

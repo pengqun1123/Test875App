@@ -22,9 +22,17 @@ import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.model.TestBean;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
-import com.baselibrary.util.dialogUtil.DialogCallBack;
 import com.baselibrary.util.dialogUtil.AppDialog;
+import com.finger.fingerApi.FingerApi;
+import com.orhanobut.logger.Logger;
+import com.sd.tgfinger.CallBack.DevOpenCallBack;
+import com.sd.tgfinger.CallBack.DevStatusCallBack;
+import com.sd.tgfinger.CallBack.FvInitCallBack;
+import com.sd.tgfinger.pojos.Msg;
+import com.sd.tgfinger.tgApi.Constant;
+import com.sd.tgfinger.tgApi.TGBApi;
 import com.testApp.R;
+import com.testApp.base.TestApplication;
 import com.testApp.constant.AppConstant;
 
 
@@ -33,14 +41,6 @@ import com.testApp.constant.AppConstant;
  * on 2019/9/9
  */
 public class MainActivity extends BaseActivity {
-
-    @SuppressLint("ResourceAsColor")
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Override
     protected void initToolBar() {
@@ -62,6 +62,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        //监测设备的连接状态
+//        TGBApi.getTGAPI().startDevService(this);
         bindViewWithClick(R.id.fingerModel, true);
         bindViewWithClick(R.id.faceModel, true);
         bindViewWithClick(R.id.idCardModel, true);
@@ -78,8 +80,45 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void onDestroy() {
+        super.onDestroy();
+//        TGBApi.getTGAPI().unbindDevService(this);
+    }
 
+    @Override
+    protected void initData() {
+        //初始化指静脉
+        initFinger();
+
+    }
+
+    //临时放到这里初始化指静脉
+    private void initFinger() {
+        FingerApi.fingerInit(this, null, new FvInitCallBack() {
+            @Override
+            public void fvInitResult(Msg msg) {
+                Integer result = msg.getResult();
+                if (result == 1) {
+                    openFinger();
+                } else {
+                    Logger.e("指静脉初始化失败:" + msg.getTip());
+                }
+            }
+        });
+    }
+
+    private void openFinger() {
+        FingerApi.openDev(this, Constant.TEMPL_MODEL_6, true, new DevOpenCallBack() {
+            @Override
+            public void devOpenResult(Msg msg) {
+                Logger.d(msg.getTip());
+            }
+        }, new DevStatusCallBack() {
+            @Override
+            public void devStatus(Msg msg) {
+                Logger.d("设备的连接状态:" + msg.getTip());
+            }
+        });
     }
 
     @Override
@@ -152,6 +191,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onNoDoubleClick(View v) {
                 routerSkip(flag);
+                dialog.dismiss();
             }
         });
     }

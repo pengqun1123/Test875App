@@ -23,7 +23,7 @@
         android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_20"
+        android:padding="@dimen/dp_20"
         android:textColor="@color/black_0"
         android:textSize="@dimen/sp_16"
         tools:text="提示的内容" />

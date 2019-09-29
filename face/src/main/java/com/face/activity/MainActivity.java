@@ -45,30 +45,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_1c1:
-                startActivity(new Intent(MainActivity.this, CompareTwoActivity.class));
-                break;
-            case R.id.btn_single_camera:
-                startActivity(new Intent(MainActivity.this, SingleCameraRecActivity.class));
-                break;
-            case R.id.btn_dual_camera:
-             //   startActivity(new Intent(MainActivity.this, DualCameraRecActivity.class));
-                break;
-            case R.id.btn_register:
-                startActivity(new Intent(MainActivity.this, UserListActivity.class));
-                break;
-            case R.id.btn_direct_demo:
-            //    startActivity(new Intent(MainActivity.this, DirectCameraDetectActivity.class));
-                break;
-            case R.id.btn_safety_halmet:
-            //    startActivity(new Intent(MainActivity.this, SafetyHelmetDetectActivity.class));
-                break;
-            case R.id.btn_v3_rec:
-                startActivity(new Intent(MainActivity.this, V3FaceRecActivity.class));
-                break;
-            default:
-                break;
+        int i = v.getId();
+        if (i == R.id.btn_1c1) {
+            startActivity(new Intent(MainActivity.this, CompareTwoActivity.class));
+
+        } else if (i == R.id.btn_single_camera) {
+            startActivity(new Intent(MainActivity.this, SingleCameraRecActivity.class));
+
+        } else if (i == R.id.btn_dual_camera) {//   startActivity(new Intent(MainActivity.this, DualCameraRecActivity.class));
+
+        } else if (i == R.id.btn_register) {
+            startActivity(new Intent(MainActivity.this, UserListActivity.class));
+
+        } else if (i == R.id.btn_direct_demo) {//    startActivity(new Intent(MainActivity.this, DirectCameraDetectActivity.class));
+
+        } else if (i == R.id.btn_safety_halmet) {//    startActivity(new Intent(MainActivity.this, SafetyHelmetDetectActivity.class));
+
+        } else if (i == R.id.btn_v3_rec) {
+            startActivity(new Intent(MainActivity.this, V3FaceRecActivity.class));
+
+        } else {
         }
     }
 }

@@ -12,5 +12,8 @@ public final class AppConstant {
     public static final Integer PW_MODEL = 0x13;
 
     public static final Boolean OPEN_FACE = false;
+    //更新库中模板的阈值分数
+    public static final Integer UPDATE_THRESHOLDBOOLEAN = 75;
+
 
 }
