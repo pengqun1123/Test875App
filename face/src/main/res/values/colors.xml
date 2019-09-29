@@ -3,4 +3,8 @@
     <color name="face_colorPrimary">#008577</color>
     <color name="face_colorPrimaryDark">#00574B</color>
     <color name="face_colorAccent">#D81B60</color>
+    <!--淡蓝色-->
+    <color name="face_blue">#347AF5</color>
+    <!--背景色-->
+    <color name="face_back_gray">#333333</color>
 </resources>

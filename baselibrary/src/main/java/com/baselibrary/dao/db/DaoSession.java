@@ -8,11 +8,13 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
 
+import com.baselibrary.dao.db.FaceDao;
 import com.baselibrary.dao.db.IdCardDao;
 import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.dao.db.StudentDao;
@@ -27,11 +29,13 @@ import com.baselibrary.dao.db.UserDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig faceDaoConfig;
     private final DaoConfig idCardDaoConfig;
     private final DaoConfig pwDaoConfig;
     private final DaoConfig studentDaoConfig;
     private final DaoConfig userDaoConfig;
 
+    private final FaceDao faceDao;
     private final IdCardDao idCardDao;
     private final PwDao pwDao;
     private final StudentDao studentDao;
@@ -40,6 +44,9 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        faceDaoConfig = daoConfigMap.get(FaceDao.class).clone();
+        faceDaoConfig.initIdentityScope(type);
 
         idCardDaoConfig = daoConfigMap.get(IdCardDao.class).clone();
         idCardDaoConfig.initIdentityScope(type);
@@ -53,11 +60,13 @@ public class DaoSession extends AbstractDaoSession {
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
 
+        faceDao = new FaceDao(faceDaoConfig, this);
         idCardDao = new IdCardDao(idCardDaoConfig, this);
         pwDao = new PwDao(pwDaoConfig, this);
         studentDao = new StudentDao(studentDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
 
+        registerDao(Face.class, faceDao);
         registerDao(IdCard.class, idCardDao);
         registerDao(Pw.class, pwDao);
         registerDao(Student.class, studentDao);
@@ -65,10 +74,15 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
+        faceDaoConfig.clearIdentityScope();
         idCardDaoConfig.clearIdentityScope();
         pwDaoConfig.clearIdentityScope();
         studentDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
+    }
+
+    public FaceDao getFaceDao() {
+        return faceDao;
     }
 
     public IdCardDao getIdCardDao() {

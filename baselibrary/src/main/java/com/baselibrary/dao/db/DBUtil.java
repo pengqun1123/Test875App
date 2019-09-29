@@ -348,16 +348,16 @@ public class DBUtil {
             @Override
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
-                    List<T> list = new ArrayList<>();
-                    list.add(((T) operation.getResult()));
-                    mCallBack.onSuccess(list);
+              //      List<T> list = new ArrayList<>();
+               //     list.add(((T) operation.getResult()));
+                    mCallBack.onSuccess((List) operation.getResult());
                 } else if (operation.isFailed()) {
                     mCallBack.onFailed();
                 }
             }
         });
         Query query = daoSession.queryBuilder(cls).where(whereCondition).build();
-        asyncSession.queryUnique(query);
+        asyncSession.queryList(query);
     }
 
     /**

@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.face">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".activity.DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/face_ic_launcher"
         android:label="@string/face_app_name"
@@ -12,13 +18,22 @@
         android:theme="@style/face_AppTheme"
         tools:replace="android:theme,label"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.FaceActivity">
+        <activity android:name=".activity.SDKInitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.FaceActivity"/>
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.FaceCaptureActivity"/>
+        <activity android:name=".activity.UserListActivity"/>
+        <activity android:name=".activity.CompareTwoActivity"/>
+        <activity android:name=".activity.UserAddActivity"/>
+        <activity android:name=".activity.V3FaceRecActivity"/>
+        <activity android:name=".activity.SingleCameraRecActivity"/>
+
     </application>
 
 </manifest>

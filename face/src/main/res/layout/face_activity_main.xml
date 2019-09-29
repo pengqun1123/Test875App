@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    tools:context=".activity.FaceActivity">
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="注册人脸" />
+
+    <Button
+        android:id="@+id/btn_single_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="单目识别" />
+
+    <Button
+        android:id="@+id/btn_dual_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="双目识别" />
+
+    <Button
+        android:id="@+id/btn_1c1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1:1比对" />
+
+    <Button
+        android:id="@+id/btn_direct_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="摄像头原生调用人脸检测示例" />
+
+    <Button
+        android:id="@+id/btn_safety_halmet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安全帽检测" />
+
+    <Button
+        android:id="@+id/btn_v3_rec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="V3识别流程示例" />
+
+</LinearLayout>

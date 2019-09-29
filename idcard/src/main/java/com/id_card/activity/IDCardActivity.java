@@ -2,7 +2,6 @@ package com.id_card.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,25 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.pojo.IdCard;
 import com.id_card.R;
-import com.id_card.callback.CardInfoListener;
-import com.id_card.service.IdCardService;
-import com.zkteco.android.IDReader.IDPhotoHelper;
-import com.zkteco.android.IDReader.WLTService;
+import com.id_card.service.IdController;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;
 import com.zkteco.android.biometric.core.utils.LogHelper;
-import com.zkteco.android.biometric.core.utils.ToolUtils;
+
 import com.zkteco.android.biometric.module.idcard.IDCardReader;
 import com.zkteco.android.biometric.module.idcard.IDCardReaderFactory;
 import com.zkteco.android.biometric.module.idcard.exception.IDCardReaderException;
-import com.zkteco.android.biometric.module.idcard.meta.IDCardInfo;
-import com.zkteco.android.biometric.module.idcard.meta.IDPRPCardInfo;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +59,7 @@ public class IDCardActivity extends AppCompatActivity {
     private TextView textView = null;
     private ImageView imageView = null;
     private boolean bopen = false;
-    private IdCardService instance;
+    private IdController instance;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +70,9 @@ public class IDCardActivity extends AppCompatActivity {
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
         }else {
-            instance = IdCardService.getInstance(this);
+          //  startIDCardReader();
+           instance = IdController.getInstance(this);
+           //instance.queryAll();
         }
 
     }
@@ -92,7 +86,9 @@ public class IDCardActivity extends AppCompatActivity {
                 isAllGranted &= (grantResult == PackageManager.PERMISSION_GRANTED);
             }
             if (isAllGranted) {
-               startIDCardReader();
+               //startIDCardReader();
+                instance = IdController.getInstance(this);
+
             } else {
                 Toast.makeText(this, R.string.id_card_permission_denied, Toast.LENGTH_SHORT).show();
             }
@@ -194,12 +190,12 @@ public class IDCardActivity extends AppCompatActivity {
 
     public void OnBnUID(View view)
     {
-        String uCardNum = instance.getUCardNum();
-        if (uCardNum!=null){
-            textView.setText(uCardNum);
-        }else{
-            textView.setText("获取身份证物理卡号失败");
-        }
+//        String uCardNum = instance.getUCardNum();
+//        if (uCardNum!=null){
+//            textView.setText(uCardNum);
+//        }else{
+//            textView.setText("获取身份证物理卡号失败");
+//        }
 //        try {
 //            if (!bopen) {
 //                textView.setText("请先连接设备");
@@ -283,6 +279,7 @@ public class IDCardActivity extends AppCompatActivity {
                             bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
                             out.flush();
                             out.close();
+                       //     instance.stopScanIdCard();
                             Log.d("===","保存成功！");
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -291,6 +288,11 @@ public class IDCardActivity extends AppCompatActivity {
                 }else {
                     textView.setText("获取信息失败!");
                 }
+            }
+
+            @Override
+            public void onRegisterResult(boolean result,IdCard idCard) {
+
             }
         });
 
