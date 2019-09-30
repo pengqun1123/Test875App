@@ -1,4 +1,4 @@
-package com.testApp.constant;
+package com.baselibrary.constant;
 
 /**
  * Created By pq
@@ -11,9 +11,13 @@ public final class AppConstant {
     public static final Integer IDCARD_MODEL = 0x12;
     public static final Integer PW_MODEL = 0x13;
 
-    public static final Boolean OPEN_FACE = false;
+    //标记是否启用人脸
+    public static final String OPEN_FACE = "open_face";
     //更新库中模板的阈值分数
     public static final Integer UPDATE_THRESHOLDBOOLEAN = 75;
+
+    //注册验证的类型
+    public static final Integer REGISTER_FINGER = 0xf1;
 
 
 }

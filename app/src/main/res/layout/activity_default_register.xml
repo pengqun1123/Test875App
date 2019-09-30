@@ -20,7 +20,7 @@
         android:layout_gravity="bottom"
         android:background="@drawable/tab_bg"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/dp_40">
+        android:paddingBottom="@dimen/dp_50">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/pwVerify"
+                android:id="@+id/manage_set"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -41,12 +41,29 @@
                 android:background="@drawable/menu_select_bg"
                 android:gravity="center"
                 android:padding="@dimen/dp_10"
-                android:text="@string/pw_verify"
+                android:text="@string/manager_set"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_16" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/fingerNVerify"
+                android:id="@+id/userCenter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_weight="1"
+                android:background="@drawable/menu_select_bg"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
+                android:text="@string/user_center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/pwVerify"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -58,7 +75,7 @@
                 android:background="@drawable/menu_select_bg"
                 android:gravity="center"
                 android:padding="@dimen/dp_10"
-                android:text="@string/finger_n_verify"
+                android:text="@string/pw_verify"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_16" />
         </LinearLayout>
@@ -67,6 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView

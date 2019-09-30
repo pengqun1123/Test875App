@@ -18,6 +18,7 @@ import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.pojo.Pw;
+import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.dialogUtil.AppDialog;
 import com.testApp.R;
@@ -37,9 +38,9 @@ public class DefaultRegisterActivity extends BaseActivity {
     @Override
     protected void initView() {
         AppCompatTextView pwVerify = bindViewWithClick(R.id.pwVerify, true);
-        AppCompatTextView fingerNVerify = bindViewWithClick(R.id.fingerNVerify, true);
-        AppCompatTextView finger1Verify = bindViewWithClick(R.id.finger1Verify, true);
-        AppCompatTextView cardVerify = bindViewWithClick(R.id.cardVerify, true);
+        AppCompatTextView manage_set = bindViewWithClick(R.id.manage_set, true);
+        AppCompatTextView userCenter = bindViewWithClick(R.id.userCenter, true);
+
 
     }
 
@@ -66,15 +67,15 @@ public class DefaultRegisterActivity extends BaseActivity {
             case R.id.pwVerify:
                 pwInputVerify();
                 break;
-            case R.id.fingerNVerify:
-
+            case R.id.manage_set:
+                SkipActivityUtil.skipActivity(this, ManagerActivity.class);
+                finish();
                 break;
-            case R.id.finger1Verify:
-
+            case R.id.userCenter:
+                SkipActivityUtil.skipActivity(this, UserCenterActivity.class);
+                finish();
                 break;
-            case R.id.cardVerify:
 
-                break;
         }
     }
 
@@ -155,8 +156,6 @@ public class DefaultRegisterActivity extends BaseActivity {
             }
         }).queryAsyncAll(Pw.class, pwQueryBuilder);
     }
-
-
 
 
 }

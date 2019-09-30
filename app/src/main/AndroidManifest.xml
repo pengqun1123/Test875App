@@ -19,9 +19,7 @@
         tools:targetApi="donut">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/activityPublicStyle">
-
-        </activity>
+            android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.AppRegisterActivity"
             android:theme="@style/activityPublicStyle" />
@@ -37,6 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ManagerActivity" />
+        <activity android:name=".activity.UserCenterActivity"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,6 @@
 package com.testApp.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +26,8 @@ import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.FvInitCallBack;
 import com.sd.tgfinger.pojos.Msg;
 import com.sd.tgfinger.tgApi.Constant;
-import com.sd.tgfinger.tgApi.TGBApi;
 import com.testApp.R;
-import com.testApp.base.TestApplication;
-import com.testApp.constant.AppConstant;
+import com.baselibrary.constant.AppConstant;
 
 
 /**

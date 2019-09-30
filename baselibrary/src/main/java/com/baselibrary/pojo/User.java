@@ -188,11 +188,11 @@ public class User {
         return finger3;
     }
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 832427489)
+    @Generated(hash = 309724030)
     public void setFinger3(Finger3 finger3) {
         synchronized (this) {
             this.finger3 = finger3;
-            finger3Id = finger3 == null ? null : finger3.getFinger3Id();
+            finger3Id = finger3 == null ? null : finger3.getUId();
             finger3__resolvedKey = finger3Id;
         }
     }
@@ -217,11 +217,11 @@ public class User {
         return finger6;
     }
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1364956845)
+    @Generated(hash = 657162331)
     public void setFinger6(Finger6 finger6) {
         synchronized (this) {
             this.finger6 = finger6;
-            finger6Id = finger6 == null ? null : finger6.getFinger6Id();
+            finger6Id = finger6 == null ? null : finger6.getUId();
             finger6__resolvedKey = finger6Id;
         }
     }

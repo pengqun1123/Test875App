@@ -7,6 +7,7 @@ import android.support.multidex.MultiDex;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.util.AudioProvider;
+import com.baselibrary.util.SharedpreferencesUtil;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
@@ -25,6 +26,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         INSTANCE = this;
         Logger.init("UE875==>: ");
+        SharedpreferencesUtil.getInstance().initSharedUtil(this);
         //初始化数据库
         if (dbUtil == null)
             dbUtil = DBUtil.getInstance(this);

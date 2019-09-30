@@ -49,6 +49,20 @@
     <string name="finger_n_verify">指静脉验证N</string>
     <string name="finger_1_verify">指静脉验证1</string>
     <string name="card_verify">身份证验证</string>
+    <string name="manager_set">管理设置</string>
+    <string name="please_manager_pw">请输入管理员密码</string>
+    <string name="ask_open_face">是否启用人脸识别?</string>
+    <string name="please_select_open_face">请选择是否启用人脸验证:</string>
+    <string name="pw_no_eq">前后两次密码不相等</string>
+    <string name="manager_add_success">管理员添加成功</string>
+    <string name="manager_add_fail">管理员添加失败</string>
+    <string name="please_input_pw_agin">请再次输入密码:</string>
+    <string name="user_center">个人中心</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_manage">用户管理</string>
+    <string name="user_register">用户注册</string>
 
 
 </resources>

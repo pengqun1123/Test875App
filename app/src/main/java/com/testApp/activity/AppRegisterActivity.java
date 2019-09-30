@@ -1,7 +1,6 @@
 package com.testApp.activity;
 
 import android.annotation.SuppressLint;
-import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -36,9 +35,8 @@ import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.CallBack.Verify1_NCallBack;
 import com.sd.tgfinger.pojos.Msg;
-import com.sd.tgfinger.utils.ToastUtil;
 import com.testApp.R;
-import com.testApp.constant.AppConstant;
+import com.baselibrary.constant.AppConstant;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
@@ -129,12 +127,12 @@ public class AppRegisterActivity extends BaseActivity {
                     registerUser();
                 } else if (pwBtnText.equals(getString(R.string.complete))) {
                     //跳转人脸识别的界面(只要开启了人脸)
-                    if (AppConstant.OPEN_FACE) {
-
-                    } else {
-                        //跳转默认的识别页面(没有开启人脸)
-                        SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
-                    }
+//                    if (AppConstant.OPEN_FACE) {
+//
+//                    } else {
+//                        //跳转默认的识别页面(没有开启人脸)
+//                        SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
+//                    }
                 }
                 break;
             case R.id.fingerModel:
@@ -171,12 +169,12 @@ public class AppRegisterActivity extends BaseActivity {
             case R.id.rightTv:
                 //跳转下一页
                 //跳转人脸识别的界面(只要开启了人脸)
-                if (AppConstant.OPEN_FACE) {
-
-                } else {
-                    //跳转默认的识别页面(没有开启人脸)
-                    SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
-                }
+//                if (AppConstant.OPEN_FACE) {
+//
+//                } else {
+//                    //跳转默认的识别页面(没有开启人脸)
+//                    SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
+//                }
                 break;
         }
     }
@@ -294,21 +292,32 @@ public class AppRegisterActivity extends BaseActivity {
             ToastUtils.showSingleToast(this, getString(R.string.please_select_sex));
             return;
         }
-        insertUser(userName, userAge, userPhone, companyName, department, staffNo);
+        User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
+//        insertUser(newUser, );
     }
 
-    private void insertUser(String userName, String userAge, String userPhone,
+    private User getNewUser(String userName, String userAge, String userPhone,
                             String companyName, String department, String staffNo) {
+        User user = new User();
+        user.setName(userName);
+        user.setAge(userAge);
+        user.setSex(sex);
+        user.setPhone(userPhone);
+        user.setOrganizName(companyName);
+        user.setSection(department);
+        user.setWorkNum(staffNo);
+        return user;
+    }
+
+    /**
+     * 存储用户的注册信息
+     *
+     * @param user 用户
+     * @param type 注册的类型:
+     */
+    private void insertUser(User user, Integer type) {
         if (AppRegisterActivity.this.pw != null) {
             Long pwId = AppRegisterActivity.this.pw.getUId();
-            User user = new User();
-            user.setName(userName);
-            user.setAge(userAge);
-            user.setSex(sex);
-            user.setPhone(userPhone);
-            user.setOrganizName(companyName);
-            user.setSection(department);
-            user.setWorkNum(staffNo);
             user.setPwId(pwId);
             user.setPw(AppRegisterActivity.this.pw);
             DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -353,15 +362,7 @@ public class AppRegisterActivity extends BaseActivity {
             }).insertAsyncSingle(user);
 
         } else if (AppRegisterActivity.this.fg6 != null || AppRegisterActivity.this.fg3 != null) {
-            Long fg6Id = AppRegisterActivity.this.fg6.getFinger6Id();
-            User user = new User();
-            user.setName(userName);
-            user.setAge(userAge);
-            user.setSex(sex);
-            user.setPhone(userPhone);
-            user.setOrganizName(companyName);
-            user.setSection(department);
-            user.setWorkNum(staffNo);
+            Long fg6Id = AppRegisterActivity.this.fg6.getUId();
             user.setFinger6Id(fg6Id);
             user.setFinger6(AppRegisterActivity.this.fg6);
             DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -501,6 +502,7 @@ public class AppRegisterActivity extends BaseActivity {
             }
         }).insertAsyncSingle(fg);
     }
+
 
     //验证指静脉
     private void verifyFinger(byte[] fingerData, Integer fingerSize) {

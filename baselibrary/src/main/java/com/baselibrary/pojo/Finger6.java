@@ -14,40 +14,35 @@ import java.util.Arrays;
 @Entity
 public class Finger6 {
     @Id(autoincrement = true)
-    Long finger6Id;
-    @Property(nameInDb = "finger6")
+    Long uId;
+    @Property(nameInDb = "feature")
     byte[] finger6Feature;
-
-    @Generated(hash = 470613142)
-    public Finger6(Long finger6Id, byte[] finger6Feature) {
-        this.finger6Id = finger6Id;
+    @Generated(hash = 2087254474)
+    public Finger6(Long uId, byte[] finger6Feature) {
+        this.uId = uId;
         this.finger6Feature = finger6Feature;
     }
-
     @Generated(hash = 1398466695)
     public Finger6() {
     }
-
-    public Long getFinger6Id() {
-        return this.finger6Id;
+    public Long getUId() {
+        return this.uId;
     }
-
-    public void setFinger6Id(Long finger6Id) {
-        this.finger6Id = finger6Id;
+    public void setUId(Long uId) {
+        this.uId = uId;
     }
-
     public byte[] getFinger6Feature() {
         return this.finger6Feature;
     }
-
     public void setFinger6Feature(byte[] finger6Feature) {
         this.finger6Feature = finger6Feature;
     }
 
+
     @Override
     public String toString() {
         return "Finger6{" +
-                "finger6Id=" + finger6Id +
+                "uId=" + uId +
                 ", finger6Feature=" + Arrays.toString(finger6Feature) +
                 '}';
     }
