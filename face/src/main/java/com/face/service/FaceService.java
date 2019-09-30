@@ -80,6 +80,7 @@ public class FaceService {
         try {
             faceRecConfig = new BaseFaceRecProcessor.FaceRecConfig(new BaseFaceRecProcessor.FaceRecStep[]{livenessDetectStep,extractFeatureStep, faceSearchStep, });
             //设置为近红外活体检测
+            faceRecConfig.maxSearchFailTimes=2;
             faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
             faceRecProcessor = new BaseFaceRecProcessor(FaceConfig.getInstance().getFaceSDK(), visCamera, nirCamera, faceRecConfig);
             faceRecProcessor.setFaceDetectCallback(faceRecCallback);

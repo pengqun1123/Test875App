@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.baselibrary.base.BaseActivity;
 import com.face.R;
 import com.face.callback.FaceListener;
 import com.face.db.User;
@@ -46,7 +47,7 @@ import static com.zqzn.android.face.processor.BaseFaceRecProcessor.extractFeatur
 import static com.zqzn.android.face.processor.BaseFaceRecProcessor.faceSearchStep;
 import static com.zqzn.android.face.processor.BaseFaceRecProcessor.livenessDetectStep;
 
-public class V3FaceRecActivity extends AppCompatActivity implements BaseFaceRecProcessor.FaceRecCallback, FaceSDK.InitCallback, FaceListener {
+public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProcessor.FaceRecCallback, FaceSDK.InitCallback, FaceListener {
 
     private static final String TAG = V3FaceRecActivity.class.getSimpleName();
 
@@ -74,33 +75,49 @@ public class V3FaceRecActivity extends AppCompatActivity implements BaseFaceRecP
     private ProgressBar pb;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.face_activity_v3_face_rec);
+    protected Integer contentView() {
+        return R.layout.face_activity_v3_face_rec;
+    }
+
+    @Override
+    protected void initView() {
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
-       // nirPreview = (SurfaceView) findViewById(R.id.nir_preview);
+        // nirPreview = (SurfaceView) findViewById(R.id.nir_preview);
         pb = ((ProgressBar) findViewById(R.id.pb));
-    //    nirPreview.bringToFront();
-      //  visCamera = FaceConfig.getInstance().getVisCamera();
+        //    nirPreview.bringToFront();
+        //  visCamera = FaceConfig.getInstance().getVisCamera();
         nirCamera = FaceConfig.getInstance().getNirCamera();
-      //  logFilePath = new File(String.format("%s/face_rec_log", FaceConfig.getInstance().getAppRootDir()));
+        //  logFilePath = new File(String.format("%s/face_rec_log", FaceConfig.getInstance().getAppRootDir()));
         //noinspection ResultOfMethodCallIgnored
-       // logFilePath.mkdirs();
+        // logFilePath.mkdirs();
+    }
+
+    @Override
+    protected void initToolBar() {
+
+    }
+
+    @Override
+    protected void initData() {
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
         }else {
-          //  FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
-           // initCamera();
-         //   FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
-           // initNirPreview();
+            //  FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+            // initCamera();
+            //   FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
+            // initNirPreview();
             FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
-           // initNirPreview();
+            // initNirPreview();
         }
+    }
 
+    @Override
+    protected void onViewClick(View view) {
 
     }
+
 
     private boolean checkPermissions(String[] neededPermissions) {
         if (neededPermissions == null || neededPermissions.length == 0) {
@@ -114,37 +131,6 @@ public class V3FaceRecActivity extends AppCompatActivity implements BaseFaceRecP
     }
 
 
-//    private void initCamera() {
-//        visCamera = FaceConfig.getInstance().getVisCamera();
-//        visCamera.setAsync(true);
-//        try {
-//            visCameraView.setCamera(visCamera);
-//            visCameraView.setViewMode(FaceCameraView.ViewMode.TEXTURE_VIEW);
-//            visCameraView.setFaceDataView(faceRecBoxView);
-//        } catch (IOException e) {
-//            Logger.i(TAG, "开启可见光摄像头失败");
-//        }
-//        nirCamera = FaceConfig.getInstance().getNirCamera();
-
-//        if (nirCamera != null) {
-//            nirCamera.setAsync(true);
-//        }
-//
-//        try {
-//            faceRecConfig = new BaseFaceRecProcessor.FaceRecConfig(new BaseFaceRecProcessor.FaceRecStep[]{livenessDetectStep,extractFeatureStep, faceSearchStep, });
-//            faceRecConfig.maxSearchFailTimes=2;
-//            //设置为近红外活体检测
-//            faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
-//            faceRecProcessor = new BaseFaceRecProcessor(FaceConfig.getInstance().getFaceSDK(), visCamera, nirCamera, faceRecConfig);
-//            faceRecProcessor.setFaceDetectCallback(this);
-//        } catch (FaceException e) {
-//            Logger.e(TAG, "创建人脸识别器失败", e);
-//            Toast.makeText(this, "创建人脸识别器失败", Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
-//        openCloseNirCamera(true);
-//    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -156,69 +142,12 @@ public class V3FaceRecActivity extends AppCompatActivity implements BaseFaceRecP
             if (isAllGranted) {
                // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
                 FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
-             //   initNirPreview();
             } else {
                 Toast.makeText(this, "权限拒绝！", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-
-//    private void initNirPreview() {
-//        if (nirPreview != null) {
-//            nirPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
-//                @Override
-//                public void surfaceCreated(SurfaceHolder holder) {
-//                    try {
-//                        if (nirCamera != null) {
-//                            nirCamera.setPreviewDisplay(holder);
-//                            nirCamera.open();
-//                        }
-//                    } catch (IOException e) {
-//                        Logger.e(TAG, "红外摄像头开启失败");
-//                    }
-//                }
-//
-//                @Override
-//                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-//
-//                }
-//
-//                @Override
-//                public void surfaceDestroyed(SurfaceHolder holder) {
-//                    if (nirCamera != null) {
-//                        try {
-//                            nirCamera.setPreviewDisplay(null);
-//                        } catch (Throwable ignore) {
-//                        }
-//                        try {
-//                            nirCamera.release();
-//                        } catch (Throwable e) {
-//                            Logger.i(TAG, "红外摄像头关闭失败");
-//                        }
-//                    }
-//
-//                }
-//            });
-//        }
-//    }
-
-//    protected void openCloseNirCamera(boolean open) {
-//        if (nirCamera != null) {
-//            try {
-//                if (open) {
-//                    if (!nirCamera.isOpen()) {
-//                        nirCamera.open();
-//                        nirCamera.startPreview();
-//                    }
-//                } else if (nirCamera.isOpen()) {
-//                    nirCamera.release();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     @Override
     protected void onDestroy() {
@@ -240,23 +169,26 @@ public class V3FaceRecActivity extends AppCompatActivity implements BaseFaceRecP
 
     @Override
     public void onFaceDetected(FaceDetectData faceDetectData) {
+        Log.d("555","onFaceDetected"+faceDetectData);
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
     }
 
     @Override
     public void onLivenessDetected(FaceDetectData faceDetectData) {
-
+             Log.d("555","活体检测");
     }
 
     @Override
     public void onFaceChanged(FaceDetectData faceDetectData, List<FaceData> addFaces, List<FaceData> lostFaces) {
+       Log.d("555","onFaceChanged:"+faceDetectData);
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
     }
 
     @Override
     public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData, BaseFaceRecProcessor.FaceTrackData faceTrackData) {
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
+        Log.d("555","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS ").format(new Date());
         try  {

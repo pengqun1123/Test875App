@@ -102,9 +102,8 @@ public class IdController {
                    }
                    bopen=true;
                }
-
                long nTickStart = System.currentTimeMillis();
-               boolean card = idCardReader.findCard(2);
+               boolean card = idCardReader.findCard(0);
                Log.d("===c",card+"");
                if (card) {
                    idCardReader.selectCard(0);
@@ -124,8 +123,6 @@ public class IdController {
                            if (1 == WLTService.wlt2Bmp(idCardInfo.getPhoto(), buf)) {
                                System.out.println("timeSet decode photo, use time:" + (System.currentTimeMillis() - nTickStart));
                                bitmap = IDPhotoHelper.Bgr2Bitmap(buf);
-
-
                            }
                        }
                        emitter.onNext(idCard);
@@ -150,6 +147,7 @@ public class IdController {
                    }
                }
            } catch (Exception e) {
+               Log.d("===c",e.getMessage());
                if (e instanceof IDCardReaderException){
                    IDCardReaderException  exception=(IDCardReaderException) e;
                    LogHelper.d("获取SAM模块失败, 错误码：" + exception.getErrorCode() + "\n错误信息：" + exception.getMessage() + "\n 内部错误码=" + exception.getInternalErrorCode());
@@ -296,6 +294,7 @@ public class IdController {
            }
            catch (IDCardReaderException e)
            {
+               Log.d("===c","getUCardNum"+e.getMessage());
                LogHelper.d("获取身份证物理卡号失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
            }
            return cardNum;
@@ -303,7 +302,7 @@ public class IdController {
 
 
     //获取SAM模块编号
-    public String GetSamID(View view)
+    public String GetSamID()
     {
         String samId=null;
         try {
@@ -311,10 +310,11 @@ public class IdController {
                 idCardReader.open(0);
                 bopen=true;
             }
-            String samid = idCardReader.getSAMID(0);
+            samId = idCardReader.getSAMID(0);
         }
         catch (IDCardReaderException e)
         {
+
             LogHelper.d("获取SAM模块失败, 错误码：" + e.getErrorCode() + "\n错误信息：" + e.getMessage() + "\n 内部错误码=" + e.getInternalErrorCode());
         }
         return samId;

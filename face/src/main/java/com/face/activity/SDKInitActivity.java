@@ -75,8 +75,6 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
                     return;
                 }
             }
-            //设置APP默认存储目录，所有数据都分类存在此目录下
-            FaceConfig.getInstance().setAppRootDir(new File(Environment.getExternalStorageDirectory(), "zhiqu"));
             //所有必需权限已经授予，开始初始化SDK
             //FaceConfig.getInstance().init(this, this);
             FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);

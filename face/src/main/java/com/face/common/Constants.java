@@ -24,6 +24,10 @@ public interface Constants {
         float SEARCH_ACCURACY_LOW = 0.8F;
 
         /**
+         * 低人脸识别识别精度相似度阈值，高于此阈值才算同一个人
+         */
+        float SEARCH_ACCURACY_IDCARD = 0.75F;
+        /**
          * 人脸模糊度阈值，人脸质量{@link FaceQuality#getBlur()}高于这个值表示人脸清晰
          */
         float BLUR = 0.65F;

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baselibrary.base.BaseActivity;
 import com.face.R;
 import com.face.common.TestFaceDetectProcessor;
 import com.orhanobut.logger.Logger;
@@ -36,7 +37,7 @@ import java.util.List;
  * <p>
  * 此类实现的 FaceDetectProcessor.FaceDetectCallback是在FaceDetectProcessor进行人脸识别成功后接收回调信息时使用的接口
  */
-public abstract class AbstractFaceDetectActivity extends AppCompatActivity implements FaceDetectProcessor.FaceDetectCallback {
+public abstract class AbstractFaceDetectActivity extends BaseActivity implements FaceDetectProcessor.FaceDetectCallback {
 
     private static final String TAG = AbstractFaceDetectActivity.class.getSimpleName();
 
@@ -51,7 +52,7 @@ public abstract class AbstractFaceDetectActivity extends AppCompatActivity imple
     /**
      * 可以直接使用的人脸检测处理器
      */
-    protected TestFaceDetectProcessor faceDetectProcessor;
+    protected FaceDetectProcessor faceDetectProcessor;
     /**
      * 人脸质量检测器
      */
@@ -78,20 +79,33 @@ public abstract class AbstractFaceDetectActivity extends AppCompatActivity imple
      */
 //    protected SurfaceView nirPreview;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.face_activity_face_detect);
+    protected void initView() {
         svPreview = (TextureView) findViewById(R.id.sv_preview);
         fbvFaceRect = (FaceBoxView) findViewById(R.id.fbv_face_rect);
         tv_direct = (TextView) findViewById(R.id.tv_direct);
 //        nirPreview = (SurfaceView) findViewById(R.id.nir_preview);
         //将人脸框绘制自定义View放置到最上层，以保持人脸检测框能正常显示
         fbvFaceRect.bringToFront();
+    }
+
+    @Override
+    protected void initToolBar() {
+
+    }
+
+    @Override
+    protected void initData() {
         //初始化摄像头预览配置
         initPreview();
         //初始化人脸检测处理器
         initFaceDetectorProcessor();
+    }
+
+    @Override
+    protected Integer contentView() {
+        return R.layout.face_activity_face_detect;
     }
 
     /**
@@ -100,7 +114,7 @@ public abstract class AbstractFaceDetectActivity extends AppCompatActivity imple
     protected void initFaceDetectorProcessor() {
         //初始化FaceDetectorProcessor
         try {
-            faceDetectProcessor = new TestFaceDetectProcessor(visCamera, nirCamera);
+            faceDetectProcessor = new FaceDetectProcessor(visCamera, nirCamera);
             //设置人脸检测器
             faceDetectProcessor.setFaceDetector(FaceConfig.getInstance().getFaceSDK().getVisFaceDetector());
             //注册人脸检测回调接口
@@ -425,6 +439,7 @@ public abstract class AbstractFaceDetectActivity extends AppCompatActivity imple
             info = new FaceDataExtraInfo();
             faceData.setTag(info);
         }
+
         info.setFaceQualityMessage("请勿遮挡面部");
         faceDetectProcessor.updateTrackFace(faceData);
     }

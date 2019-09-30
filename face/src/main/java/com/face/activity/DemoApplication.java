@@ -25,7 +25,6 @@ public class DemoApplication extends BaseApplication {
         CrashReport.setAppChannel(getApplicationContext(), "demo");
         CrashReport.initCrashReport(getApplicationContext(), "3fd99dae55", true);
         //设置APP默认存储目录，所有数据都分类存在此目录下
-        FaceConfig.getInstance().setAppRootDir(new File(Environment.getExternalStorageDirectory(), "zhiqu"));
         //demo模式下，打开SQLiteStudio连接功能，以方便查看数据库内容，在发布生产APP时不要使用。
        // SQLiteStudioService.instance().start(getApplicationContext());
     }
