@@ -131,7 +131,7 @@ public class AppRegisterActivity extends BaseActivity {
 //
 //                    } else {
 //                        //跳转默认的识别页面(没有开启人脸)
-//                        SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
+//                        SkipActivityUtil.skipActivity(this, DefaultVerifyActivity.class);
 //                    }
                 }
                 break;
@@ -173,7 +173,7 @@ public class AppRegisterActivity extends BaseActivity {
 //
 //                } else {
 //                    //跳转默认的识别页面(没有开启人脸)
-//                    SkipActivityUtil.skipActivity(this, DefaultRegisterActivity.class);
+//                    SkipActivityUtil.skipActivity(this, DefaultVerifyActivity.class);
 //                }
                 break;
         }

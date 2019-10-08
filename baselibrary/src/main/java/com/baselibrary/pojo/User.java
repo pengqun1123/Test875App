@@ -12,6 +12,8 @@ import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.dao.db.Finger6Dao;
 import com.baselibrary.dao.db.Finger3Dao;
+import com.baselibrary.dao.db.IdCardDao;
+import com.baselibrary.dao.db.FaceDao;
 
 /**
  * Created By pq
@@ -47,16 +49,24 @@ public class User {
     Long finger6Id;
     @ToOne(joinProperty = "finger6Id")
     Finger6 finger6;
+    @Property(nameInDb = "faceId")
+    Long faceId;
+    @ToOne(joinProperty = "faceId")
+    Face face;
+    @Property(nameInDb = "cardId")
+    Long cardId;
+    @ToOne(joinProperty = "cardId")
+    IdCard idCard;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
     /** Used for active entity operations. */
     @Generated(hash = 1507654846)
     private transient UserDao myDao;
-    @Generated(hash = 574549119)
+    @Generated(hash = 292060493)
     public User(Long uId, String name, String age, String sex, String phone,
             String organizName, String section, String workNum, Long pwId,
-            Long finger3Id, Long finger6Id) {
+            Long finger3Id, Long finger6Id, Long faceId, Long cardId) {
         this.uId = uId;
         this.name = name;
         this.age = age;
@@ -68,6 +78,8 @@ public class User {
         this.pwId = pwId;
         this.finger3Id = finger3Id;
         this.finger6Id = finger6Id;
+        this.faceId = faceId;
+        this.cardId = cardId;
     }
     @Generated(hash = 586692638)
     public User() {
@@ -137,6 +149,18 @@ public class User {
     }
     public void setFinger6Id(Long finger6Id) {
         this.finger6Id = finger6Id;
+    }
+    public Long getFaceId() {
+        return this.faceId;
+    }
+    public void setFaceId(Long faceId) {
+        this.faceId = faceId;
+    }
+    public Long getCardId() {
+        return this.cardId;
+    }
+    public void setCardId(Long cardId) {
+        this.cardId = cardId;
     }
     @Generated(hash = 534339714)
     private transient Long pw__resolvedKey;
@@ -225,6 +249,64 @@ public class User {
             finger6__resolvedKey = finger6Id;
         }
     }
+    @Generated(hash = 495600469)
+    private transient Long face__resolvedKey;
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1564146146)
+    public Face getFace() {
+        Long __key = this.faceId;
+        if (face__resolvedKey == null || !face__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            FaceDao targetDao = daoSession.getFaceDao();
+            Face faceNew = targetDao.load(__key);
+            synchronized (this) {
+                face = faceNew;
+                face__resolvedKey = __key;
+            }
+        }
+        return face;
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1271567982)
+    public void setFace(Face face) {
+        synchronized (this) {
+            this.face = face;
+            faceId = face == null ? null : face.getUId();
+            face__resolvedKey = faceId;
+        }
+    }
+    @Generated(hash = 602561657)
+    private transient Long idCard__resolvedKey;
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1790411946)
+    public IdCard getIdCard() {
+        Long __key = this.cardId;
+        if (idCard__resolvedKey == null || !idCard__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            IdCardDao targetDao = daoSession.getIdCardDao();
+            IdCard idCardNew = targetDao.load(__key);
+            synchronized (this) {
+                idCard = idCardNew;
+                idCard__resolvedKey = __key;
+            }
+        }
+        return idCard;
+    }
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1274803049)
+    public void setIdCard(IdCard idCard) {
+        synchronized (this) {
+            this.idCard = idCard;
+            cardId = idCard == null ? null : idCard.getUId();
+            idCard__resolvedKey = cardId;
+        }
+    }
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -265,28 +347,4 @@ public class User {
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "uId=" + uId +
-                ", name='" + name + '\'' +
-                ", age='" + age + '\'' +
-                ", sex='" + sex + '\'' +
-                ", phone='" + phone + '\'' +
-                ", organizName='" + organizName + '\'' +
-                ", section='" + section + '\'' +
-                ", workNum='" + workNum + '\'' +
-                ", pwId=" + pwId +
-                ", pw=" + pw +
-                ", finger3Id=" + finger3Id +
-                ", finger3=" + finger3 +
-                ", finger6Id=" + finger6Id +
-                ", finger6=" + finger6 +
-                ", daoSession=" + daoSession +
-                ", myDao=" + myDao +
-                ", pw__resolvedKey=" + pw__resolvedKey +
-                ", finger3__resolvedKey=" + finger3__resolvedKey +
-                ", finger6__resolvedKey=" + finger6__resolvedKey +
-                '}';
-    }
 }

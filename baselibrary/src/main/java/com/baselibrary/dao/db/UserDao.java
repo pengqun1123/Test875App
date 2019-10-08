@@ -12,8 +12,10 @@ import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger3;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Pw;
 
 import com.baselibrary.pojo.User;
@@ -42,6 +44,8 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property PwId = new Property(8, Long.class, "pwId", false, "pwId");
         public final static Property Finger3Id = new Property(9, Long.class, "finger3Id", false, "finger3Id");
         public final static Property Finger6Id = new Property(10, Long.class, "finger6Id", false, "finger6Id");
+        public final static Property FaceId = new Property(11, Long.class, "faceId", false, "faceId");
+        public final static Property CardId = new Property(12, Long.class, "cardId", false, "cardId");
     }
 
     private DaoSession daoSession;
@@ -70,7 +74,9 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"workNum\" TEXT," + // 7: workNum
                 "\"pwId\" INTEGER," + // 8: pwId
                 "\"finger3Id\" INTEGER," + // 9: finger3Id
-                "\"finger6Id\" INTEGER);"); // 10: finger6Id
+                "\"finger6Id\" INTEGER," + // 10: finger6Id
+                "\"faceId\" INTEGER," + // 11: faceId
+                "\"cardId\" INTEGER);"); // 12: cardId
     }
 
     /** Drops the underlying database table. */
@@ -137,6 +143,16 @@ public class UserDao extends AbstractDao<User, Long> {
         if (finger6Id != null) {
             stmt.bindLong(11, finger6Id);
         }
+ 
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(12, faceId);
+        }
+ 
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(13, cardId);
+        }
     }
 
     @Override
@@ -197,6 +213,16 @@ public class UserDao extends AbstractDao<User, Long> {
         if (finger6Id != null) {
             stmt.bindLong(11, finger6Id);
         }
+ 
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(12, faceId);
+        }
+ 
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(13, cardId);
+        }
     }
 
     @Override
@@ -223,7 +249,9 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // workNum
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // pwId
             cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // finger3Id
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // finger6Id
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // finger6Id
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // faceId
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // cardId
         );
         return entity;
     }
@@ -241,6 +269,8 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setPwId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setFinger3Id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
         entity.setFinger6Id(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setFaceId(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setCardId(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
      }
     
     @Override
@@ -280,10 +310,16 @@ public class UserDao extends AbstractDao<User, Long> {
             SqlUtils.appendColumns(builder, "T1", daoSession.getFinger3Dao().getAllColumns());
             builder.append(',');
             SqlUtils.appendColumns(builder, "T2", daoSession.getFinger6Dao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T3", daoSession.getFaceDao().getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T4", daoSession.getIdCardDao().getAllColumns());
             builder.append(" FROM USER T");
             builder.append(" LEFT JOIN PW T0 ON T.\"pwId\"=T0.\"_id\"");
             builder.append(" LEFT JOIN FINGER3 T1 ON T.\"finger3Id\"=T1.\"_id\"");
             builder.append(" LEFT JOIN FINGER6 T2 ON T.\"finger6Id\"=T2.\"_id\"");
+            builder.append(" LEFT JOIN FACE T3 ON T.\"faceId\"=T3.\"_id\"");
+            builder.append(" LEFT JOIN ID_CARD T4 ON T.\"cardId\"=T4.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -304,6 +340,14 @@ public class UserDao extends AbstractDao<User, Long> {
 
         Finger6 finger6 = loadCurrentOther(daoSession.getFinger6Dao(), cursor, offset);
         entity.setFinger6(finger6);
+        offset += daoSession.getFinger6Dao().getAllColumns().length;
+
+        Face face = loadCurrentOther(daoSession.getFaceDao(), cursor, offset);
+        entity.setFace(face);
+        offset += daoSession.getFaceDao().getAllColumns().length;
+
+        IdCard idCard = loadCurrentOther(daoSession.getIdCardDao(), cursor, offset);
+        entity.setIdCard(idCard);
 
         return entity;    
     }

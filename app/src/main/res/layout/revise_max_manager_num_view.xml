@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/managerSetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_pw_bg_select"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
+        android:text="@string/revise"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/dismissBtn"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_6"
+        android:layout_marginEnd="3dp"
+        android:padding="@dimen/dp_3"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/managerTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/managerSetTitle"
+        android:padding="@dimen/dp_13"
+        android:text="@string/revise_manager_num"
+        android:textColor="@color/black_0"
+        android:textSize="@dimen/sp_15" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/maxManagerEt"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/managerTip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_5"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLength="10"
+        android:textColor="@color/black_0"
+        android:textColorHint="@color/blue_6"
+        android:textSize="@dimen/sp_18" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/nextBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/maxManagerEt"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/dialog_btn_bg"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/blue_6"
+        android:textSize="@dimen/sp_16" />
+
+</RelativeLayout>

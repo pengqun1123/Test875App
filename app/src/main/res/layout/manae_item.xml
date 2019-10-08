@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/dp_5">
+
+    <RelativeLayout
+        android:id="@+id/userContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/userAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/dp_3"
+            android:layout_marginTop="@dimen/dp_3"
+            app:srcCompat="@drawable/ic_default_user_avatar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_toEndOf="@+id/userAvatar"
+            android:text="@string/user_name"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_toEndOf="@+id/userName"
+            android:text="@string/user_sex"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_12" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_toEndOf="@+id/userSex"
+            android:text="@string/user_age"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_12" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_toEndOf="@+id/userAvatar"
+            android:text="@string/user_phone"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userPhone"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_toEndOf="@+id/userAvatar"
+            android:text="@string/user_section"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_8"
+        android:layout_below="@+id/userContent"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@color/common_line" />
+</RelativeLayout>

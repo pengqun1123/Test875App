@@ -26,9 +26,6 @@
     <string name="passWard_1">输入密码</string>
 
     <string name="register_password">录入密码</string>
-
-    <string name="pw_register_success">密码注册成功!</string>
-
     <string name="register">注册</string>
     <string name="select_verify_method">选择注册方式</string>
     <string name="register_finer">注册指静脉</string>
@@ -44,12 +41,11 @@
     <string name="please_input_staff_no">请填写员工工号</string>
     <string name="please_select_sex">请选择性别</string>
     <string name="please_select_register_model">请注册验证方式</string>
-    <string name="pw_register_fail">密码注册失败</string>
     <string name="pw_verify">密码验证</string>
     <string name="finger_n_verify">指静脉验证N</string>
     <string name="finger_1_verify">指静脉验证1</string>
     <string name="card_verify">身份证验证</string>
-    <string name="manager_set">管理设置</string>
+    <string name="manager_set">管理员设置</string>
     <string name="please_manager_pw">请输入管理员密码</string>
     <string name="ask_open_face">是否启用人脸识别?</string>
     <string name="please_select_open_face">请选择是否启用人脸验证:</string>
@@ -58,11 +54,25 @@
     <string name="manager_add_fail">管理员添加失败</string>
     <string name="please_input_pw_agin">请再次输入密码:</string>
     <string name="user_center">个人中心</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="user_manage">用户管理</string>
     <string name="user_register">用户注册</string>
+    <string name="verify_manager_pwd">验证管理员</string>
+    <string name="manager_pwd_verify_fail">管理员密码验证失败!</string>
+    <string name="max_manager_mun">最多可注册10位管理员</string>
+    <string name="manager_list">管理员列表</string>
+    <string name="username_userno">用户姓名或用户工号</string>
+    <string name="search_user">搜索用户</string>
+    <string name="user_name">用户姓名</string>
+    <string name="user_sex">用户性别</string>
+    <string name="user_age">用户年龄</string>
+    <string name="user_phone">用户手机号</string>
+    <string name="user_section">用户部门</string>
+    <string name="no_data">暂无数据</string>
+    <string name="current_register_max_manager_mun">当前可最多注册的管理员人数为:</string>
+    <string name="add_new_manager">增加新的管理员</string>
+    <string name="revise">修改</string>
+    <string name="revise_manager_num">修改可注册的管理员的最大数量:</string>
+    <string name="revise_success">修改成功</string>
 
 
 </resources>

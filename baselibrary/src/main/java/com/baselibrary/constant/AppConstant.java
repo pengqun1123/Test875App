@@ -13,6 +13,10 @@ public final class AppConstant {
 
     //标记是否启用人脸
     public static final String OPEN_FACE = "open_face";
+    //是否设置管理员密码
+    public static final String MANAGER_PWD = "manager_pwd";
+    //可注册的最大管理员数量
+    public static final String MAX_MANAGER = "max_manager";
     //更新库中模板的阈值分数
     public static final Integer UPDATE_THRESHOLDBOOLEAN = 75;
 

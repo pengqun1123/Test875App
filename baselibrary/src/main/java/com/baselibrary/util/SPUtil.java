@@ -1,5 +1,6 @@
 package com.baselibrary.util;
 
+import com.baselibrary.base.AppConfig;
 import com.baselibrary.constant.AppConstant;
 
 /**
@@ -23,4 +24,25 @@ public class SPUtil {
     public static Boolean getOpenFace() {
         return instance().getBoolean(AppConstant.OPEN_FACE, false);
     }
+
+    //存储标记是否设置管理员密码
+    public static void putHasManagerPwd(Boolean hasManagerPwd) {
+        instance().putBoolean(AppConstant.MANAGER_PWD, hasManagerPwd);
+    }
+
+    //获取是否存在管理员密码
+    public static Boolean getHasManagerPwd() {
+        return instance().getBoolean(AppConstant.MANAGER_PWD, false);
+    }
+
+    //可注册的最大的管理员数量
+    public static void putMaxManagerNum(Integer maxManagerNum) {
+        instance().putInt(AppConstant.MAX_MANAGER, maxManagerNum);
+    }
+
+    //获取可注册的最大的管理员的数量
+    public static int getMacManagerNum() {
+        return instance().getInt(AppConstant.MAX_MANAGER, 10);
+    }
+
 }

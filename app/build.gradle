@@ -23,6 +23,7 @@ android {
         }
         //突破64k限制
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         //正式

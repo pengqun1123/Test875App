@@ -24,7 +24,7 @@
             android:name=".activity.AppRegisterActivity"
             android:theme="@style/activityPublicStyle" />
         <activity
-            android:name=".activity.DefaultRegisterActivity"
+            android:name=".activity.DefaultVerifyActivity"
             android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.SplashActivity"
@@ -36,7 +36,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ManagerActivity" />
-        <activity android:name=".activity.UserCenterActivity"></activity>
+        <activity android:name=".activity.UserCenterActivity" />
+        <activity android:name=".activity.SearchActivity"></activity>
     </application>
 
 </manifest>
