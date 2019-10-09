@@ -76,8 +76,8 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
                 }
             }
             //所有必需权限已经授予，开始初始化SDK
-            //FaceConfig.getInstance().init(this, this);
-            FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+            FaceConfig.getInstance().init(this, this);
+          //  FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
         }
     }
 
