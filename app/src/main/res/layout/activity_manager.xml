@@ -24,17 +24,28 @@
         app:tabTextColor="@color/black_dd" />
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/addManagerBtn"
-        android:layout_width="@dimen/dp_37"
-        android:layout_height="@dimen/dp_37"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/dp_25"
-        android:layout_marginEnd="@dimen/dp_10"
+        android:id="@+id/backPreviousBtn"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_33"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="@dimen/dp_5"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_add_manager"
-        tools:ignore="VectorDrawableCompat" />
+        android:padding="@dimen/dp_3"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_back_left_white" />
+
+    <!--<android.support.v7.widget.AppCompatImageView-->
+        <!--android:id="@+id/addManagerBtn"-->
+        <!--android:layout_width="@dimen/dp_37"-->
+        <!--android:layout_height="@dimen/dp_37"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginTop="@dimen/dp_25"-->
+        <!--android:layout_marginEnd="@dimen/dp_10"-->
+        <!--android:background="?android:attr/selectableItemBackground"-->
+        <!--android:padding="@dimen/dp_5"-->
+        <!--android:visibility="gone"-->
+        <!--app:srcCompat="@drawable/ic_add_manager"-->
+        <!--tools:ignore="VectorDrawableCompat" />-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/managePg"

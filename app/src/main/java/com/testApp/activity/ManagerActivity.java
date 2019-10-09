@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
 
+import com.baselibrary.util.SPUtil;
+import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
 import com.testApp.adapter.MyFragmentStatePagerAdapter;
@@ -32,7 +34,7 @@ public class ManagerActivity extends BaseActivity {
     protected void initView() {
         TabLayout manageTab = bindViewWithClick(R.id.manageTab, false);
         ViewPager managePg = bindViewWithClick(R.id.managePg, false);
-        bindViewWithClick(R.id.addManagerBtn, true);
+        bindViewWithClick(R.id.backPreviousBtn, true);
 
         setTabContent(manageTab, managePg);
     }
@@ -56,20 +58,14 @@ public class ManagerActivity extends BaseActivity {
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.addManagerBtn:
-                AskDialog.verifyManagerPwd(this, new AskDialog.ManagerPwdVerifyCallBack() {
-                    @Override
-                    public void managerPwdVerifyCallBack(Boolean isVerify) {
-                        if (isVerify) {
+            case R.id.backPreviousBtn:
+                if (SPUtil.getOpenFace()) {
+                    //回到人脸识别页面
 
-                        } else {
-                            ToastUtils.showSquareImgToast(ManagerActivity.this,
-                                    getString(R.string.manager_pwd_verify_fail),
-                                    ActivityCompat.getDrawable(ManagerActivity.this,
-                                            R.drawable.cry_icon));
-                        }
-                    }
-                });
+                } else {
+                    SkipActivityUtil.skipActivity(this, DefaultVerifyActivity.class);
+                    finish();
+                }
                 break;
         }
     }

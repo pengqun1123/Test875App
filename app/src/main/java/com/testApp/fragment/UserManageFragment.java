@@ -4,6 +4,7 @@ package com.testApp.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatButton;
@@ -35,7 +36,8 @@ import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
-import com.finger.fingerApi.FingerApi;
+import com.finger.callBack.FingerRegisterCallBack;
+import com.finger.fingerApi.FingerApiUtil;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
@@ -45,7 +47,6 @@ import com.testApp.adapter.UserManageAdapter;
 import com.testApp.dialog.AskDialog;
 
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -114,8 +115,8 @@ public class UserManageFragment extends BaseFragment
             case R.id.searchUserBtn:
                 SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
                 break;
-            case R.id.pwBtn:
-                String pwBtnText = pwBtn.getText().toString().trim();
+            case R.id.registerBtn:
+                String pwBtnText = registerBtn.getText().toString().trim();
                 if (pwBtnText.equals(getString(R.string.register))) {
                     registerUser();
                 } else if (pwBtnText.equals(getString(R.string.complete))) {
@@ -130,19 +131,23 @@ public class UserManageFragment extends BaseFragment
                 }
                 break;
             case R.id.fingerModel:
-                pwBtn.setText(getString(R.string.register));
-
+                //指静脉注册
+                registerBtn.setText(getString(R.string.register));
+                fingerRegister();
                 break;
             case R.id.faceModel:
-                pwBtn.setText(getString(R.string.register));
+                //人脸注册
+                registerBtn.setText(getString(R.string.register));
 
                 break;
             case R.id.idCardModel:
-                pwBtn.setText(getString(R.string.register));
+                //身份证注册
+                registerBtn.setText(getString(R.string.register));
 
                 break;
             case R.id.pwModel:
-                pwBtn.setText(getString(R.string.register));
+                //密码模式注册
+                registerBtn.setText(getString(R.string.register));
                 pwRegister();
                 break;
             case R.id.registerManagerMaxNum:
@@ -262,7 +267,7 @@ public class UserManageFragment extends BaseFragment
     /*************** 用户注册--Start **************/
     private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
     private AppCompatTextView fingerModel, faceModel, idCardModel, pwModel;
-    private AppCompatButton pwBtn;
+    private AppCompatButton registerBtn;
     private View nameBottomLine, ageBottomLine, phoneEtLine, companyNameLine, departmentLine, staffNoLine;
     //    private long pwId = 0L;
     private String sex;
@@ -274,7 +279,7 @@ public class UserManageFragment extends BaseFragment
         companyNameEt = bindViewWithClick(R.id.companyNameEt, false);
         departmentEt = bindViewWithClick(R.id.departmentEt, false);
         staffNoEt = bindViewWithClick(R.id.staffNoEt, false);
-        pwBtn = bindViewWithClick(R.id.pwBtn, true);
+        registerBtn = bindViewWithClick(R.id.registerBtn, true);
         fingerModel = bindViewWithClick(R.id.fingerModel, true);
         faceModel = bindViewWithClick(R.id.faceModel, true);
         idCardModel = bindViewWithClick(R.id.idCardModel, true);
@@ -385,6 +390,7 @@ public class UserManageFragment extends BaseFragment
     private Finger6 fg6;
     private Finger3 fg3;
 
+    //密码注册
     private void pwRegister() {
         PwFactory.createPw(getActivity(), new PwCallBack() {
             @Override
@@ -421,6 +427,26 @@ public class UserManageFragment extends BaseFragment
         }).insertAsyncSingle(pw);
     }
 
+    //指静脉注册
+    private void fingerRegister() {
+        FingerApiUtil.getInstance().fingerRegister(Objects.requireNonNull(getActivity()),
+                new FingerRegisterCallBack() {
+                    @Override
+                    public void fingerRegisterCallBack(Integer res, String tipMsg, byte[] fingerData) {
+                        if (res == 8) {
+                            ToastUtils.showSquareImgToast(getActivity(), getString(R.string.finger_register_success),
+                                    ActivityCompat.getDrawable(getActivity(), R.drawable.ic_emoje));
+                            Finger6 finger6 = new Finger6();
+                            finger6.setFinger6Feature(fingerData);
+                            insertOrReplaceFinger(finger6);
+                        } else {
+                            ToastUtils.showSingleToast(getActivity(), tipMsg);
+                        }
+                    }
+                });
+    }
+
+    //目前只考虑注册liu特征模式
     private void insertOrReplaceFinger(Finger6 fg) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<Finger6>() {

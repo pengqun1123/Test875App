@@ -82,6 +82,7 @@
     <string name="please_input_pw_new">请重新输入密码</string>
     <string name="no">否</string>
     <string name="yes">是</string>
+    <string name="finger_register_success">指静脉注册成功</string>
 
 
 </resources>
