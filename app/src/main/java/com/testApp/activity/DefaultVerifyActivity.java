@@ -4,7 +4,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.WindowManager;
-
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
@@ -26,8 +25,6 @@ public class DefaultVerifyActivity extends BaseActivity {
         AppCompatTextView pwVerify = bindViewWithClick(R.id.pwVerify, true);
         AppCompatTextView manage_set = bindViewWithClick(R.id.manage_set, true);
         AppCompatTextView userCenter = bindViewWithClick(R.id.userCenter, true);
-
-
     }
 
     @Override

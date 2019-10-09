@@ -128,6 +128,8 @@ public class FaceConfig {
        // sdkConfig.save();
         //设置license类型 1-为SDK类型的序列号
         sdkConfig.setLicenseType(1);
+        sdkConfig.setBlurThreshold(0);
+        sdkConfig.save();
         //设置SDK版本号
         sdkConfig.setVersion("1.0.0");
         if (serialNumber != null && !serialNumber.trim().isEmpty()) {

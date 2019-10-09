@@ -76,8 +76,8 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
                 }
             }
             //所有必需权限已经授予，开始初始化SDK
-            FaceConfig.getInstance().init(this, this);
-          //  FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+         //   FaceConfig.getInstance().init(this, this);
+            FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
         }
     }
 
@@ -171,7 +171,7 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
                 serialNumber = serialNumber.substring(0, 4) + "-" + serialNumber.substring(4, 8) + "-" + serialNumber.substring(8, 12) + "-" + serialNumber.substring(12);
             }
             //在输入序列号的情况下，使用序列号初始化SDK
-           // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+            FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
         }
     }
 }

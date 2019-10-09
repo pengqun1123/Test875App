@@ -22,25 +22,25 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         FaceDao.createTable(db, ifNotExists);
+        Finger3Dao.createTable(db, ifNotExists);
+        Finger6Dao.createTable(db, ifNotExists);
         IdCardDao.createTable(db, ifNotExists);
+        ManagerDao.createTable(db, ifNotExists);
         PwDao.createTable(db, ifNotExists);
         StudentDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
-        Finger3Dao.createTable(db, ifNotExists);
-        Finger6Dao.createTable(db, ifNotExists);
-        ManagerDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         FaceDao.dropTable(db, ifExists);
+        Finger3Dao.dropTable(db, ifExists);
+        Finger6Dao.dropTable(db, ifExists);
         IdCardDao.dropTable(db, ifExists);
+        ManagerDao.dropTable(db, ifExists);
         PwDao.dropTable(db, ifExists);
         StudentDao.dropTable(db, ifExists);
         UserDao.dropTable(db, ifExists);
-        Finger3Dao.dropTable(db, ifExists);
-        Finger6Dao.dropTable(db, ifExists);
-        ManagerDao.dropTable(db, ifExists);
     }
 
     /**
@@ -60,13 +60,13 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(FaceDao.class);
+        registerDaoClass(Finger3Dao.class);
+        registerDaoClass(Finger6Dao.class);
         registerDaoClass(IdCardDao.class);
+        registerDaoClass(ManagerDao.class);
         registerDaoClass(PwDao.class);
         registerDaoClass(StudentDao.class);
         registerDaoClass(UserDao.class);
-        registerDaoClass(Finger3Dao.class);
-        registerDaoClass(Finger6Dao.class);
-        registerDaoClass(ManagerDao.class);
     }
 
     public DaoSession newSession() {

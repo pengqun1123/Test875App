@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 import com.face.R;
 import com.face.callback.FaceListener;
@@ -37,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Route(path = ARouterConstant.FACE_1_N_ACTIVITY)
 public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProcessor.FaceRecCallback, FaceSDK.InitCallback, FaceListener {
 
     private static final String TAG = V3FaceRecActivity.class.getSimpleName();

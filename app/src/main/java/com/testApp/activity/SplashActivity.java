@@ -2,7 +2,10 @@ package com.testApp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.mbms.MbmsErrors;
 
+import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.callBack.PermissionC;
 import com.baselibrary.callBack.PermissionResultCallBack;
 import com.baselibrary.util.PermissionUtils;
@@ -31,6 +34,16 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    private void initFace() {
+        AskDialog.showManagerDialog(this, new AskDialog.PositiveCallBack() {
+            @Override
+            public void positiveCallBack() {
+                skipVerifyACtivity();
+                SplashActivity.this.finish();
+            }
+        });
+    }
+
     private void askPermission() {
         PermissionUtils.instance().requestPermission(this,
                 getString(R.string.permissions), PermissionC.WR_FILES_PERMISSION,
@@ -54,11 +67,13 @@ public class SplashActivity extends AppCompatActivity {
             AskDialog.showManagerDialog(this, new AskDialog.PositiveCallBack() {
                 @Override
                 public void positiveCallBack() {
+                    //人脸注册激活
                     skipVerifyACtivity();
                     SplashActivity.this.finish();
                 }
             });
         } else {
+            //人脸注册激活
             skipVerifyACtivity();
         }
     }
@@ -67,6 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         Boolean openFace = SPUtil.getOpenFace();
         if (openFace) {
             //跳转人脸识别页面
+            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
 
         } else {
             //跳转不带人脸识别的页面

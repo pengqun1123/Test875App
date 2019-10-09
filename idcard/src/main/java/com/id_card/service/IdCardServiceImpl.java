@@ -3,6 +3,7 @@ package com.id_card.service;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
@@ -51,7 +52,15 @@ public class IdCardServiceImpl implements IdCardService {
     }
 
     @Override
+    public void destroyIdCard() {
+        if (instance!=null) {
+            instance.closeIdCard();
+        }
+    }
+
+    @Override
     public void init(Context context) {
+        Log.d("777","初始化");
         instance = IdController.getInstance(context);
     }
 }

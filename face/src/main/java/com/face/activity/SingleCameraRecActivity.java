@@ -103,18 +103,18 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
 //            String path = Environment.getExternalStorageDirectory() + "/idcard/";
 //            File file = new File(path,"4445.jpg");
 //            idcard_feature = FaceUtils.extractFaceFeature(file);
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    idCardService.verify_IdCard(SingleCameraRecActivity.this);
+                }
+            }).start();
         } catch (Exception e) {
             Logger.e(TAG, "onCreate: 获取SDK模型失败", e);
             Toast.makeText(this, "获取SDK模型失败", Toast.LENGTH_SHORT).show();
             finish();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                idCardService.verify_IdCard(SingleCameraRecActivity.this);
-            }
-        }).start();
+
 
  }
 
@@ -209,9 +209,11 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (idCardService!=null) {
+            idCardService.destroyIdCard();
+        }
         if (searchHandler!=null){
             searchHandler.removeMessages(SEARCH_FEATURE);
-            searchHandler.removeMessages(OBSERVAER_TASH);
             searchHandler=null;
             searchThread.quit();
             searchThread=null;
@@ -385,6 +387,7 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
 
 
 
+
     @Override
     protected FaceCamera getVisCamera() {
         return FaceConfig.getInstance().getVisCamera();
@@ -406,8 +409,10 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
             if(idCardFile!=null) {
                  idcard_feature = FaceUtils.extractFaceFeature(idCardFile);
                  if (idcard_feature!=null) {
+                     idCardFile.delete();
                      Toast.makeText(this, "身份证图片特征提取成功!", Toast.LENGTH_SHORT).show();
-                    // faceDetectProcessor.setDetect(true);
+
+                     // faceDetectProcessor.setDetect(true);
                  }else {
                      Toast.makeText(this, "身份证图片特征提取失败!", Toast.LENGTH_SHORT).show();
                  }

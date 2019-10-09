@@ -277,6 +277,9 @@ public class IdController {
        public String getUCardNum(){
            String cardNum=null;
            try {
+               if (idCardReader == null) {
+                   startIDCardReader();
+               }
                if (!bopen) {
                   idCardReader.open(0);
                   bopen=true;
@@ -306,6 +309,9 @@ public class IdController {
     {
         String samId=null;
         try {
+            if (idCardReader == null) {
+                startIDCardReader();
+            }
             if (!bopen) {
                 idCardReader.open(0);
                 bopen=true;
@@ -337,20 +343,23 @@ public class IdController {
     }
 
     //初始化身份证读卡器
-    private void startIDCardReader() {
+    public void startIDCardReader() {
         // Define output log level
         LogHelper.setLevel(Log.VERBOSE);
         // Start fingerprint sensor
-        Map idrparams = new HashMap();
+        Log.d("777","startIDCardReader");
+        if (idCardReader == null) {
+            Map idrparams = new HashMap();
 
        /* idrparams.put(ParameterHelper.PARAM_KEY_VID, VID);
         idrparams.put(ParameterHelper.PARAM_KEY_PID, PID);
         idCardReader = IDCardReaderFactory.createIDCardReader(this, TransportType.USB, idrparams);*/
 
 
-        idrparams.put(ParameterHelper.PARAM_SERIAL_SERIALNAME,  idSerialName);
-        idrparams.put(ParameterHelper.PARAM_SERIAL_BAUDRATE, idBaudrate);
-        idCardReader = IDCardReaderFactory.createIDCardReader(mContext, TransportType.SERIALPORT, idrparams);
+            idrparams.put(ParameterHelper.PARAM_SERIAL_SERIALNAME, idSerialName);
+            idrparams.put(ParameterHelper.PARAM_SERIAL_BAUDRATE, idBaudrate);
+            idCardReader = IDCardReaderFactory.createIDCardReader(mContext, TransportType.SERIALPORT, idrparams);
+        }
     }
 
     private void initHandler() {
@@ -375,6 +384,15 @@ public class IdController {
             return false;
         }
     };
+       public void closeIdCard(){
+           mHandler.removeMessages(GET_CardInfo);
+           if (idCardReader!=null) {
+               IDCardReaderFactory.destroy(idCardReader);
+               idCardReader=null;
+               bopen=false;
+
+           }
+       }
 
        public void queryAll(){
            List<IdCard> idCards = BaseApplication.getDbUtil().queryAll(IdCard.class);

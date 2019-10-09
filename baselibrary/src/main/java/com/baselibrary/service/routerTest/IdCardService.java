@@ -21,5 +21,9 @@ public interface IdCardService extends IProvider {
     //获取身份证照片
     Bitmap getBitmap();
 
+    //获取存储的身份证图片
     File getIdCardFile();
+
+    //销毁idcardReader
+    void destroyIdCard();
 }
