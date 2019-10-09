@@ -53,4 +53,5 @@
     <dimen name="dp_180">180dp</dimen>
     <dimen name="dp_280">280dp</dimen>
     <dimen name="dp_26">26dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
 </resources>

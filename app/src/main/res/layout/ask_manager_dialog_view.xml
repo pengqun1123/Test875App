@@ -60,24 +60,45 @@
         app:lineWidth="@dimen/dp_1"
         app:spaceWidth="@dimen/dp_10"
         app:textColor="@color/pink_6"
-        app:textSize="@dimen/sp_16" />
+        app:textSize="@dimen/sp_17" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/activationCodeEt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_below="@+id/managerTip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/dp_25"
+        android:layout_marginEnd="@dimen/dp_25"
+        android:digits="@string/et_digits"
+        android:focusable="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLength="19"
+        android:textColor="@color/black_0"
+        android:textColorHint="@color/blue_6"
+        android:textSize="@dimen/sp_17"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/openFaceAsk"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_55"
         android:layout_below="@+id/managerTip"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cbOpenFace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_20"
-            android:background="?android:attr/selectableItemBackground"
-            android:checked="false" />
+        <!--<android.support.v7.widget.AppCompatCheckBox-->
+            <!--android:id="@+id/cbOpenFace"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="@dimen/dp_20"-->
+            <!--android:visibility="gone"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:checked="false" />-->
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -100,6 +121,19 @@
         android:textColor="@color/blue_6"
         android:textSize="@dimen/sp_16" />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/nextActiveCodeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activationCodeEt"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/dialog_btn_bg"
+        android:gravity="center"
+        android:text="@string/positive"
+        android:textColor="@color/blue_6"
+        android:textSize="@dimen/sp_16"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/btnParent"
         android:layout_width="match_parent"
@@ -115,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:background="@drawable/dialog_btn_bg"
-            android:text="@string/cancel"
+            android:text="@string/no"
             android:textColor="@color/blue_6"
             android:textSize="@dimen/sp_16" />
 
@@ -125,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:background="@drawable/dialog_btn_bg"
-            android:text="@string/positive"
+            android:text="@string/yes"
             android:textColor="@color/blue_5"
             android:textSize="@dimen/sp_16" />
 

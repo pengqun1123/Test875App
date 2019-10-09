@@ -57,7 +57,8 @@ import static com.testApp.dialog.AskDialog.reviseMaxManagerNum;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserManageFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class UserManageFragment extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener {
 
     private int type;
     private LinearLayoutManager mLayoutManager;

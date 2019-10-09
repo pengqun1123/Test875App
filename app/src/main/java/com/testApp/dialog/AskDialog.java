@@ -26,6 +26,7 @@ import com.baselibrary.pojo.Manager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
+import com.baselibrary.util.TransInformation;
 import com.baselibrary.util.dialogUtil.AppDialog;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
@@ -141,53 +142,84 @@ public class AskDialog {
         AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
         CEditText inputPw = dialogView.findViewById(R.id.inputPw);
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
+        AppCompatButton nextActiveCodeBtn = dialogView.findViewById(R.id.nextActiveCodeBtn);
         LinearLayout btnParent = dialogView.findViewById(R.id.btnParent);
         LinearLayout openFaceAsk = dialogView.findViewById(R.id.openFaceAsk);
         AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
         AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
-        AppCompatCheckBox cbOpenFace = dialogView.findViewById(R.id.cbOpenFace);
+        //AppCompatCheckBox cbOpenFace = dialogView.findViewById(R.id.cbOpenFace);
+        AppCompatEditText activationCodeEt = dialogView.findViewById(R.id.activationCodeEt);
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
+        activationCodeEt.setTransformationMethod(new TransInformation());
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         final String[] pw1 = new String[2];
         nextBtn.setOnClickListener(new OnceClickListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onNoDoubleClick(View v) {
-                if (pw1[0] == null) {
-                    String pw = inputPw.getText().toString().trim();
-                    if (pw.length() < 6) {
-                        ToastUtils.showSquareTvToast(
-                                activity, activity.getString(com.pw.R.string.please_input_6_pw));
-                        return;
-                    }
-                    pw1[0] = pw;
-                    managerTip.setText(activity.getString(R.string.please_input_pw_agin));
+                if (nextBtn.getText().toString().trim().equals(activity.getString(R.string.previous))) {
+                    pw1[0] = null;
+                    pw1[1] = null;
                     inputPw.getText().clear();
+                    managerTip.setText(activity.getString(R.string.please_input_pw_new));
+                    nextBtn.setText(activity.getString(R.string.next));
                 } else {
-                    String pw2 = inputPw.getText().toString().trim();
-                    if (pw2.length() < 6) {
-                        ToastUtils.showSquareTvToast(
-                                activity, activity.getString(com.pw.R.string.please_input_6_pw));
-                        return;
-                    }
-                    pw1[1] = pw2;
-                    if (pw1[0].equals(pw1[1])) {
-                        nextBtn.setVisibility(View.GONE);
-                        btnParent.setVisibility(View.VISIBLE);
-                        inputPw.setVisibility(View.GONE);
-                        openFaceAsk.setVisibility(View.VISIBLE);
-                        managerTip.setText(activity.getString(R.string.please_select_open_face));
-                    } else {
-                        ToastUtils.showSquareTvToast(
-                                activity, activity.getString(R.string.pw_no_eq));
+                    if (pw1[0] == null) {
+                        String pw = inputPw.getText().toString().trim();
+                        if (pw.length() < 6) {
+                            ToastUtils.showSquareTvToast(
+                                    activity, activity.getString(com.pw.R.string.please_input_6_pw));
+                            return;
+                        }
+                        pw1[0] = pw;
+                        managerTip.setText(activity.getString(R.string.please_input_pw_agin));
                         inputPw.getText().clear();
+                    } else {
+                        String pw2 = inputPw.getText().toString().trim();
+                        if (pw2.length() < 6) {
+                            ToastUtils.showSquareTvToast(
+                                    activity, activity.getString(com.pw.R.string.please_input_6_pw));
+                            return;
+                        }
+                        pw1[1] = pw2;
+                        if (pw1[0].equals(pw1[1])) {
+                            nextBtn.setVisibility(View.GONE);
+                            inputPw.setVisibility(View.GONE);
+                            openFaceAsk.setVisibility(View.VISIBLE);
+                            btnParent.setVisibility(View.VISIBLE);
+                            managerTip.setText(activity.getString(R.string.please_select_open_face));
+                        } else {
+                            ToastUtils.showSquareTvToast(
+                                    activity, activity.getString(R.string.pw_no_eq));
+                            nextBtn.setText(activity.getString(R.string.previous));
+                            nextBtn.setTextColor(R.color.red_1);
+                        }
                     }
                 }
             }
         });
-        cbOpenFace.setOnCheckedChangeListener((compoundButton, b) -> SPUtil.putOpenFace(b));
+        nextActiveCodeBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                //输入人脸激活码...
+                if (callBack != null)
+                    callBack.positiveCallBack();
+                dialog.dismiss();
+                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+            }
+        });
+//        cbOpenFace.setOnCheckedChangeListener((compoundButton, b) -> {
+//            SPUtil.putOpenFace(b);
+//            managerSetTitle.setText(activity.getString(R.string.active_code));
+//            managerTip.setText(activity.getString(R.string.please_input_active_code));
+//            activationCodeEt.setVisibility(View.VISIBLE);
+//            nextActiveCodeBtn.setVisibility(View.VISIBLE);
+//            openFaceAsk.setVisibility(View.GONE);
+//            btnParent.setVisibility(View.GONE);
+//        });
         dismissBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
@@ -200,15 +232,10 @@ public class AskDialog {
         cancelBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
-                pw1[0] = null;
-                pw1[1] = null;
-                dialog.dismiss();
-                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
-            }
-        });
-        positiveBtn.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
+//                pw1[0] = null;
+//                pw1[1] = null;
+//                dialog.dismiss();
+//                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
                 if (pw1[0].equals(pw1[1])) {
                     checkManagerPw(activity, pw1[0]);
                 }
@@ -216,6 +243,18 @@ public class AskDialog {
                     callBack.positiveCallBack();
                 dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+            }
+        });
+        positiveBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                SPUtil.putOpenFace(true);
+                managerSetTitle.setText(activity.getString(R.string.active_code));
+                managerTip.setText(activity.getString(R.string.please_input_active_code));
+                activationCodeEt.setVisibility(View.VISIBLE);
+                nextActiveCodeBtn.setVisibility(View.VISIBLE);
+                openFaceAsk.setVisibility(View.GONE);
+                btnParent.setVisibility(View.GONE);
             }
         });
     }
