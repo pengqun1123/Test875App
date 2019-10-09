@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.baselibrary">
 
-    <application android:name=".base.BaseApplication">
+    <application>
+        <!--android:name=".base.BaseApplication">-->
 
         <activity
             android:name=".activity.PermissionsActivity"

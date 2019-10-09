@@ -11,17 +11,15 @@ import com.baselibrary.pojo.Face;
 import com.face.callback.FaceListener;
 import com.face.common.FaceConfig;
 import com.face.db.User;
-import com.face.db.UserManager;
+import com.face.ui.FaceRecBoxView;
 import com.face.ui.FaceRecView;
 import com.face.utils.FaceUtils;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.camera.FaceCameraView;
-import com.zqzn.android.face.data.FaceItem;
 import com.zqzn.android.face.exceptions.FaceException;
 import com.zqzn.android.face.model.FaceSearchLibrary;
 import com.zqzn.android.face.processor.BaseFaceRecProcessor;
-import com.zqzn.android.face.processor.FaceRecBoxView;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +29,7 @@ import java.util.concurrent.Executors;
 import static com.zqzn.android.face.processor.BaseFaceRecProcessor.extractFeatureStep;
 import static com.zqzn.android.face.processor.BaseFaceRecProcessor.faceSearchStep;
 import static com.zqzn.android.face.processor.BaseFaceRecProcessor.livenessDetectStep;
+import static com.zqzn.android.face.processor.BaseFaceRecProcessor.qualityDetectStep;
 
 /**
  * Created by wangyu on 2019/9/24.
@@ -63,7 +62,7 @@ public class FaceService {
     }
 
     //初始化摄像头
-    public void initCamera(  FaceRecView visCameraView,FaceRecBoxView faceRecBoxView,FaceCamera nirCamera,BaseFaceRecProcessor.FaceRecCallback faceRecCallback) {
+    public void initCamera(FaceRecView visCameraView, FaceRecBoxView faceRecBoxView, FaceCamera nirCamera, BaseFaceRecProcessor.FaceRecCallback faceRecCallback) {
         visCamera = FaceConfig.getInstance().getVisCamera();
         visCamera.setAsync(true);
         try {
@@ -78,7 +77,7 @@ public class FaceService {
         }
 
         try {
-            faceRecConfig = new BaseFaceRecProcessor.FaceRecConfig(new BaseFaceRecProcessor.FaceRecStep[]{livenessDetectStep,extractFeatureStep, faceSearchStep, });
+            faceRecConfig = new BaseFaceRecProcessor.FaceRecConfig(new BaseFaceRecProcessor.FaceRecStep[]{qualityDetectStep,livenessDetectStep,extractFeatureStep, faceSearchStep, });
             //设置为近红外活体检测
             faceRecConfig.maxSearchFailTimes=2;
             faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;

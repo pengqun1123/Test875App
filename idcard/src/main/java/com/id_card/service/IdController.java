@@ -146,7 +146,7 @@ public class IdController {
                        emitter.onNext(idCard);
                    }
                }
-           } catch (Exception e) {
+                   } catch (Exception e) {
                Log.d("===c",e.getMessage());
                if (e instanceof IDCardReaderException){
                    IDCardReaderException  exception=(IDCardReaderException) e;
@@ -348,7 +348,7 @@ public class IdController {
         idCardReader = IDCardReaderFactory.createIDCardReader(this, TransportType.USB, idrparams);*/
 
 
-        idrparams.put(ParameterHelper.PARAM_SERIAL_SERIALNAME, idSerialName);
+        idrparams.put(ParameterHelper.PARAM_SERIAL_SERIALNAME,  idSerialName);
         idrparams.put(ParameterHelper.PARAM_SERIAL_BAUDRATE, idBaudrate);
         idCardReader = IDCardReaderFactory.createIDCardReader(mContext, TransportType.SERIALPORT, idrparams);
     }

@@ -2,13 +2,10 @@ package com.face.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,32 +17,25 @@ import com.face.callback.FaceListener;
 import com.face.db.User;
 import com.face.db.UserManager;
 import com.face.service.FaceService;
+import com.face.ui.FaceBoxView;
+import com.face.ui.FaceRecBoxView;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
-import com.zqzn.android.face.camera.FaceCameraView;
 import com.zqzn.android.face.data.FaceData;
 import com.zqzn.android.face.data.FaceDetectData;
 import com.zqzn.android.face.data.SearchedPerson;
 import com.zqzn.android.face.exceptions.FaceException;
-import com.zqzn.android.face.jni.Tool;
 import com.zqzn.android.face.model.FaceSDK;
 import com.zqzn.android.face.model.FaceSearchLibrary;
 import com.zqzn.android.face.processor.BaseFaceRecProcessor;
 import com.zqzn.android.face.processor.FaceDetectProcessor;
-import com.zqzn.android.face.processor.FaceRecBoxView;
 import com.face.common.FaceConfig;
 import com.face.ui.FaceRecView;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import static com.zqzn.android.face.processor.BaseFaceRecProcessor.extractFeatureStep;
-import static com.zqzn.android.face.processor.BaseFaceRecProcessor.faceSearchStep;
-import static com.zqzn.android.face.processor.BaseFaceRecProcessor.livenessDetectStep;
 
 public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProcessor.FaceRecCallback, FaceSDK.InitCallback, FaceListener {
 
@@ -170,6 +160,7 @@ public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProces
     @Override
     public void onFaceDetected(FaceDetectData faceDetectData) {
         Log.d("555","onFaceDetected"+faceDetectData);
+
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
     }
@@ -188,7 +179,7 @@ public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProces
     @Override
     public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData, BaseFaceRecProcessor.FaceTrackData faceTrackData) {
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
-        Log.d("555","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
+        Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS ").format(new Date());
         try  {

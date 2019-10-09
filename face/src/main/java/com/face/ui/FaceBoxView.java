@@ -106,10 +106,7 @@ public class FaceBoxView extends View {
 
                 if (data != null) {
                     int fontx = (x2 + x1) / 2;
-                    int fonty = y2 + 55;
-                    if (fonty > getHeight()) {
-                        fonty = y1;
-                    }
+                    int fonty = y1;
                     if (data.getLoginStatus() == 2) {
                         //attack
                         canvas.drawText(data.getName(), fontx, fonty, attackPaint);

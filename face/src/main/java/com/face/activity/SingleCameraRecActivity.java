@@ -3,7 +3,6 @@ package com.face.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -37,7 +36,6 @@ import com.zqzn.android.face.processor.FaceDetectProcessor;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * 单目摄像头人脸识别示例
