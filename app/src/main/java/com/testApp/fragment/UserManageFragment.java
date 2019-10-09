@@ -27,6 +27,7 @@ import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.pojo.Finger3;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.service.factory.PwFactory;
@@ -36,13 +37,15 @@ import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
 import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
-import com.sd.tgfinger.CallBack.RegisterCallBack;
-import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.activity.SearchActivity;
+import com.testApp.adapter.ManagerAdapter;
 import com.testApp.adapter.UserManageAdapter;
 import com.testApp.dialog.AskDialog;
+
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -127,20 +130,7 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
                 break;
             case R.id.fingerModel:
                 pwBtn.setText(getString(R.string.register));
-                FingerApi.register(getActivity(), null, 0, new RegisterCallBack() {
-                    @Override
-                    public void registerResult(Msg msg) {
-                        Integer result = msg.getResult();
-                        // TODO: 2019/10/8 指静脉是3特征还是6特征模式
-                        if (result == 8) {
-                            byte[] fingerData = msg.getFingerData();
-                            Finger6 finger6 = new Finger6();
-                            finger6.setFinger6Feature(fingerData);
-                            insertOrReplaceFinger(finger6);
-//                            verifyFinger(fingerData, 1);
-                        }
-                    }
-                });
+
                 break;
             case R.id.faceModel:
                 pwBtn.setText(getString(R.string.register));
@@ -207,7 +197,7 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
                         == userManageAdapter.getItemCount()) {
                     //加载更多
                     pageSize++;
-                    getUserData(userManageAdapter);
+                    getUserData(userManageAdapter, noData);
                 }
             }
 
@@ -219,7 +209,7 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
         });
 
         //获取用户的数据
-        getUserData(userManageAdapter);
+        getUserData(userManageAdapter, noData);
     }
 
 
@@ -228,15 +218,43 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
 
     }
 
-    private void getUserData(UserManageAdapter userManageAdapter) {
+    private void getUserData(UserManageAdapter userManageAdapter, AppCompatTextView noData) {
         List<User> users = getUsers(pageSize);
-        userManageAdapter.addData(users);
+        if (users.size() > 0) {
+            noData.setVisibility(View.GONE);
+            userManageAdapter.addData(users);
+        }
     }
 
-    private int pageSize = 1;
+    private int pageSize = 0;
 
     private List<User> getUsers(int pageSize) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
+        List<User> users = dbUtil.queryAll(User.class);
+        List<User> users1 = dbUtil.queryAll(User.class);
+//        QueryBuilder<User> queryBuilder = dbUtil.getQueryBuilder(User.class);
+//        queryBuilder.offset(pageSize * 20).limit(20);
+//        dbUtil.setDbCallBack(new DbCallBack<User>() {
+//            @Override
+//            public void onSuccess(User result) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(List<User> result) {
+//
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//
+//            }
+//
+//            @Override
+//            public void onNotification(boolean result) {
+//
+//            }
+//        }).queryAsync();
         return dbUtil.getQueryBuilder(User.class).offset(pageSize * 20).limit(20).list();
     }
 
@@ -459,9 +477,11 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
     private void managerLayout() {
         AppCompatTextView registerManagerMaxNum = bindViewWithClick(R.id.registerManagerMaxNum, true);
         bindViewWithClick(R.id.addManager, true);
+        // SwipeRefreshLayout managerRefresh = bindViewWithClick(R.id.managerRefresh, false);
         RecyclerView managerRv = bindViewWithClick(R.id.managerRv, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         noData.setVisibility(View.VISIBLE);
+        //managerRefresh.setRefreshing(false);
         registerManagerMaxNum.setText(MessageFormat.format("{0}{1}",
                 getString(R.string.current_register_max_manager_mun), SPUtil.getMacManagerNum()));
         managerRv.setHasFixedSize(true);
@@ -469,10 +489,48 @@ public class UserManageFragment extends BaseFragment implements SwipeRefreshLayo
                 OrientationHelper.VERTICAL, false);
         managerRv.setLayoutManager(mLayoutManager);
         managerRv.setItemAnimator(new DefaultItemAnimator());
-//        UserManageAdapter userManageAdapter = new UserManageAdapter();
-//        managerRv.setAdapter(userManageAdapter);
-
+        ManagerAdapter managerAdapter = new ManagerAdapter(callBack);
+        managerRv.setAdapter(managerAdapter);
+        queryAllManagerData(managerAdapter, noData);
 
     }
+
+    //查询manager的数据
+    private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        QueryBuilder<Manager> queryBuilder = dbUtil.getQueryBuilder(Manager.class);
+        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
+            @Override
+            public void onSuccess(Manager result) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Manager> result) {
+                Logger.d("管理员数据查询成功");
+                if (result.size() > 0) {
+                    managerAdapter.addData(result);
+                    noData.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                Logger.d("管理员数据查询失败");
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).queryAsyncAll(Manager.class, queryBuilder);
+    }
+
+    private ManagerAdapter.ManagerItemCallBack callBack = new ManagerAdapter.ManagerItemCallBack() {
+        @Override
+        public void managerItemCallBack(int position) {
+            ToastUtils.showSingleToast(getActivity(), "点击了managerItem");
+        }
+    };
 
 }

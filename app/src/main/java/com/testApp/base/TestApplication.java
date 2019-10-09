@@ -1,7 +1,6 @@
 package com.testApp.base;
 
 import com.baselibrary.base.BaseApplication;
-import com.sd.tgfinger.tgApi.TGBApi;
 
 /**
  * Created By pq
@@ -15,6 +14,7 @@ public class TestApplication extends BaseApplication {
         super.onCreate();
         //TGBApi.getTGAPI().startDevService(TestApplication.this);
 
+//        FingerServiceUtil.getInstance().startFingerService(this);
     }
 
     @Override

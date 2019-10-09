@@ -52,4 +52,5 @@
     <dimen name="sp_12">12sp</dimen>
     <dimen name="dp_180">180dp</dimen>
     <dimen name="dp_280">280dp</dimen>
+    <dimen name="dp_26">26dp</dimen>
 </resources>

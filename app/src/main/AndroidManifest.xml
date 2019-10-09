@@ -35,9 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ManagerActivity" />
-        <activity android:name=".activity.UserCenterActivity" />
-        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".activity.ManagerActivity"
+            android:theme="@style/activityPublicStyle"/>
+        <activity android:name=".activity.UserCenterActivity"
+            android:theme="@style/activityPublicStyle"/>
+        <activity android:name=".activity.SearchActivity"
+            android:theme="@style/activityPublicStyle">
+
+        </activity>
     </application>
 
 </manifest>

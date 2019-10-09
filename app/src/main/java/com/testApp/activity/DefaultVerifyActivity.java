@@ -7,9 +7,10 @@ import android.view.WindowManager;
 
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.util.SkipActivityUtil;
-import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
+
 import com.pw.pwApi.PwApi;
+
 import com.testApp.R;
 import com.testApp.dialog.AskDialog;
 

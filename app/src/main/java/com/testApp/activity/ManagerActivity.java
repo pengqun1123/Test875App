@@ -79,7 +79,7 @@ public class ManagerActivity extends BaseActivity {
         List<Fragment> fragmentList = initFragments();
         String[] titles = new String[]{getString(R.string.user_manage),
                 getString(R.string.user_register),
-                getString(R.string.manager_list)};
+                getString(R.string.manager)};
         MyFragmentStatePagerAdapter mainFragmentAdapter =
                 new MyFragmentStatePagerAdapter(getSupportFragmentManager(),
                         fragmentList, Arrays.asList(titles));

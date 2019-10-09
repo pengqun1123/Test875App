@@ -19,8 +19,14 @@ import com.baselibrary.model.TestBean;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
 import com.finger.R;
+import com.finger.fingerApi.FingerApi;
 import com.finger.test.RouterTest;
 import com.orhanobut.logger.Logger;
+import com.sd.tgfinger.CallBack.DevOpenCallBack;
+import com.sd.tgfinger.CallBack.DevStatusCallBack;
+import com.sd.tgfinger.CallBack.FvInitCallBack;
+import com.sd.tgfinger.pojos.Msg;
+import com.sd.tgfinger.tgApi.Constant;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -63,8 +69,8 @@ public class FingerActivity extends AppCompatActivity {
         TextView params = findViewById(R.id.params);
 
         //接收上个页面传递过来的数据
-        params.setText(MessageFormat.format("姓名：{0}  年龄：{1}  地址：{2}"
-                , testBean.getName(), testBean.getAge(), Address));
+//        params.setText(MessageFormat.format("姓名：{0}  年龄：{1}  地址：{2}"
+//                , testBean.getName(), testBean.getAge(), Address));
 
 //        btn7.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -124,7 +130,10 @@ public class FingerActivity extends AppCompatActivity {
                 dbUtil.deleteAll(Student.class);
             }
         });
+
+
     }
+
 
     //增
     public void insert() {

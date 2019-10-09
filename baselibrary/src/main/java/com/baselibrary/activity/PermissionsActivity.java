@@ -13,6 +13,7 @@ import com.baselibrary.callBack.PermissionC;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.dialogUtil.DialogCallBack;
 import com.baselibrary.util.dialogUtil.MyDialogUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

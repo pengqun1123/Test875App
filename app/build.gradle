@@ -159,7 +159,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:28.0.0-alpha1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -183,7 +182,6 @@ dependencies {
     //每个需要用到Router的组件都要依赖路由的注解
     annotationProcessor rootProject.ext.dependencies["router-compiler"]
     implementation project(':baselibrary')
-    implementation(name: 'TGFinger661J-release', ext: 'aar')
 }
 
 static def releaseTime() {

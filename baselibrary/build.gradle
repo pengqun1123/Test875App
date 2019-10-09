@@ -104,6 +104,7 @@ dependencies {
     api rootProject.ext.dependencies["percent"]
     api rootProject.ext.dependencies["dynamic"]
     api rootProject.ext.dependencies["router"]
+    api rootProject.ext.dependencies["constraint-layout"]
 
     api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["rxjava"]

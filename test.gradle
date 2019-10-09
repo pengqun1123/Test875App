@@ -46,7 +46,7 @@ ext {
             "percent"               : "com.android.support:percent:${version["androidSupportSdkVersion"]}",
             "dynamic"               : "com.android.support:support-dynamic-animation:${version["androidSupportSdkVersion"]}",
             "annotations"           : "com.android.support:support-annotations:${version["androidSupportSdkVersion"]}",
-
+            "constraint-layout"     : 'com.android.support.constraint:constraint-layout:1.1.3',
             //greenDao
             "greendao"              : "org.greenrobot:greendao:${version["greendao"]}",
             "debug-db"              : "com.amitshekhar.android:debug-db:1.0.0",

@@ -73,6 +73,8 @@
     <string name="revise">修改</string>
     <string name="revise_manager_num">修改可注册的管理员的最大数量:</string>
     <string name="revise_success">修改成功</string>
+    <string name="manager_no">管理员代号</string>
+    <string name="manager">管理员</string>
 
 
 </resources>

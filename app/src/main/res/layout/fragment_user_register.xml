@@ -8,8 +8,8 @@
     tools:context=".activity.AppRegisterActivity">
 
     <!--<include-->
-        <!--android:id="@+id/topBar"-->
-        <!--layout="@layout/normal_toolbar" />-->
+    <!--android:id="@+id/topBar"-->
+    <!--layout="@layout/normal_toolbar" />-->
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/name"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -203,7 +203,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/age"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -251,7 +251,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/phone_name"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -299,7 +299,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/company_name"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -347,7 +347,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/department_name"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -395,7 +395,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_10"
                 android:text="@string/staff_no"
-                android:textColor="@color/black_0"
+                android:textColor="@color/blue_5"
                 android:textSize="@dimen/sp_14" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -434,17 +434,19 @@
 
             <TextView
                 android:id="@+id/verifyMethodTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/staffNoLine"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_6"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:paddingTop="@dimen/dp_5"
-                android:paddingBottom="@dimen/dp_5"
+                android:drawableStart="@drawable/tv_line"
+                android:drawablePadding="@dimen/dp_2"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
                 android:text="@string/select_verify_method"
-                android:textColor="@color/black_0"
-                android:textSize="@dimen/sp_14" />
+                android:textColor="@color/blue_5"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/fingerModel"

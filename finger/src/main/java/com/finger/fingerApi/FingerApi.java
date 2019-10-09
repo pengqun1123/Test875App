@@ -1,8 +1,6 @@
 package com.finger.fingerApi;
 
 import android.app.Activity;
-import android.content.Context;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 
 import com.finger.R;
@@ -14,11 +12,9 @@ import com.sd.tgfinger.CallBack.FvInitCallBack;
 import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.CallBack.Verify1_1CallBack;
 import com.sd.tgfinger.CallBack.Verify1_NCallBack;
-import com.sd.tgfinger.api.TGAPI;
 import com.sd.tgfinger.pojos.Msg;
 import com.sd.tgfinger.tgApi.Constant;
 import com.sd.tgfinger.tgApi.TGBApi;
-import com.sd.tgfinger.utils.LogUtils;
 
 import java.io.InputStream;
 
@@ -52,7 +48,7 @@ public class FingerApi {
         if (!TGBApi.getTGAPI().isDevOpen()) {
             //初始化准备数据
             TGBApi.getTGAPI().openDev(activity, Constant.WORK_BEHIND, fingerModelType, sound
-                    ,devOpenCallBack,devStatusCallBack);
+                    , devOpenCallBack, devStatusCallBack);
         } else {
             Logger.d(activity.getString(R.string.dev_open));
         }
@@ -62,11 +58,11 @@ public class FingerApi {
     public static void register(@NonNull Activity activity, byte[] fingerData,
                                 Integer fingerSize,
                                 RegisterCallBack callBack) {
-        TGBApi.getTGAPI().extractFeatureRegister(activity, fingerData, fingerSize,callBack);
+        TGBApi.getTGAPI().extractFeatureRegister(activity, fingerData, fingerSize, callBack);
     }
 
     //1:1验证
-    public static void verify1(@NonNull Activity activity, byte[] fingerData,Verify1_1CallBack callBack) {
+    public static void verify1(@NonNull Activity activity, byte[] fingerData, Verify1_1CallBack callBack) {
         TGBApi.getTGAPI().featureCompare1_1(activity, fingerData, new Verify1_1CallBack() {
             @Override
             public void verify1CallBack(Msg msg) {
@@ -118,4 +114,8 @@ public class FingerApi {
         TGBApi.getTGAPI().closeDev(activity, callBack);
     }
 
+    //获取设备打开的状态
+    public static Boolean getDevOpenSatus() {
+        return TGBApi.getTGAPI().isDevOpen();
+    }
 }

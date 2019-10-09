@@ -8,10 +8,15 @@ import com.baselibrary.callBack.PermissionResultCallBack;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
+import com.finger.callBack.DevOpenResult;
+import com.finger.callBack.DevStatusResult;
+import com.finger.callBack.FvInitResult;
+import com.finger.fingerApi.FingerApiUtil;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.dialog.AskDialog;
 
-import javax.crypto.spec.PSource;
+import java.io.InputStream;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -23,7 +28,6 @@ public class SplashActivity extends AppCompatActivity {
         askPermission();
         //初始化数据的准备--异步加载
 
-        ask();
 
     }
 
@@ -32,7 +36,13 @@ public class SplashActivity extends AppCompatActivity {
                 getString(R.string.permissions), PermissionC.WR_FILES_PERMISSION,
                 (PermissionResultCallBack) () -> {
                     //同意权限
-
+                    fingerInit();
+                    try {
+                        Thread.sleep(300);
+                        ask();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
     }
 
@@ -63,4 +73,33 @@ public class SplashActivity extends AppCompatActivity {
             SkipActivityUtil.skipActivity(SplashActivity.this, DefaultVerifyActivity.class);
         }
     }
+
+    //指静脉初始化
+    private void fingerInit() {
+        InputStream LicenseIs = getResources().openRawResource(R.raw.license);
+        //初始化指静脉
+        FingerApiUtil.getInstance().initFinger(this, LicenseIs,
+                new FvInitResult() {
+                    @Override
+                    public void fvInitResult(String msg) {
+                        Logger.d(msg);
+                    }
+                }
+                , new DevOpenResult() {
+
+                    @Override
+                    public void devOpenResult(Integer res, String msg) {
+                        Logger.d(msg);
+                    }
+                }
+                , new DevStatusResult() {
+
+                    @Override
+                    public void devStatusResult(Integer res, String msg) {
+                        Logger.d(msg);
+                    }
+                });
+    }
+
+
 }

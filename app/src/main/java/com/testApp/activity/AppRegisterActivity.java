@@ -27,16 +27,10 @@ import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.service.factory.PwFactory;
-import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
-import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
-import com.sd.tgfinger.CallBack.RegisterCallBack;
-import com.sd.tgfinger.CallBack.Verify1_NCallBack;
-import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
-import com.baselibrary.constant.AppConstant;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
@@ -137,19 +131,7 @@ public class AppRegisterActivity extends BaseActivity {
                 break;
             case R.id.fingerModel:
                 pwBtn.setText(getString(R.string.register));
-                FingerApi.register(this, null, 0, new RegisterCallBack() {
-                    @Override
-                    public void registerResult(Msg msg) {
-                        Integer result = msg.getResult();
-                        if (result == 8) {
-                            byte[] fingerData = msg.getFingerData();
-                            Finger6 finger6 = new Finger6();
-                            finger6.setFinger6Feature(fingerData);
-                            insertOrReplaceFinger(finger6);
-//                            verifyFinger(fingerData, 1);
-                        }
-                    }
-                });
+
                 break;
             case R.id.faceModel:
                 pwBtn.setText(getString(R.string.register));
@@ -504,18 +486,5 @@ public class AppRegisterActivity extends BaseActivity {
     }
 
 
-    //验证指静脉
-    private void verifyFinger(byte[] fingerData, Integer fingerSize) {
-        FingerApi.verifyN(this, fingerData, fingerSize, new Verify1_NCallBack() {
-            @Override
-            public void verify1_NCallBack(Msg msg) {
-                Integer result = msg.getResult();
-                if (result == 8) {
-                    ToastUtils.showSingleToast(AppRegisterActivity.this, "验证成功");
-                } else {
-                    ToastUtils.showSingleToast(AppRegisterActivity.this, "验证失败");
-                }
-            }
-        });
-    }
+
 }
