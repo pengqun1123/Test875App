@@ -76,7 +76,7 @@
     <string name="manager_no">管理员代号</string>
     <string name="manager">管理员</string>
     <string name="please_input_active_code">请填写激活码:</string>
-    <string name="et_digits">0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="et_digits">qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890</string>
     <string name="active_code">激活码</string>
     <string name="previous">上一步</string>
     <string name="please_input_pw_new">请重新输入密码</string>

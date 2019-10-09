@@ -99,7 +99,8 @@ public class AskDialog {
 
     //确认管理员密码
     public static void verifyManagerPwd(@NonNull Activity activity, ManagerPwdVerifyCallBack callBack) {
-        View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view,
+                null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
         CEditText inputPw = dialogView.findViewById(R.id.inputPw);
@@ -118,7 +119,7 @@ public class AskDialog {
                 }
                 verifyManagerPw(dialog, pw, callBack);
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(300);
                     SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -134,7 +135,6 @@ public class AskDialog {
         });
     }
 
-    // TODO: 2019/10/8 逻辑还需要完善
     //展示设置管理员密码和启用人脸识别
     public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
@@ -153,7 +153,38 @@ public class AskDialog {
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
-        activationCodeEt.setTransformationMethod(new TransInformation());
+        activationCodeEt.setFocusable(true);
+        activationCodeEt.setFocusableInTouchMode(true);
+        activationCodeEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // 先移除当前监听，避免死循环。
+                activationCodeEt.removeTextChangedListener(this);
+                String string = activationCodeEt.getText().toString().toUpperCase();
+                if (string.length() == 4) {
+                    string = string + "-";
+                } else if (string.length() == 9) {
+                    string = string + "-";
+                } else if (string.length() == 14) {
+                    string = string + "-";
+                }
+                activationCodeEt.setText(string);
+                // 让光标定位最后位置。
+                activationCodeEt.setSelection(string.length());
+                //操作完当前显示内容之后，再添加监听。
+                activationCodeEt.addTextChangedListener(this);
+            }
+        });
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         final String[] pw1 = new String[2];
         nextBtn.setOnClickListener(new OnceClickListener() {
@@ -232,10 +263,6 @@ public class AskDialog {
         cancelBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
-//                pw1[0] = null;
-//                pw1[1] = null;
-//                dialog.dismiss();
-//                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
                 if (pw1[0].equals(pw1[1])) {
                     checkManagerPw(activity, pw1[0]);
                 }
