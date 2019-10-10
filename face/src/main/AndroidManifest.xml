@@ -3,5 +3,8 @@
 
     <application>
         <activity android:name=".activity.FaceActivity" />
+        <activity android:name=".activity.V3FaceRecActivity"/>
+        <activity android:name=".activity.SingleCameraRecActivity"/>
     </application>
+
 </manifest>

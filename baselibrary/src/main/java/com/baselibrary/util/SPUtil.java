@@ -1,5 +1,7 @@
 package com.baselibrary.util;
 
+import android.media.midi.MidiManager;
+
 import com.baselibrary.base.AppConfig;
 import com.baselibrary.constant.AppConstant;
 
@@ -45,4 +47,12 @@ public class SPUtil {
         return instance().getInt(AppConstant.MAX_MANAGER, 10);
     }
 
+    //人脸的注册码
+    public static void putFaceActiveCode(String code){
+        instance().putString("faceCode", code);
+    }
+
+    public static String getFaceActiveCode(){
+      return    instance().getString("faceCode",null);
+    }
 }

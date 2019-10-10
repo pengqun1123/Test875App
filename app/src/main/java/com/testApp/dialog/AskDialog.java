@@ -11,11 +11,13 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.custom.CEditText;
@@ -135,8 +137,11 @@ public class AskDialog {
         });
     }
 
+
+    static int lastLength=0;
     //展示设置管理员密码和启用人脸识别
     public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
+
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
         AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
@@ -153,12 +158,12 @@ public class AskDialog {
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
-        activationCodeEt.setFocusable(true);
-        activationCodeEt.setFocusableInTouchMode(true);
+
+
         activationCodeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                 lastLength=charSequence.length();
             }
 
             @Override
@@ -171,14 +176,17 @@ public class AskDialog {
                 // 先移除当前监听，避免死循环。
                 activationCodeEt.removeTextChangedListener(this);
                 String string = activationCodeEt.getText().toString().toUpperCase();
-                if (string.length() == 4) {
-                    string = string + "-";
-                } else if (string.length() == 9) {
-                    string = string + "-";
-                } else if (string.length() == 14) {
-                    string = string + "-";
+                if (string.length()>lastLength) {
+                    if (string.length() == 4) {
+                        string = string + "-";
+                    } else if (string.length() == 9) {
+                        string = string + "-";
+                    } else if (string.length() == 14) {
+                        string = string + "-";
+                    }
+                    activationCodeEt.setText(string);
                 }
-                activationCodeEt.setText(string);
+
                 // 让光标定位最后位置。
                 activationCodeEt.setSelection(string.length());
                 //操作完当前显示内容之后，再添加监听。
@@ -239,10 +247,24 @@ public class AskDialog {
                     checkManagerPw(activity, pw1[0]);
                 }
                 //输入人脸激活码...
+                String code = activationCodeEt.getText().toString().toUpperCase();
+                if (TextUtils.isEmpty(code)){
+                    ToastUtils.showSquareTvToast(
+                            activity, activity.getString(R.string.please_input_active_code));
+                    return;
+                }
+                if (code.length()<19){
+                    ToastUtils.showSquareTvToast(
+                            activity, activity.getString(com.face.R.string.face_please_input_confirm_code));
+                    return;
+                }
                 if (callBack != null)
-                    callBack.positiveCallBack();
+                    SPUtil.putFaceActiveCode(code);
+                    SPUtil.putOpenFace(true);
+                    callBack.activationCodeCallBack(code);
                 dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                SoftInputKeyboardUtils.hiddenKeyboard(activationCodeEt);
             }
         });
 //        cbOpenFace.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -261,6 +283,7 @@ public class AskDialog {
                 pw1[1] = null;
                 dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                callBack.positiveCallBack();
             }
         });
         cancelBtn.setOnClickListener(new OnceClickListener() {
@@ -278,13 +301,16 @@ public class AskDialog {
         positiveBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
-                SPUtil.putOpenFace(true);
                 managerSetTitle.setText(activity.getString(R.string.active_code));
                 managerTip.setText(activity.getString(R.string.please_input_active_code));
                 activationCodeEt.setVisibility(View.VISIBLE);
                 nextActiveCodeBtn.setVisibility(View.VISIBLE);
                 openFaceAsk.setVisibility(View.GONE);
                 btnParent.setVisibility(View.GONE);
+                activationCodeEt.setFocusable(true);
+                activationCodeEt.setFocusableInTouchMode(true);
+                activationCodeEt.requestFocus();
+                SoftInputKeyboardUtils.showKeyboard(activationCodeEt);
             }
         });
     }
@@ -414,6 +440,7 @@ public class AskDialog {
 
     public interface PositiveCallBack {
         void positiveCallBack();
+        void activationCodeCallBack(String code);
     }
 
     public interface ManagerPwdVerifyCallBack {

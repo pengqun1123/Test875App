@@ -45,7 +45,7 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
     private EditText etSerialNumber;
     private TextView tvErrorInfo;
     private FaceSearchLibrary faceSearchLibrary;
-    private String serialNumber="VG9D-QVA7-956E-RE97 ";
+    private String serialNumber="VG9D-QVA7-956E-RE97";
     private DBUtil dbUtil;
 
     @Override

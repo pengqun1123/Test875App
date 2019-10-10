@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.face.R;
 import com.face.callback.FaceListener;
@@ -77,14 +78,14 @@ public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProces
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
-        // nirPreview = (SurfaceView) findViewById(R.id.nir_preview);
         pb = ((ProgressBar) findViewById(R.id.pb));
-        //    nirPreview.bringToFront();
         //  visCamera = FaceConfig.getInstance().getVisCamera();
         nirCamera = FaceConfig.getInstance().getNirCamera();
         //  logFilePath = new File(String.format("%s/face_rec_log", FaceConfig.getInstance().getAppRootDir()));
         //noinspection ResultOfMethodCallIgnored
         // logFilePath.mkdirs();
+        //注入路由
+        ARouterUtil.injectActivity(this);
     }
 
     @Override

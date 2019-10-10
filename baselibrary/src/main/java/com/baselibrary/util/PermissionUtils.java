@@ -49,6 +49,7 @@ public class PermissionUtils {
 
     public void callBack() {
         if (this.permissionResultCallBack != null) permissionResultCallBack.permissionCallBack();
+
     }
 
 }

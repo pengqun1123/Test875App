@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.baselibrary.base.BaseApplication;
+import com.baselibrary.callBack.FaceInitListener;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Face;
 import com.face.callback.FaceListener;
@@ -18,6 +19,10 @@ import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.camera.FaceCameraView;
 import com.zqzn.android.face.exceptions.FaceException;
+import com.zqzn.android.face.exceptions.SDKAuthException;
+import com.zqzn.android.face.exceptions.SDKAuthExpireException;
+import com.zqzn.android.face.exceptions.SDKNotAuthException;
+import com.zqzn.android.face.model.FaceSDK;
 import com.zqzn.android.face.model.FaceSearchLibrary;
 import com.zqzn.android.face.processor.BaseFaceRecProcessor;
 
@@ -61,6 +66,29 @@ public class FaceService {
         return instance;
     }
 
+    public void  initFace(String code,Context mContext,FaceInitListener listener){
+        FaceConfig.getInstance().init(mContext, code, new FaceSDK.InitCallback() {
+            @Override
+            public void onInitSuccess() {
+                listener.initSuccess();
+            }
+
+            @Override
+            public void onInitFailed(Throwable throwable) {
+                String error;
+                if (throwable instanceof SDKAuthExpireException) {
+                    error="授权已过期: " + throwable.getMessage();
+                } else if (throwable instanceof SDKNotAuthException) {
+                    error="未授权: " + throwable.getMessage();
+                } else if (throwable instanceof SDKAuthException) {
+                    error="授权失败: " + throwable.getMessage();
+                } else {
+                    error="授权异常：" + throwable.getMessage();
+                }
+                listener.initFail(error);
+            }
+        });
+    }
     //初始化摄像头
     public void initCamera(FaceRecView visCameraView, FaceRecBoxView faceRecBoxView, FaceCamera nirCamera, BaseFaceRecProcessor.FaceRecCallback faceRecCallback) {
         visCamera = FaceConfig.getInstance().getVisCamera();
@@ -109,7 +137,7 @@ public class FaceService {
     }
 
     //加载模板数据
-    public void loadUserToSearchLibrary(FaceListener faceListener, Context context) {
+    public void loadUserToSearchLibrary( Context context,FaceListener faceListener) {
         service.execute(new Runnable() {
             @Override
             public void run() {
@@ -141,14 +169,15 @@ public class FaceService {
                     }
                 }
                 Logger.i(TAG, "用户加载完成，总数：" + offset);
-                if (context instanceof Activity){
-                    ((Activity) context) .runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            faceListener.onLoadDataListener();
-                        }
-                    });
-                }
+                faceListener.onLoadDataListener();
+//                if (context instanceof Activity){
+//                    ((Activity) context) .runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            faceListener.onLoadDataListener();
+//                        }
+//                    });
+//                }
 
             }
         });

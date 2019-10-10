@@ -71,8 +71,6 @@
         android:layout_marginStart="@dimen/dp_25"
         android:layout_marginEnd="@dimen/dp_25"
         android:digits="@string/et_digits"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:ellipsize="end"
         android:gravity="center"
         android:inputType="text"

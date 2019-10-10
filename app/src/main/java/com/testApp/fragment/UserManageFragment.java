@@ -167,6 +167,11 @@ public class UserManageFragment extends BaseFragment
                             public void positiveCallBack() {
 
                             }
+
+                            @Override
+                            public void activationCodeCallBack(String code) {
+
+                            }
                         });
                 break;
 
