@@ -235,6 +235,9 @@ public class AskDialog {
         nextActiveCodeBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
+                if (pw1[0].equals(pw1[1])) {
+                    checkManagerPw(activity, pw1[0]);
+                }
                 //输入人脸激活码...
                 if (callBack != null)
                     callBack.positiveCallBack();
@@ -343,7 +346,6 @@ public class AskDialog {
                 ToastUtils.showSquareImgToast(activity,
                         activity.getString(R.string.manager_add_success),
                         ActivityCompat.getDrawable(activity, R.drawable.ic_emoje));
-
                 putHasManagerPwd(true);
                 Logger.d("管理员密码存储成功:" + result.toString());
             }

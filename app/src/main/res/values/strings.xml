@@ -83,6 +83,7 @@
     <string name="no">否</string>
     <string name="yes">是</string>
     <string name="finger_register_success">指静脉注册成功</string>
+    <string name="lest_select_one_verify">请至少注册一种验证方式</string>
 
 
 </resources>

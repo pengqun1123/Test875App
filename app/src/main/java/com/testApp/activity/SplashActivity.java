@@ -3,11 +3,14 @@ package com.testApp.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.callBack.PermissionC;
 import com.baselibrary.callBack.PermissionResultCallBack;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
+import com.finger.activity.FingerActivity;
 import com.finger.callBack.DevOpenResult;
 import com.finger.callBack.DevStatusResult;
 import com.finger.callBack.FvInitResult;
@@ -78,8 +81,10 @@ public class SplashActivity extends AppCompatActivity {
     private void skipVerifyActivity() {
         Boolean openFace = SPUtil.getOpenFace();
         if (openFace) {
+            ARouterUtil.navigation(ARouterConstant.FINGER_ACTIVITY,ARouterConstant.GROUP_FINGER);
+//            SkipActivityUtil.skipActivity(this, FingerActivity.class);
             //跳转人脸识别页面
-            //ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+//            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
         } else {
             //跳转不带人脸识别的页面
             SkipActivityUtil.skipActivity(SplashActivity.this, DefaultVerifyActivity.class);

@@ -12,12 +12,26 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/managerSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/tv_line"
+            android:drawablePadding="@dimen/dp_2"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/manager_set"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/sp_17"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/registerManagerMaxNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_revise"
             android:gravity="center_vertical"
+            android:layout_marginEnd="@dimen/dp_7"
             android:padding="@dimen/dp_10"
             android:text="@string/current_register_max_manager_mun"
             android:textColor="@color/black_0"
@@ -35,6 +49,7 @@
             android:id="@+id/addManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_7"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_add_manager"
             android:gravity="center_vertical"
@@ -55,7 +70,6 @@
             android:id="@+id/managerListTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addManagerLine"
             android:drawableStart="@drawable/tv_line"
             android:drawablePadding="@dimen/dp_2"
             android:paddingTop="@dimen/dp_10"

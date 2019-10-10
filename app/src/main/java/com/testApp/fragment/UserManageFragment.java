@@ -26,8 +26,10 @@ import com.baselibrary.base.BaseFragment;
 import com.baselibrary.callBack.PwCallBack;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger3;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
@@ -116,9 +118,12 @@ public class UserManageFragment extends BaseFragment
                 SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
                 break;
             case R.id.registerBtn:
+
+                registerUser();
+
                 String pwBtnText = registerBtn.getText().toString().trim();
                 if (pwBtnText.equals(getString(R.string.register))) {
-                    registerUser();
+
                 } else if (pwBtnText.equals(getString(R.string.complete))) {
                     //跳转人脸识别的界面(只要开启了人脸)
                     if (SPUtil.getOpenFace()) {
@@ -292,17 +297,12 @@ public class UserManageFragment extends BaseFragment
         staffNoLine = bindViewWithClick(R.id.staffNoLine, false);
         SoftInputKeyboardUtils.hiddenKeyboard(nameEt);
         spinnerListener();
-
-
-//        etChangeListener(nameEt, nameBottomLine);
-//        etChangeListener(ageEt, ageBottomLine);
-//        etChangeListener(phoneEt, phoneEtLine);
-//        etChangeListener(companyNameEt, companyNameLine);
-//        etChangeListener(departmentEt, departmentLine);
-//        etChangeListener(staffNoEt, staffNoLine);
+        //隐藏注册的按钮，当用户至少选择了一种验证模式注册完成后才显示注册按钮
+        registerBtn.setVisibility(View.GONE);
 
         //设置音量
         float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
+        Logger.d("设备的最大音量:" + streamVolumeMax);
         BaseApplication.AP.setVolume((int) streamVolumeMax);
     }
 
@@ -369,7 +369,39 @@ public class UserManageFragment extends BaseFragment
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
             return;
         }
+
+        //先插入各验证模式的数据
+        if (pwd != null) {
+            insertOrReplacePw(pwd);
+        }
+        if (fingerData != null) {
+            insertOrReplaceFinger(fingerData);
+        }
+        //身份证，人脸
+
+        if (pwd == null && fingerData == null && idCard == null && face == null) {
+            ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
+                    ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
+            return;
+        }
         User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
+        if (pwd != null) {
+            newUser.setPwId(pwd.getUId());
+            newUser.setPw(pwd);
+        }
+        if (fg6 != null) {
+            newUser.setFinger6Id(fg6.getUId());
+            newUser.setFinger6(fg6);
+        }
+        if (idCard != null) {
+            newUser.setCardId(idCard.getUId());
+            newUser.setIdCard(idCard);
+        }
+        if (face != null) {
+            newUser.setFaceId(face.getUId());
+            newUser.setFace(face);
+        }
+
 //        insertUser(newUser, );
     }
 
@@ -386,7 +418,14 @@ public class UserManageFragment extends BaseFragment
         return user;
     }
 
+    /**
+     * 注意:
+     * 所有注册数据的插入都在用户点击了注册按钮后才进行；插入顺序依次是先插入各验证模式的数据，再user
+     */
     private Pw pwd;
+    private IdCard idCard;
+    private Face face;
+    private byte[] fingerData;
     private Finger6 fg6;
     private Finger3 fg3;
 
@@ -395,7 +434,9 @@ public class UserManageFragment extends BaseFragment
         PwFactory.createPw(getActivity(), new PwCallBack() {
             @Override
             public void pwCallBack(Pw pw) {
-                insertOrReplacePw(pw);
+                //可插入到pw表中的pwd
+                UserManageFragment.this.pwd = pw;
+//                insertOrReplacePw(pw);
             }
         });
     }
@@ -411,7 +452,8 @@ public class UserManageFragment extends BaseFragment
             @Override
             public void onSuccess(Pw result) {
                 Logger.d("Pw成功插入：" + result);
-                pwd = result;
+                //可添加到User表的pwd
+                UserManageFragment.this.pwd = result;
             }
 
             @Override
@@ -436,9 +478,9 @@ public class UserManageFragment extends BaseFragment
                         if (res == 8) {
                             ToastUtils.showSquareImgToast(getActivity(), getString(R.string.finger_register_success),
                                     ActivityCompat.getDrawable(getActivity(), R.drawable.ic_emoje));
-                            Finger6 finger6 = new Finger6();
-                            finger6.setFinger6Feature(fingerData);
-                            insertOrReplaceFinger(finger6);
+                            //可插入finger表的指静脉模板
+                            UserManageFragment.this.fingerData = fingerData;
+                            //insertOrReplaceFinger(fingerData);
                         } else {
                             ToastUtils.showSingleToast(getActivity(), tipMsg);
                         }
@@ -447,13 +489,16 @@ public class UserManageFragment extends BaseFragment
     }
 
     //目前只考虑注册liu特征模式
-    private void insertOrReplaceFinger(Finger6 fg) {
+    private void insertOrReplaceFinger(byte[] fingerData) {
+        Finger6 finger6 = new Finger6();
+        finger6.setFinger6Feature(fingerData);
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<Finger6>() {
             @Override
             public void onSuccess(Finger6 result) {
                 Logger.d("Fg6成功插入：" + result);
-                fg6 = result;
+                //可插入User表的数据
+                UserManageFragment.this.fg6 = result;
             }
 
             @Override
@@ -470,7 +515,7 @@ public class UserManageFragment extends BaseFragment
             public void onNotification(boolean result) {
 
             }
-        }).insertAsyncSingle(fg);
+        }).insertAsyncSingle(finger6);
     }
 
     private void insertOrReplaceFinger(Finger3 fg) {
@@ -498,6 +543,8 @@ public class UserManageFragment extends BaseFragment
             }
         }).insertAsyncSingle(fg);
     }
+
+
 
     /*****************管理员列表*****************/
 
