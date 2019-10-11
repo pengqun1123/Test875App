@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -34,7 +35,8 @@ public class PermissionsActivity extends AppCompatActivity {
         if (bundle != null) {
             String[] permissions = bundle.getStringArray(PermissionC.init_permis);
             //申请权限
-            checkMyPermissions(permissions);
+            requestPermissions(Objects.requireNonNull(permissions), PermissionC.WR_FILE_CODE);
+//            checkMyPermissions(permissions);
         }
     }
 

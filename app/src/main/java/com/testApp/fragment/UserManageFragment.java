@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.baselibrary.base.BaseApplication;
@@ -118,22 +120,7 @@ public class UserManageFragment extends BaseFragment
                 SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
                 break;
             case R.id.registerBtn:
-
                 registerUser();
-
-                String pwBtnText = registerBtn.getText().toString().trim();
-                if (pwBtnText.equals(getString(R.string.register))) {
-
-                } else if (pwBtnText.equals(getString(R.string.complete))) {
-                    //跳转人脸识别的界面(只要开启了人脸)
-                    if (SPUtil.getOpenFace()) {
-
-                    } else {
-                        //跳转默认的识别页面(没有开启人脸)
-                        SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);
-                    }
-                    Objects.requireNonNull(getActivity()).finish();
-                }
                 break;
             case R.id.fingerModel:
                 //指静脉注册
@@ -374,22 +361,38 @@ public class UserManageFragment extends BaseFragment
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
             return;
         }
-
+        if (SPUtil.getPwVerifyFlag() && pwd == null) {
+            ToastUtils.showSingleToast(getActivity(), getString(R.string.please_register_pwd));
+            return;
+        }
+        if (SPUtil.getFingerVerifyFlag() && fingerData == null) {
+            ToastUtils.showSingleToast(getActivity(), getString(R.string.please_register_finger));
+            return;
+        }
+        if (SPUtil.getFingerVerifyFlag() && fingerData == null) {
+            ToastUtils.showSingleToast(getActivity(), getString(R.string.please_register_face));
+            return;
+        }
+        if (SPUtil.getFingerVerifyFlag() && fingerData == null) {
+            ToastUtils.showSingleToast(getActivity(), getString(R.string.please_register_card));
+            return;
+        }
         //先插入各验证模式的数据
+        User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
         if (pwd != null) {
             insertOrReplacePw(pwd);
         }
         if (fingerData != null) {
             insertOrReplaceFinger(fingerData);
         }
-        //身份证，人脸
+        // TODO: 2019/10/10  身份证，人脸
 
-        if (pwd == null && fingerData == null && idCard == null && face == null) {
+        if (pwd == null && fg6 == null && idCard == null && face == null) {
             ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
             return;
         }
-        User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
+
         if (pwd != null) {
             newUser.setPwId(pwd.getUId());
             newUser.setPw(pwd);
@@ -407,7 +410,35 @@ public class UserManageFragment extends BaseFragment
             newUser.setFace(face);
         }
 
-//        insertUser(newUser, );
+        insertUser(newUser);
+    }
+
+    private void insertUser(User user) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
+                ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
+                        , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
+                                R.drawable.ic_emoje));
+                skipVerify();
+            }
+
+            @Override
+            public void onSuccess(List<User> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).insertAsyncSingle(user);
     }
 
     private User getNewUser(String userName, String userAge, String userPhone,
@@ -441,6 +472,7 @@ public class UserManageFragment extends BaseFragment
             public void pwCallBack(Pw pw) {
                 //可插入到pw表中的pwd
                 UserManageFragment.this.pwd = pw;
+                registerBtn.setVisibility(View.VISIBLE);
 //                insertOrReplacePw(pw);
             }
         });
@@ -485,6 +517,7 @@ public class UserManageFragment extends BaseFragment
                                     ActivityCompat.getDrawable(getActivity(), R.drawable.ic_emoje));
                             //可插入finger表的指静脉模板
                             UserManageFragment.this.fingerData = fingerData;
+                            registerBtn.setVisibility(View.VISIBLE);
                             //insertOrReplaceFinger(fingerData);
                         } else {
                             ToastUtils.showSingleToast(getActivity(), tipMsg);
@@ -523,6 +556,7 @@ public class UserManageFragment extends BaseFragment
         }).insertAsyncSingle(finger6);
     }
 
+    /*
     private void insertOrReplaceFinger(Finger3 fg) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<Finger3>() {
@@ -547,8 +581,7 @@ public class UserManageFragment extends BaseFragment
 
             }
         }).insertAsyncSingle(fg);
-    }
-
+    }*/
 
 
     /*****************管理员列表*****************/
@@ -557,8 +590,16 @@ public class UserManageFragment extends BaseFragment
         AppCompatTextView registerManagerMaxNum = bindViewWithClick(R.id.registerManagerMaxNum, true);
         bindViewWithClick(R.id.addManager, true);
         // SwipeRefreshLayout managerRefresh = bindViewWithClick(R.id.managerRefresh, false);
+        AppCompatCheckBox cbPw = bindViewWithClick(R.id.cbPw, false);
+        AppCompatCheckBox cbFinger = bindViewWithClick(R.id.cbFinger, false);
+        AppCompatCheckBox cbFace = bindViewWithClick(R.id.cbFace, false);
+        AppCompatCheckBox cbCard = bindViewWithClick(R.id.cbCard, false);
         RecyclerView managerRv = bindViewWithClick(R.id.managerRv, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
+        setVerifyModel(cbFinger, 1);
+        setVerifyModel(cbPw, 2);
+        setVerifyModel(cbFace, 3);
+        setVerifyModel(cbCard, 4);
         noData.setVisibility(View.VISIBLE);
         //managerRefresh.setRefreshing(false);
         registerManagerMaxNum.setText(MessageFormat.format("{0}{1}",
@@ -572,6 +613,34 @@ public class UserManageFragment extends BaseFragment
         managerRv.setAdapter(managerAdapter);
         queryAllManagerData(managerAdapter, noData);
 
+    }
+
+    private void setVerifyModel(AppCompatCheckBox checkBox, int type) {
+        checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                compoundButton.setTextColor(R.color.gold);
+                if (type == 1) {
+                    SPUtil.putFingerVerifyFlag(true);
+                } else if (type == 2) {
+                    SPUtil.putPwVerifyFlag(true);
+                } else if (type == 3) {
+                    SPUtil.putFaceVerifyFlag(true);
+                } else if (type == 4) {
+                    SPUtil.putCardVerifyFlag(true);
+                }
+            } else {
+                compoundButton.setTextColor(R.color.black_0);
+                if (type == 1) {
+                    SPUtil.putFingerVerifyFlag(false);
+                } else if (type == 2) {
+                    SPUtil.putPwVerifyFlag(false);
+                } else if (type == 3) {
+                    SPUtil.putFaceVerifyFlag(false);
+                } else if (type == 4) {
+                    SPUtil.putCardVerifyFlag(false);
+                }
+            }
+        });
     }
 
     //查询manager的数据
@@ -605,11 +674,19 @@ public class UserManageFragment extends BaseFragment
         }).queryAsyncAll(Manager.class, queryBuilder);
     }
 
-    private ManagerAdapter.ManagerItemCallBack callBack = new ManagerAdapter.ManagerItemCallBack() {
-        @Override
-        public void managerItemCallBack(int position) {
+    private ManagerAdapter.ManagerItemCallBack callBack = position ->
             ToastUtils.showSingleToast(getActivity(), "点击了managerItem");
+
+    //跳转验证页面
+    private void skipVerify() {
+        //跳转人脸识别的界面(只要开启了人脸)
+        if (SPUtil.getOpenFace()) {
+
+        } else {
+            //跳转默认的识别页面(没有开启人脸)
+            SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);
         }
-    };
+        Objects.requireNonNull(getActivity()).finish();
+    }
 
 }

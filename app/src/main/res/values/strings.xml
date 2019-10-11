@@ -20,6 +20,7 @@
     <string name="woman">女</string>
     <string name="age">年龄</string>
     <string name="pw_register">密码注册</string>
+    <string name="pw">密码</string>
     <string name="company_name">公司名称</string>
     <string name="phone_name">手机号码</string>
     <string name="department_name">部门名称</string>
@@ -84,6 +85,15 @@
     <string name="yes">是</string>
     <string name="finger_register_success">指静脉注册成功</string>
     <string name="lest_select_one_verify">请至少注册一种验证方式</string>
+    <string name="set_need_verify_model">设置必须的注册模式:</string>
+    <string name="finger_register">指静脉</string>
+    <string name="card_register">身份证</string>
+    <string name="face_register">人脸</string>
+    <string name="register_success">注册成功!</string>
+    <string name="please_register_pwd">请完成密码注册</string>
+    <string name="please_register_finger">请完成指静脉注册</string>
+    <string name="please_register_face">请完成人脸注册</string>
+    <string name="please_register_card">请完成身份证注册</string>
 
 
 </resources>

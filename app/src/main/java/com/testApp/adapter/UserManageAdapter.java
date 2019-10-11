@@ -65,9 +65,9 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         User user = users.get(i);
-        String imagePath = user.getFace().getImagePath();
-        GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
-                imagePath, holder.userAvatar);
+//        String imagePath = user.getFace().getImagePath();
+//        GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
+//                imagePath, holder.userAvatar);
         holder.userName.setText(user.getName());
         holder.userSex.setText(user.getSex());
         holder.userAge.setText(user.getAge());

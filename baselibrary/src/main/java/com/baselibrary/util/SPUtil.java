@@ -55,4 +55,44 @@ public class SPUtil {
     public static String getFaceActiveCode(){
       return    instance().getString("faceCode",null);
     }
+    //存储密码注册的标记模式
+    public static void putPwVerifyFlag(Boolean flag) {
+        instance().putBoolean(AppConstant.PW_VERIFY_MODEL, flag);
+    }
+
+    //获取密码中注册的标记
+    public static Boolean getPwVerifyFlag() {
+        return instance().getBoolean(AppConstant.PW_VERIFY_MODEL, false);
+    }
+
+    //存储指静脉的注册的标记
+    public static void putFingerVerifyFlag(Boolean flag) {
+        instance().getBoolean(AppConstant.FINGER_VERIFY_MODEL, flag);
+    }
+
+    //获取指静脉的注册的标记
+    public static Boolean getFingerVerifyFlag() {
+        return instance().getBoolean(AppConstant.FINGER_VERIFY_MODEL, false);
+    }
+
+    //存储人脸注册的标记
+    public static void putFaceVerifyFlag(Boolean flag) {
+        instance().putBoolean(AppConstant.FACE_VERIFY_MODEL, flag);
+    }
+
+    //获取人脸的注册标记
+    public static Boolean getFaceVerifyFlag() {
+        return instance().getBoolean(AppConstant.FACE_VERIFY_MODEL, false);
+    }
+
+    //存储身份证注册的标记
+    public static void putCardVerifyFlag(Boolean flag) {
+        instance().putBoolean(AppConstant.CARD_VERIFY_MODEL, flag);
+    }
+
+    //获取身份证/IC卡的标记
+    public static Boolean getCardVerifyFlag() {
+        return instance().getBoolean(AppConstant.CARD_VERIFY_MODEL, false);
+    }
+
 }

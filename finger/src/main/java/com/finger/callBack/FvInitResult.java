@@ -6,5 +6,5 @@ package com.finger.callBack;
  * on 2019/10/9
  */
 public interface FvInitResult {
-    void fvInitResult(String msg);
+    void fvInitResult(int res,String msg);
 }

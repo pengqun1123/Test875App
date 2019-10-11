@@ -25,13 +25,65 @@
             android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:text="@string/set_need_verify_model"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/sp_17" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10">
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cbPw"
+                style="@style/manager_checkbox"
+                android:layout_marginEnd="@dimen/dp_25"
+                android:checked="false"
+                android:text="@string/pw"
+                android:textColor="@color/black_0" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cbFinger"
+                style="@style/manager_checkbox"
+                android:layout_marginStart="@dimen/dp_25"
+                android:layout_marginEnd="@dimen/dp_25"
+                android:checked="false"
+                android:text="@string/finger_register"
+                android:textColor="@color/black_0" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cbFace"
+                style="@style/manager_checkbox"
+                android:layout_marginStart="@dimen/dp_25"
+                android:layout_marginEnd="@dimen/dp_25"
+                android:checked="false"
+                android:text="@string/face_register"
+                android:textColor="@color/black_0" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cbCard"
+                style="@style/manager_checkbox"
+                android:layout_marginStart="@dimen/dp_25"
+                android:checked="false"
+                android:text="@string/card_register"
+                android:textColor="@color/black_0" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/registerManagerMaxNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_7"
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="@drawable/ic_revise"
             android:gravity="center_vertical"
-            android:layout_marginEnd="@dimen/dp_7"
             android:padding="@dimen/dp_10"
             android:text="@string/current_register_max_manager_mun"
             android:textColor="@color/black_0"

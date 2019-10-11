@@ -76,4 +76,11 @@
         <item name="android:textSize">@dimen/sp_17</item>
     </style>
 
+    <style name="manager_checkbox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/dp_5</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+    </style>
+
 </resources>

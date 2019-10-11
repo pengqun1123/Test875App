@@ -1,5 +1,7 @@
 package com.finger.service;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +9,13 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.finger.constant.FingerConstant;
 import com.sd.tgfinger.tgApi.Constant;
 
 /**
@@ -28,12 +32,15 @@ public class FingerServiceUtil {
         return Holder.INSTANCE;
     }
 
-    public void startFingerService(Context context) {
-        if (context != null) {
+    private Activity activity;
+
+    public void startFingerService(Activity activity) {
+        if (activity != null) {
+            this.activity = activity;
             Intent intent = new Intent();
             intent.setAction(FingerService.ACTION);
             intent.addCategory(FingerService.CATEGORY);
-            PackageManager packageManager = context.getPackageManager();
+            PackageManager packageManager = activity.getPackageManager();
             ResolveInfo resolveInfo = packageManager.resolveService(intent, 0);
             ServiceInfo serviceInfo = resolveInfo.serviceInfo;
             if (serviceInfo != null) {
@@ -45,7 +52,7 @@ public class FingerServiceUtil {
                 // 因为Android5.0后不允许隐式启动service
                 ComponentName componentName = new ComponentName(packageName, name);
                 intent.setComponent(componentName);
-                context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+                activity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
             }
         }
     }
@@ -54,9 +61,20 @@ public class FingerServiceUtil {
         context.unbindService(serviceConnection);
     }
 
+    private Messenger fingerServiceMessenger;
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            try {
+                fingerServiceMessenger = new Messenger(iBinder);
+                Message message = new Message();
+                message.what = FingerConstant.SEND_CODE;
+                message.obj = activity;
+                message.replyTo = fingerUtilMessenger;
+                fingerServiceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 //            devServiceMessenger = new Messenger(iBinder);
 //            //如果设备开启
 //            Message tg661JMessage = new Message();
@@ -71,8 +89,19 @@ public class FingerServiceUtil {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-//            devServiceMessenger = null;
+            fingerServiceMessenger = null;
         }
     };
+
+    @SuppressLint("HandlerLeak")
+    private Messenger fingerUtilMessenger = new Messenger(new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == FingerConstant.RECEIVE_CODE) {
+
+            }
+        }
+    });
 
 }
