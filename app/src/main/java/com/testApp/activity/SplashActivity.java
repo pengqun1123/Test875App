@@ -126,7 +126,13 @@ public class SplashActivity extends AppCompatActivity {
        FaceService.getInstance().initFace(code, this, new FaceInitListener() {
            @Override
            public void initFail(String error) {
-               ToastUtils.showShortToast(SplashActivity.this,error);
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       ToastUtils.showSingleToast(SplashActivity.this,error);
+                   }
+               });
+
            }
 
            @Override
@@ -134,9 +140,14 @@ public class SplashActivity extends AppCompatActivity {
            FaceService.getInstance().loadUserToSearchLibrary(SplashActivity.this, new FaceListener() {
                @Override
                public void onLoadDataListener() {
-                 //  ToastUtils.showShortToast(SplashActivity.this,"加载数据成功");
-                   Log.d("uuu","ddd");
-                   skipVerifyActivity();
+                   runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           ToastUtils.showSingleToast(SplashActivity.this,"加载数据成功");
+                           skipVerifyActivity();
+                       }
+                   });
+
                   //
                }
            });

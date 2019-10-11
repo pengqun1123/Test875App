@@ -7,6 +7,11 @@
         <item name="colorPrimary">@color/blue_5</item>
         <item name="colorPrimaryDark">@color/blue_15</item>
         <item name="colorAccent">@color/gold</item>
+        <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <item name="android:windowFullscreen">true</item>
+      <!--  <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>-->
     </style>
 
 </resources>

@@ -1,12 +1,17 @@
 package com.face.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.DisplayMetrics;
 import android.view.TextureView;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,22 +77,31 @@ public abstract class AbstractFaceDetectActivity extends BaseActivity implements
     protected int mScreenHeight = 0;
     protected int mScreenWidth = 0;
     private float coordinateScaleFactor = -1;
-    protected TextView tv_direct;
+   // protected TextView tv_direct;
 
+    protected AppCompatImageView iv_in;
+    protected AppCompatImageView iv_sight;
+    protected ObjectAnimator sight_rotate;
+
+
+    protected ObjectAnimator  in_rotate;
+    protected TextView tv_result;
+    protected TextView tv_type;
     /**
      * 红外视频预览
      */
-//    protected SurfaceView nirPreview;
-
 
     @Override
     protected void initView() {
         svPreview = (TextureView) findViewById(R.id.sv_preview);
         fbvFaceRect = (FaceBoxView) findViewById(R.id.fbv_face_rect);
-        tv_direct = (TextView) findViewById(R.id.tv_direct);
-//        nirPreview = (SurfaceView) findViewById(R.id.nir_preview);
+        //tv_direct = (TextView) findViewById(R.id.tv_direct);
         //将人脸框绘制自定义View放置到最上层，以保持人脸检测框能正常显示
         fbvFaceRect.bringToFront();
+        iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
+        iv_sight = ((AppCompatImageView) findViewById(R.id.iv_sight));
+        tv_result = ((TextView) findViewById(R.id.tv_result));
+        tv_type = ((TextView) findViewById(R.id.tv_type));
     }
 
     @Override
@@ -101,6 +115,40 @@ public abstract class AbstractFaceDetectActivity extends BaseActivity implements
         initPreview();
         //初始化人脸检测处理器
         initFaceDetectorProcessor();
+
+        tv_type.setText(getString(R.string.face_verify_idCard));
+
+        sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
+        sight_rotate.setDuration(4000);
+        sight_rotate.setInterpolator(new LinearInterpolator());
+        sight_rotate.setRepeatMode(ObjectAnimator.RESTART);
+        sight_rotate.setRepeatCount(Animation.INFINITE);
+
+        in_rotate = ObjectAnimator.ofFloat(iv_in, "rotation", 0.0f, -360.0f);
+        //in_rotate = new RotateAnimation(0, -360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        in_rotate.setDuration(4000);
+        in_rotate.setInterpolator(new LinearInterpolator());
+        in_rotate.setRepeatMode(ObjectAnimator.RESTART);
+        in_rotate.setRepeatCount(Animation.INFINITE);
+    }
+
+    protected void startAnimator(){
+        if (sight_rotate.isStarted()){
+            if (sight_rotate.isPaused()){
+                tv_result.setText(getString(R.string.face_verifying));
+                tv_result.setTextColor(getResources().getColor(R.color.white));
+                tv_result.setVisibility(View.VISIBLE);
+                sight_rotate.resume();
+                in_rotate.resume();
+            }
+        }else {
+            tv_result.setText(getString(R.string.face_verifying));
+            tv_result.setTextColor(getResources().getColor(R.color.white));
+            tv_result.setVisibility(View.VISIBLE);
+            sight_rotate.start();
+            in_rotate.start();
+        }
+
     }
 
     @Override
