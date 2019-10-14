@@ -29,7 +29,10 @@ import com.baselibrary.base.BaseFragment;
 import com.baselibrary.callBack.PwCallBack;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.dao.db.ManagerDao;
+import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger3;
 import com.baselibrary.pojo.Finger6;
@@ -100,25 +103,25 @@ public class UserManageFragment extends BaseFragment
     @Override
     protected Integer contentView() {
         type = getArguments().getInt("type");
-        if (type == 1) {
+        if (type == 0) {
             return R.layout.fragment_user_manage;
-        } else if (type == 2) {
+        } else if (type == 1) {
             return R.layout.fragment_user_register;
-        } else if (type == 3) {
+        } else if (type == 2) {
             return R.layout.fragment_manager_manage;
         } else {
-            return R.layout.fragment_user_register;
+            return 0;
         }
     }
 
     @Override
     protected void initView() {
         //设置内容
-        if (type == 1) {
+        if (type == 0) {
             setUserManageView();
-        } else if (type == 2) {
+        } else if (type == 1) {
             userRegister();
-        } else if (type == 3) {
+        } else if (type == 2) {
             managerLayout();
         }
 
@@ -267,7 +270,8 @@ public class UserManageFragment extends BaseFragment
     private void queryAllUserNo() {
         //查出所有用户的工号
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        QueryBuilder<User> queryBuilder = dbUtil.getQueryBuilder(User.class);
+        UserDao userDao = dbUtil.getDaoSession().getUserDao();
+        QueryBuilder<User> userQueryBuilder = userDao.queryBuilder();
         dbUtil.setDbCallBack(new DbCallBack<User>() {
             @Override
             public void onSuccess(User result) {
@@ -294,7 +298,7 @@ public class UserManageFragment extends BaseFragment
             public void onNotification(boolean result) {
 
             }
-        }).queryAsyncAll(User.class, queryBuilder);
+        }).queryAsyncAll(User.class, userQueryBuilder);
     }
 
     private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
@@ -705,58 +709,12 @@ public class UserManageFragment extends BaseFragment
     //查询manager的数据
     private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        QueryBuilder<Manager> queryBuilder = dbUtil.getQueryBuilder(Manager.class);
-        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
-            @Override
-            public void onSuccess(Manager result) {
-
-            }
-
-            @Override
-            public void onSuccess(List<Manager> result) {
-                Logger.d("管理员数据查询成功");
-                if (result.size() > 0) {
-                    managerAdapter.addData(result);
-                    noData.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailed() {
-                Logger.d("管理员数据查询失败");
-            }
-
-            @Override
-            public void onNotification(boolean result) {
-
-            }
-        }).queryAsyncAll(Manager.class, queryBuilder);
-
-//        QueryBuilder<Finger6> queryBuilder = dbUtil.getQueryBuilder(Finger6.class);
-//        dbUtil.setDbCallBack(new DbCallBack<Finger6>() {
-//            @Override
-//            public void onSuccess(Finger6 result) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(List<Finger6> result) {
-//                if (result != null) {
-//                    Logger.d("指静脉模板的数量:" + result.size());
-//                    callBack.allFingerData(result);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//                callBack.allFingerFail();
-//            }
-//
-//            @Override
-//            public void onNotification(boolean result) {
-//
-//            }
-//        }).queryAsyncAll(Finger6.class, queryBuilder);
+        List<Manager> managers = dbUtil.queryAll(Manager.class);
+        Logger.d("管理员数据查询成功");
+        if (managers.size() > 0) {
+            managerAdapter.addData(managers);
+            noData.setVisibility(View.GONE);
+        }
     }
 
     private ManagerAdapter.ManagerItemCallBack callBack = position ->

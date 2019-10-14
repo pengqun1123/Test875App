@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.orhanobut.logger.Logger;
+
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.async.AsyncOperation;
 import org.greenrobot.greendao.async.AsyncOperationListener;
@@ -348,8 +350,8 @@ public class DBUtil {
             @Override
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
-              //      List<T> list = new ArrayList<>();
-               //     list.add(((T) operation.getResult()));
+                    //      List<T> list = new ArrayList<>();
+                    //     list.add(((T) operation.getResult()));
                     mCallBack.onSuccess((List) operation.getResult());
                 } else if (operation.isFailed()) {
                     mCallBack.onFailed();
@@ -360,7 +362,7 @@ public class DBUtil {
         asyncSession.queryList(query);
     }
 
-    public <T> void queryAsync(Class<T> cls, WhereCondition cond1,WhereCondition cond2, WhereCondition... condMore) {
+    public <T> void queryAsync(Class<T> cls, WhereCondition cond1, WhereCondition cond2, WhereCondition... condMore) {
         AsyncSession asyncSession = daoSession.startAsyncSession();
         asyncSession.setListenerMainThread(new AsyncOperationListener() {
             @Override
@@ -374,7 +376,7 @@ public class DBUtil {
                 }
             }
         });
-        Query query = daoSession.queryBuilder(cls).whereOr(cond1,cond2,condMore).build();
+        Query query = daoSession.queryBuilder(cls).whereOr(cond1, cond2, condMore).build();
         asyncSession.queryList(query);
     }
 
@@ -388,6 +390,8 @@ public class DBUtil {
      */
     public <T> void queryAsyncAll(Class<T> claz, QueryBuilder<T> builder) {
         setCurrentDao(claz);
+        String name = claz.getName();
+        Logger.d("  类名 :" + name);
         AsyncSession asyncSession = daoSession.startAsyncSession();
         asyncSession.setListenerMainThread(new AsyncOperationListener() {
             @Override

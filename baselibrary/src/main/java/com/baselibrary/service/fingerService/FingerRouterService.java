@@ -7,6 +7,7 @@ import com.alibaba.android.arouter.facade.template.IProvider;
 import com.baselibrary.callBack.FingerDevCloseListener;
 import com.baselibrary.callBack.FingerDevOpenListener;
 import com.baselibrary.callBack.FingerDevStatusConnectListener;
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.pojo.Finger6;
@@ -27,7 +28,10 @@ public interface FingerRouterService extends IProvider {
 
     void fingerDevConnectStatus(FingerDevStatusConnectListener listener);
 
-    void startFingerService(Activity activity, OnStartServiceListener startServiceListener);
+    void setFingerVerifyResultListener(FingerVerifyResultListener fingerVerifyResultListener);
+
+    void startFingerService(Activity activity,
+                            OnStartServiceListener startServiceListener);
 
     void unbindDevService(Context context);
 

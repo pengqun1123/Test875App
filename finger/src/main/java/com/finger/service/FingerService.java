@@ -11,6 +11,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
 
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.ToastUtils;
@@ -27,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.finger.fingerApi.FingerApi.devStatus;
 
 public class FingerService extends Service {
 
@@ -47,6 +46,12 @@ public class FingerService extends Service {
     private Messenger fingerUtilMessennger;
     private Activity activity;
     private Boolean isLoop = false;
+    private FingerVerifyResultListener fingerVerifyResultListener;
+
+    public void setFingerVerifyResultListener(FingerVerifyResultListener listener) {
+        this.fingerVerifyResultListener = listener;
+    }
+
     private Messenger messenger = new Messenger(new FingerServiceHandler());
 
     @SuppressLint("HandlerLeak")
@@ -182,6 +187,9 @@ public class FingerService extends Service {
                         new Verify1_NCallBack() {
                             @Override
                             public void verify1_NCallBack(Msg msg) {
+                                if (fingerVerifyResultListener != null) {
+                                    fingerVerifyResultListener.fingerfVerifyResult(msg.getResult(), msg.getTip());
+                                }
                                 ToastUtils.showSingleToast(activity, msg.getTip());
                                 Logger.d("指静脉验证:" + msg.getTip());
                             }

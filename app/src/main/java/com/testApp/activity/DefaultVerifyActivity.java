@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
@@ -29,7 +30,8 @@ import com.testApp.dialog.AskDialog;
 
 import java.util.ArrayList;
 
-public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack {
+public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
+        FingerVerifyResultListener {
 
     private ArrayList<Finger6> fingerList;
 
@@ -170,5 +172,10 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                         }
                     });
         }
+    }
+
+    @Override
+    public void fingerfVerifyResult(int res, String msg) {
+
     }
 }

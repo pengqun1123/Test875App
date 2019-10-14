@@ -16,6 +16,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
@@ -47,6 +48,10 @@ public class FingerServiceUtil {
 //        this.fingerData = fingerData;
 //        this.fingerDataSize = fingerDataSize;
         this.finger6ArrayList = fingerList;
+    }
+
+    public void setFingerVerifyResult(FingerVerifyResultListener fingerVerifyResultListener){
+
     }
 
     public void startFingerService(Activity activity, OnStartServiceListener startServiceListener) {
@@ -82,7 +87,6 @@ public class FingerServiceUtil {
         this.startServiceListener.startServiceListener(false);
         context.unbindService(serviceConnection);
     }
-
 
     private Messenger fingerServiceMessenger;
 

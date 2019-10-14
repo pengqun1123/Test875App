@@ -118,10 +118,10 @@ public class ManagerActivity extends BaseActivity {
             fragments.clear();
         }
         Logger.d("managerFragment 2 指静脉模板数量：" + allFingerSize);
-        fragments.add(UserManageFragment.instance(1, null, 0));//用户管理
-        userRegisterFragment = UserManageFragment.instance(2, allFingerData, allFingerSize);
+        fragments.add(UserManageFragment.instance(0, null, 0));//用户管理
+        userRegisterFragment = UserManageFragment.instance(1, allFingerData, allFingerSize);
         fragments.add(userRegisterFragment);//用户注册
-        fragments.add(UserManageFragment.instance(3, null, 0));//管理员列表
+        fragments.add(UserManageFragment.instance(2, null, 0));//管理员列表
         return fragments;
     }
 

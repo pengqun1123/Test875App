@@ -7,6 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.callBack.FingerDevCloseListener;
 import com.baselibrary.callBack.FingerDevOpenListener;
 import com.baselibrary.callBack.FingerDevStatusConnectListener;
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.pojo.Finger6;
@@ -65,9 +66,14 @@ public class FingerRouter implements FingerRouterService {
         FingerApi.getInstance().receiveFingerDevConnectStatus(new FingerDevStatusCallBack() {
             @Override
             public void fingerDevStatus(int res, String msg) {
-                listener.fingerDevStatusConnect(res,msg);
+                listener.fingerDevStatusConnect(res, msg);
             }
         });
+    }
+
+    @Override
+    public void setFingerVerifyResultListener(FingerVerifyResultListener fingerVerifyResultListener) {
+        FingerServiceUtil.getInstance().setFingerVerifyResult(fingerVerifyResultListener);
     }
 
     @Override
