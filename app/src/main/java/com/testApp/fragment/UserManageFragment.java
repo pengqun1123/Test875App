@@ -259,31 +259,6 @@ public class UserManageFragment extends BaseFragment
 
     private List<User> getUsers(int pageSize) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        List<User> users = dbUtil.queryAll(User.class);
-        List<User> users1 = dbUtil.queryAll(User.class);
-//        QueryBuilder<User> queryBuilder = dbUtil.getQueryBuilder(User.class);
-//        queryBuilder.offset(pageSize * 20).limit(20);
-//        dbUtil.setDbCallBack(new DbCallBack<User>() {
-//            @Override
-//            public void onSuccess(User result) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(List<User> result) {
-//
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//
-//            }
-//
-//            @Override
-//            public void onNotification(boolean result)
-//
-//            }
-//        }).queryAsync();
         return dbUtil.getQueryBuilder(User.class).offset(pageSize * 20).limit(20).list();
     }
 
@@ -756,6 +731,32 @@ public class UserManageFragment extends BaseFragment
 
             }
         }).queryAsyncAll(Manager.class, queryBuilder);
+
+//        QueryBuilder<Finger6> queryBuilder = dbUtil.getQueryBuilder(Finger6.class);
+//        dbUtil.setDbCallBack(new DbCallBack<Finger6>() {
+//            @Override
+//            public void onSuccess(Finger6 result) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(List<Finger6> result) {
+//                if (result != null) {
+//                    Logger.d("指静脉模板的数量:" + result.size());
+//                    callBack.allFingerData(result);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//                callBack.allFingerFail();
+//            }
+//
+//            @Override
+//            public void onNotification(boolean result) {
+//
+//            }
+//        }).queryAsyncAll(Finger6.class, queryBuilder);
     }
 
     private ManagerAdapter.ManagerItemCallBack callBack = position ->

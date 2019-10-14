@@ -194,7 +194,7 @@ public class FingerApi {
     }
 
     //设备关闭
-    public static void closeDev(@NonNull Activity activity, DevCloseCallBack callBack) {
+    public void closeDev(@NonNull Activity activity, DevCloseCallBack callBack) {
         TGBApi.getTGAPI().closeDev(activity, callBack);
     }
 

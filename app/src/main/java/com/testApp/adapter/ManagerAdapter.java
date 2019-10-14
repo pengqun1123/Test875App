@@ -73,7 +73,9 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> 
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         holder.managerNo.setText(MessageFormat.format("{0}{1}",
                 holder.itemView.getContext().getString(R.string.manager), i));
-        holder.managerPw.setText(managers.get(i).getManage_pw());
+        Manager manager = managers.get(i);
+        String manage_pw = manager.getManage_pw();
+        holder.managerPw.setText(manage_pw);
         holder.managerItem.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
