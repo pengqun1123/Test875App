@@ -5,6 +5,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.WindowManager;
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.base.BaseApplication;
+import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.pojo.User;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
@@ -41,7 +44,23 @@ public class DefaultVerifyActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+      /*  DBUtil dbUtil = BaseApplication.getDbUtil();
+        User user=new User();
+        user.setAge("25");
+        user.setName("小明");
+        user.setSex("男");
+        user.setPhone("12435667894");
+        user.setWorkNum("1");
+        user.setSection("研发组");
+        dbUtil.insert(user);
+         user=new User();
+        user.setAge("28");
+        user.setName("小红");
+        user.setSex("女");
+        user.setPhone("1888888888");
+        user.setWorkNum("2");
+        user.setSection("硬件组");
+        dbUtil.insert(user);*/
     }
 
     @Override

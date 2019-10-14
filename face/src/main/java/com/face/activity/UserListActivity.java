@@ -26,8 +26,6 @@ import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.exceptions.FaceException;
 import com.zqzn.android.face.model.FaceSearchLibrary;
 import com.face.common.FaceConfig;
-import com.face.db.User;
-import com.face.db.UserManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +41,6 @@ public class UserListActivity extends AppCompatActivity {
     private Button btnAddUser;
     private Button btnLoadMore;
     private UserListAdapter userListAdapter;
-    private UserManager userManager;
     private int offset = 0;
     private static final int LIMIT = 10;
     private final List<Face> faces  = new ArrayList<>();
@@ -89,7 +86,6 @@ public class UserListActivity extends AppCompatActivity {
     }
 
     private void initFaceSDKApi() {
-        userManager = FaceConfig.getInstance().getUserManager();
         faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
     }
 

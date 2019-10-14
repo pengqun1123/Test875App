@@ -11,7 +11,6 @@ import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Face;
 import com.face.callback.FaceListener;
 import com.face.common.FaceConfig;
-import com.face.db.User;
 import com.face.ui.FaceRecBoxView;
 import com.face.ui.FaceRecView;
 import com.face.utils.FaceUtils;
@@ -182,15 +181,6 @@ public class FaceService {
             }
         });
 
-    }
-
-    private void addUserToSearchLibrary(User user) {
-        try {
-            user.addToSearchLibrary(faceSearchLibrary);
-            Logger.d(TAG, "加载用户到缓存成功：" + user.getId() + ", " + user.getName());
-        } catch (FaceException e) {
-            Logger.e(TAG, "加载用户到缓存失败：" + user.getId() + "," + user.getName(), e);
-        }
     }
 
 }

@@ -27,6 +27,7 @@ public class ARouterConstant {
 
     public static final String FACE_IDCARD_ACTIVITY="/face/face_idCard_act";
 
+    public static final String FACE_RIGSTER_ACTIVITY="/face/face_register_act";
     //idcard 模块相关的方法
     public static final String SERVICE_IdCARD = "/idcard/service";
 

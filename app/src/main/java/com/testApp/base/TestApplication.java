@@ -3,6 +3,7 @@ package com.testApp.base;
 import android.os.Environment;
 
 import com.baselibrary.base.BaseApplication;
+import com.face.activity.DemoApplication;
 import com.face.common.FaceConfig;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.io.File;
  * Created By pq
  * on 2019/9/9
  */
-public class TestApplication extends BaseApplication {
+public class TestApplication extends DemoApplication {
 
 
     @Override

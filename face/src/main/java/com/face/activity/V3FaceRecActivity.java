@@ -24,8 +24,6 @@ import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.face.R;
 import com.face.callback.FaceListener;
-import com.face.db.User;
-import com.face.db.UserManager;
 import com.face.service.FaceService;
 import com.face.ui.FaceBoxView;
 import com.face.ui.FaceRecBoxView;
@@ -48,7 +46,7 @@ import java.util.Date;
 import java.util.List;
 
 @Route(path = ARouterConstant.FACE_1_N_ACTIVITY)
-public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProcessor.FaceRecCallback, FaceSDK.InitCallback, FaceListener {
+public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProcessor.FaceRecCallback {
 
     private static final String TAG = V3FaceRecActivity.class.getSimpleName();
 
@@ -277,7 +275,15 @@ public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProces
             //判断搜索次数
             if (faceTrackData.searchTimes.get() > 0) {
                 if (faceTrackData.livenessDetectTimes.get() > 0 && !faceTrackData.livenessPass) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_result.setText(getString(R.string.face_verify_fail));
+                            tv_result.setTextColor(getResources().getColor(R.color.red_2));
+                            tv_result.setVisibility(View.VISIBLE);
 
+                        }
+                    });
                 }else if (faceTrackData.searchPass) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -356,59 +362,5 @@ public class V3FaceRecActivity extends BaseActivity implements BaseFaceRecProces
         } catch (Throwable e) {
             Logger.e(TAG, "解析人脸识别结果失败", e);
         }
-    }
-
-    @Override
-    public void onInitSuccess() {
-
-        FaceService.getInstance().loadUserToSearchLibrary(this,this);
-    }
-
-    @Override
-    public void onInitFailed(Throwable throwable) {
-
-    }
-
-    private void loadUserToSearchLibrary() {
-
-        //获取用户数据管理器
-        UserManager userManager = FaceConfig.getInstance().getUserManager();
-        //获取离线1：N搜索库
-        faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
-        int offset = 0;
-        int limit = 10;
-        while (true) {
-            List<User> users = userManager.find(limit, offset);
-            if (users == null || users.isEmpty()) {
-                break;
-            }
-            for (User user : users) {
-                //将用户特征加载到1：N离线搜索库中
-                addUserToSearchLibrary(user);
-            }
-            offset += users.size();
-            if (users.size() < limit) {
-                Log.i(TAG, "loadUserToSearchLibrary: 没有更多的用户数据需要加载");
-                break;
-            }
-        }
-        Logger.i(TAG, "用户加载完成，总数：" + offset);
-        final int finalCount = offset;
-        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "用户加载完成，总数：" + finalCount, Toast.LENGTH_SHORT).show());
-    }
-
-    private void addUserToSearchLibrary(User user) {
-        try {
-            user.addToSearchLibrary(faceSearchLibrary);
-            Logger.d(TAG, "加载用户到缓存成功：" + user.getId() + ", " + user.getName());
-        } catch (FaceException e) {
-            Logger.e(TAG, "加载用户到缓存失败：" + user.getId() + "," + user.getName(), e);
-        }
-    }
-
-    @Override
-    public void onLoadDataListener() {
-        FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
-        //initNirPreview();
     }
 }

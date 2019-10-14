@@ -33,10 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         askPermission();
         //初始化数据的准备--异步加载
-
-
     }
-
 
     private void askPermission() {
         PermissionUtils.instance().requestPermission(this,
@@ -74,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             //人脸注册激活
             String faceActiveCode = SPUtil.getFaceActiveCode();
+           faceActiveCode=null;
             if (faceActiveCode!=null){
                 initFace(faceActiveCode);
             }else {
@@ -84,6 +82,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void skipVerifyActivity() {
         Boolean openFace = SPUtil.getOpenFace();
+        openFace=false;
         if (openFace) {
             //跳转人脸识别页面
             ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
@@ -132,8 +131,8 @@ public class SplashActivity extends AppCompatActivity {
                        ToastUtils.showSingleToast(SplashActivity.this,error);
                    }
                });
-
            }
+
 
            @Override
            public void initSuccess() {
@@ -147,8 +146,6 @@ public class SplashActivity extends AppCompatActivity {
                            skipVerifyActivity();
                        }
                    });
-
-                  //
                }
            });
            }

@@ -40,6 +40,10 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         notifyDataSetChanged();
     }
 
+    public void setData(List<User> users){
+        this.users=users;
+        notifyDataSetChanged();
+    }
     public void removeData(User user) {
         this.users.remove(user);
         notifyDataSetChanged();
@@ -65,7 +69,8 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         User user = users.get(i);
-        String imagePath = user.getFace().getImagePath();
+       // String imagePath = user.getFace().getImagePath();
+        String imagePath=null;
         GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
                 imagePath, holder.userAvatar);
         holder.userName.setText(user.getName());

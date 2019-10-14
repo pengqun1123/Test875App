@@ -2,9 +2,6 @@ package com.face.common;
 
 import android.content.Context;
 import android.os.Environment;
-
-import com.face.db.SQLiteUserManager;
-import com.face.db.UserManager;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.model.FaceSDK;
@@ -39,10 +36,6 @@ public class FaceConfig {
     private String serialNumber;
     private File appRootDir = null;
 
-    /**
-     * 用户信息管理类
-     */
-    private UserManager userManager;
 
     /**
      * SDK环境配置类：主要保存摄像头适配参数等数据
@@ -113,7 +106,6 @@ public class FaceConfig {
         if (!databaseDir.exists()) {
             databaseDir.mkdirs();
         }
-        userManager = new SQLiteUserManager(context, databaseDir);
     }
 
     private void initZqznFaceSdk(Context context) {
@@ -254,9 +246,6 @@ public class FaceConfig {
         return faceSDK;
     }
 
-    public UserManager getUserManager() {
-        return userManager;
-    }
 
     /**
      * 获取环境配置

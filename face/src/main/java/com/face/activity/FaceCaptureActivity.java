@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.face.R;
 import com.face.common.FaceConfig;
+import com.face.ui.FaceRecBoxView;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.camera.FaceCameraView;
@@ -19,7 +20,6 @@ import com.zqzn.android.face.exceptions.FaceQualityException;
 import com.zqzn.android.face.jni.Tool;
 import com.zqzn.android.face.model.FaceQualityDetector;
 import com.zqzn.android.face.processor.FaceDetectProcessor;
-import com.zqzn.android.face.processor.FaceRecBoxView;
 import com.face.ui.FaceRecView;
 
 import java.io.File;

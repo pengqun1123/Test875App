@@ -39,18 +39,16 @@
                     android:id="@+id/camera_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
             </FrameLayout>
 
             <com.face.ui.FaceRecBoxView
                 android:id="@+id/camera_mask_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
         </FrameLayout>
 
-
         <LinearLayout
+            android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:orientation="horizontal"
@@ -169,5 +167,6 @@
                     android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

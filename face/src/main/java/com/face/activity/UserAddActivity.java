@@ -16,10 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.pojo.Face;
+import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.common.FaceConfig;
 import com.face.utils.FaceUtils;
@@ -31,8 +34,6 @@ import com.zqzn.android.face.jni.Tool;
 import com.zqzn.android.face.model.FaceDetector;
 import com.zqzn.android.face.model.FaceFeatureExtractor;
 import com.zqzn.android.face.model.FaceSearchLibrary;
-import com.face.db.User;
-import com.face.db.UserManager;
 import com.face.utils.FileHelper;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import java.util.List;
 /**
  * 增加用户示例
  */
+@Route(path = ARouterConstant.FACE_RIGSTER_ACTIVITY)
 public class UserAddActivity extends AppCompatActivity {
 
     private static final int FACE_CAPTURE_REQUEST_CODE = 2;
@@ -52,7 +54,6 @@ public class UserAddActivity extends AppCompatActivity {
     private Button btnSave;
     private ImageView ivHead;
     private String faceImagePath;
-    private UserManager userManager;
     private FaceFeatureExtractor faceFeatureExtractor;
     private FaceDetector visFaceDetector;
     private HandlerThread handlerThread;
@@ -202,7 +203,7 @@ public class UserAddActivity extends AppCompatActivity {
                         finish();
                     }
                 }else {
-                    Toast.makeText(UserAddActivity.this, "增加失败", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showSingleToast(UserAddActivity.this, "增加失败");
                     btnSave.setEnabled(true);
                     btnSave.setText("保存");
                 }
@@ -227,12 +228,12 @@ public class UserAddActivity extends AppCompatActivity {
             //将用户特征信息加载到离线1：N搜索库中
           FaceUtils.addToSearchLibrary(face);
             Logger.d(TAG, "加载用户到缓存成功：" + face.getUId() + "," + face.getName());
-            runOnUiThread(() -> Toast.makeText(this, "增加成功", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> ToastUtils.showSingleToast(this, "增加成功"));
             return true;
         } catch (FaceException e) {
             Logger.e(TAG, "加载用户到缓存失败：" +face.getUId() + "," + face.getName(), e);
             runOnUiThread(() -> {
-                Toast.makeText(this, "写入离线1：N搜索库失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                ToastUtils.showSingleToast(this, "写入离线1：N搜索库失败: " + e.getMessage());
                 btnSave.setEnabled(true);
                 btnSave.setText("保存");
             });
