@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/managerSetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_pw_bg_select"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
+        android:text="@string/msg_tip"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/dismissBtn"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_6"
+        android:layout_marginEnd="3dp"
+        android:padding="@dimen/dp_3"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_delete"
+        tools:ignore="VectorDrawableCompat" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/msgContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/managerSetTitle"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_20"
+        android:paddingBottom="@dimen/dp_20"
+        android:text="@string/ask_user_register_msg_save"
+        android:textColor="@color/black_0"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="normal" />
+
+    <View
+        android:id="@+id/bottomLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:layout_below="@+id/msgContent"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:background="@color/black_4" />
+
+    <LinearLayout
+        android:id="@+id/btnParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bottomLine"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@drawable/dialog_btn_bg"
+            android:text="@string/no"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16" />
+
+        <View
+            android:layout_width="@dimen/dp_0_5"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:background="@color/black_4" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/positiveBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:background="@drawable/dialog_btn_bg"
+            android:text="@string/yes"
+            android:textColor="@color/blue_6"
+            android:textSize="@dimen/sp_16" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

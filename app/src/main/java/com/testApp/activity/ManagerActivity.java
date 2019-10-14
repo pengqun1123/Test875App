@@ -31,6 +31,7 @@ public class ManagerActivity extends BaseActivity {
 
     private byte[] allFingerData;
     private int allFingerSize;
+    private UserManageFragment userRegisterFragment;
 
     @Override
     protected Integer contentView() {
@@ -44,7 +45,7 @@ public class ManagerActivity extends BaseActivity {
         if (bundle != null) {
             allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
             allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
-            Logger.d("ManagerActivity 1 指静脉模板数量："+allFingerSize);
+            Logger.d("ManagerActivity 1 指静脉模板数量：" + allFingerSize);
         }
         TabLayout manageTab = bindViewWithClick(R.id.manageTab, false);
         ViewPager managePg = bindViewWithClick(R.id.managePg, false);
@@ -77,7 +78,16 @@ public class ManagerActivity extends BaseActivity {
                     //回到人脸识别页面
 
                 } else {
-                    finish();
+                    if (userRegisterFragment != null) {
+                        Boolean save = userRegisterFragment.checkRegisterContent();
+                        if (save) {
+                            userRegisterFragment.registerUser();
+                        } else {
+                            finish();
+                        }
+                    }else {
+                        finish();
+                    }
                 }
                 break;
         }
@@ -107,9 +117,10 @@ public class ManagerActivity extends BaseActivity {
         if (fragments.size() > 0) {
             fragments.clear();
         }
-        Logger.d("managerFragment 2 指静脉模板数量："+allFingerSize);
+        Logger.d("managerFragment 2 指静脉模板数量：" + allFingerSize);
+        userRegisterFragment = UserManageFragment.instance(2, allFingerData, allFingerSize);
         fragments.add(UserManageFragment.instance(1, null, 0));//用户管理
-        fragments.add(UserManageFragment.instance(2, allFingerData, allFingerSize));//用户注册
+        fragments.add(userRegisterFragment);//用户注册
         fragments.add(UserManageFragment.instance(3, null, 0));//管理员列表
         return fragments;
     }

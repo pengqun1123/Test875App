@@ -28,6 +28,8 @@ import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.dialogUtil.AppDialog;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
+import com.testApp.callBack.CancelBtnClickListener;
+import com.testApp.callBack.PositionBtnClickListener;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -133,12 +135,54 @@ public class AskDialog {
         });
     }
 
+    /**
+     * 询问用户是否保存当前用户信息
+     *
+     * @param activity activity
+     */
+    public static void showAskSaveDialog(@NonNull Activity activity, String title, String content,
+                                         PositionBtnClickListener positionClickListener,
+                                         CancelBtnClickListener cancelClickListener) {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_user_save_register_msg, null);
+        AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
+        AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
+        AppCompatTextView msgContent = dialogView.findViewById(R.id.msgContent);
+        AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
+        if (!TextUtils.isEmpty(title)) {
+            managerSetTitle.setText(title);
+        }
+        if (!TextUtils.isEmpty(content)) {
+            msgContent.setText(content);
+        }
+        Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
+        dismissBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        cancelBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (positionClickListener != null)
+                    positionClickListener.positionClickListener();
+            }
+        });
+        positiveBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (cancelClickListener != null)
+                    cancelClickListener.cancelClickListener();
+            }
+        });
+
+    }
 
     static int lastLength = 0;
 
     //展示设置管理员密码和启用人脸识别
     public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
-
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
         AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);

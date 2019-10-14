@@ -53,6 +53,8 @@ import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.ManagerAdapter;
 import com.testApp.adapter.UserManageAdapter;
+import com.testApp.callBack.CancelBtnClickListener;
+import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -77,6 +79,7 @@ public class UserManageFragment extends BaseFragment
     private byte[] allFingerData;
     private int allFingerSize;
     private List<String> workNoList;
+    private User newUser;
 
     public static UserManageFragment instance(int type, byte[] fingerData, int fingerSize) {
         UserManageFragment userManageFragment = new UserManageFragment();
@@ -239,7 +242,6 @@ public class UserManageFragment extends BaseFragment
         getUserData(userManageAdapter, noData);
     }
 
-
     @Override
     public void onRefresh() {
 
@@ -378,7 +380,7 @@ public class UserManageFragment extends BaseFragment
     }
 
     @SuppressLint("ResourceAsColor")
-    private void registerUser() {
+    public void registerUser() {
         String userName = nameEt.getText().toString().trim();
         if (TextUtils.isEmpty(userName)) {
             nameBottomLine.setBackgroundColor(R.color.red);
@@ -449,7 +451,7 @@ public class UserManageFragment extends BaseFragment
             return;
         }
         //先插入各验证模式的数据
-        User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
+        newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
         if (pwd == null && fg6 == null && idCard == null && face == null) {
             ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
@@ -585,7 +587,25 @@ public class UserManageFragment extends BaseFragment
                         }
                     }
                 });
+    }
 
+    public Boolean checkRegisterContent() {
+        final Boolean[] save = {false};
+        if (UserManageFragment.this.newUser != null || UserManageFragment.this.fingerData != null) {
+            AskDialog.showAskSaveDialog(Objects.requireNonNull(getActivity()),
+                    null, null, new PositionBtnClickListener() {
+                        @Override
+                        public void positionClickListener() {
+                            save[0] = true;
+                        }
+                    }, new CancelBtnClickListener() {
+                        @Override
+                        public void cancelClickListener() {
+                            save[0] = false;
+                        }
+                    });
+        }
+        return save[0];
     }
 
     //目前只考虑注册6特征模式
