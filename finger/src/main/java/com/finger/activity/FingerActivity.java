@@ -1,36 +1,43 @@
 package com.finger.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
-import com.baselibrary.ARouter.ARouterUtil;
+
 import com.baselibrary.base.BaseApplication;
+import com.baselibrary.callBack.PermissionC;
+import com.baselibrary.callBack.PermissionResultCallBack;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.model.TestBean;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
+import com.baselibrary.util.PermissionUtils;
 import com.finger.R;
 import com.finger.fingerApi.FingerApi;
-import com.finger.test.RouterTest;
 import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.FvInitCallBack;
 import com.sd.tgfinger.pojos.Msg;
-import com.sd.tgfinger.tgApi.Constant;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
-import java.text.MessageFormat;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -41,18 +48,16 @@ import java.util.Random;
 @Route(path = ARouterConstant.FINGER_ACTIVITY, group = ARouterConstant.GROUP_FINGER)
 public class FingerActivity extends AppCompatActivity {
 
-    @Autowired(name = "Address")
-    String Address;
-    @Autowired(name = "testBean")
-    TestBean testBean;
+
     private DBUtil dbUtil;
 
+    String[] per={Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.finger_activity_finger);
-        //注入路由
-        ARouterUtil.injectActivity(this);
 
         dbUtil = BaseApplication.getDbUtil();
 //        dbUtil = DBUtil.getInstance(getApplication());
@@ -68,70 +73,64 @@ public class FingerActivity extends AppCompatActivity {
         Button btn8 = findViewById(R.id.btn8);
         TextView params = findViewById(R.id.params);
 
-        //接收上个页面传递过来的数据
-//        params.setText(MessageFormat.format("姓名：{0}  年龄：{1}  地址：{2}"
-//                , testBean.getName(), testBean.getAge(), Address));
+        checkMyPermissions(per);
 
-//        btn7.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dbUtil = DBUtil.getInstance(getApplication());
-//            }
-//        });
-//        btn8.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dbUtil.closeData();
-//            }
-//        });
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(FingerActivity.this, "跨组件调用方法"
-                        , Toast.LENGTH_SHORT).show();
-
-                String s = RouterTest.routerModuleCommuni("<李二狗>");
-                params.setText(MessageFormat.format("内容：{0}", s));
-
-//                insert();
-            }
-        });
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<User> users = dbUtil.queryAll(User.class);
-                Logger.d(users);
-            }
-        });
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                insert1();
-            }
-        });
-        btn4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Student> students = dbUtil.queryAll(Student.class);
-                Logger.d(students);
-            }
-        });
-        btn5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //删除User
-                dbUtil.deleteById(User.class, 2);
-            }
-        });
-        btn6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //清空Student
-                dbUtil.deleteAll(Student.class);
-            }
-        });
+       FingerApi.getInstance().startReStartFinger(this);
 
 
+    }
+
+    private void FvInit(){
+        InputStream LicenseIs = getResources().openRawResource(R.raw.license);
+        FingerApi.getInstance().fingerInit(this, LicenseIs, new FvInitCallBack() {
+            @Override
+            public void fvInitResult(Msg msg) {
+                if (msg.getResult() == 1) {
+                    openDev();
+                }
+                Logger.d("===:"+msg.getTip());
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkMyPermissions(String[] permissions) {
+        List<String> pers = new ArrayList<>();
+        //当Android版本大于等于M时候
+        for (String permission : permissions) {
+            int checkSelfPermission = checkSelfPermission(permission);
+            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
+                pers.add(permission);
+            }
+        }
+        if (pers.size() > 0) {
+            String[] strings = pers.toArray(new String[]{});
+            PermissionUtils.instance().requestPermission(this,
+                    getString(R.string.permissions), strings,
+                    new PermissionResultCallBack() {
+                        @Override
+                        public void permissionCallBack() {
+                            FvInit();
+                        }
+                    });
+        } else {
+            FvInit();
+        }
+    }
+
+    private void openDev(){
+        FingerApi.getInstance().openDev(this, true,
+                new DevOpenCallBack() {
+                    @Override
+                    public void devOpenResult(Msg msg) {
+                      Logger.d("===:"+msg.getTip());
+                    }
+                }, new DevStatusCallBack() {
+                    @Override
+                    public void devStatus(Msg msg) {
+                        Logger.d("===:"+msg.getTip());
+                    }
+                });
     }
 
 

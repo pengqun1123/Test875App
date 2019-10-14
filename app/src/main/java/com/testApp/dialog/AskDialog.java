@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -15,9 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.custom.CEditText;
@@ -28,7 +25,6 @@ import com.baselibrary.pojo.Manager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
-import com.baselibrary.util.TransInformation;
 import com.baselibrary.util.dialogUtil.AppDialog;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
@@ -138,7 +134,8 @@ public class AskDialog {
     }
 
 
-    static int lastLength=0;
+    static int lastLength = 0;
+
     //展示设置管理员密码和启用人脸识别
     public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
 
@@ -163,7 +160,7 @@ public class AskDialog {
         activationCodeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                 lastLength=charSequence.length();
+                lastLength = charSequence.length();
             }
 
             @Override
@@ -176,7 +173,7 @@ public class AskDialog {
                 // 先移除当前监听，避免死循环。
                 activationCodeEt.removeTextChangedListener(this);
                 String string = activationCodeEt.getText().toString().toUpperCase();
-                if (string.length()>lastLength) {
+                if (string.length() > lastLength) {
                     if (string.length() == 4) {
                         string = string + "-";
                     } else if (string.length() == 9) {
@@ -248,34 +245,26 @@ public class AskDialog {
                 }
                 //输入人脸激活码...
                 String code = activationCodeEt.getText().toString().toUpperCase();
-                if (TextUtils.isEmpty(code)){
+                if (TextUtils.isEmpty(code)) {
                     ToastUtils.showSquareTvToast(
                             activity, activity.getString(R.string.please_input_active_code));
                     return;
                 }
-                if (code.length()<19){
+                if (code.length() < 19) {
                     ToastUtils.showSquareTvToast(
                             activity, activity.getString(com.face.R.string.face_please_input_confirm_code));
                     return;
                 }
-                if (callBack != null)
+                if (callBack != null) {
                     SPUtil.putFaceActiveCode(code);
                     SPUtil.putOpenFace(true);
                     callBack.activationCodeCallBack(code);
+                }
                 dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
                 SoftInputKeyboardUtils.hiddenKeyboard(activationCodeEt);
             }
         });
-//        cbOpenFace.setOnCheckedChangeListener((compoundButton, b) -> {
-//            SPUtil.putOpenFace(b);
-//            managerSetTitle.setText(activity.getString(R.string.active_code));
-//            managerTip.setText(activity.getString(R.string.please_input_active_code));
-//            activationCodeEt.setVisibility(View.VISIBLE);
-//            nextActiveCodeBtn.setVisibility(View.VISIBLE);
-//            openFaceAsk.setVisibility(View.GONE);
-//            btnParent.setVisibility(View.GONE);
-//        });
         dismissBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
@@ -292,10 +281,11 @@ public class AskDialog {
                 if (pw1[0].equals(pw1[1])) {
                     checkManagerPw(activity, pw1[0]);
                 }
-                if (callBack != null)
-                    callBack.positiveCallBack();
-                dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                if (callBack != null) {
+                    callBack.positiveCallBack();
+                }
+                dialog.dismiss();
             }
         });
         positiveBtn.setOnClickListener(new OnceClickListener() {
@@ -440,6 +430,7 @@ public class AskDialog {
 
     public interface PositiveCallBack {
         void positiveCallBack();
+
         void activationCodeCallBack(String code);
     }
 

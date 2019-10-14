@@ -36,11 +36,11 @@ public class PermissionUtils {
     public void requestPermission(Activity activity, String tip, String[] permissions,
                                   PermissionResultCallBack permissionResultCallBack) {
         this.permissionResultCallBack = permissionResultCallBack;
-        Intent intent = new Intent(/*activity,PermissionsActivity.class*/);
+        Intent intent = new Intent(activity,PermissionsActivity.class);
         Bundle bundle = new Bundle();
-        intent.setAction("com.baselibrary.activity.permissionActivity");
-        intent.addCategory("android.intent.category.DEFAULT");
-        bundle.putString(PermissionC.TIP, tip);
+//        intent.setAction("com.baselibrary.activity.permissionActivity");
+//        intent.addCategory("android.intent.category.DEFAULT");
+//        bundle.putString(PermissionC.TIP, tip);
         bundle.putStringArray(PermissionC.init_permis, permissions);
         intent.putExtras(bundle);
         activity.startActivity(intent);

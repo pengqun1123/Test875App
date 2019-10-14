@@ -11,12 +11,21 @@ public final class AppConstant {
     public static final Integer IDCARD_MODEL = 0x12;
     public static final Integer PW_MODEL = 0x13;
 
+
+    public static final Integer FINGER6_DATA_SIZE = 6464;
+
     //标记是否启用人脸
     public static final String OPEN_FACE = "open_face";
     //是否设置管理员密码
     public static final String MANAGER_PWD = "manager_pwd";
     //可注册的最大管理员数量
     public static final String MAX_MANAGER = "max_manager";
+    //指静脉的数据
+    public static final String FINGER_DATA = "finger_data";
+    public static final String FINGER_DATA_LIST = "finger_list";
+    public static final String FINGER_SIZE = "finger_size";
+    public static final String ADD_FINGER = "add_finger";
+    public static final String DELETE_FINGER = "delete_finger";
 
     //注册时标记必须注册的验证模式
     public static final String PW_VERIFY_MODEL= "pw_verify";

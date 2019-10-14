@@ -94,6 +94,12 @@
     <string name="please_register_finger">请完成指静脉注册</string>
     <string name="please_register_face">请完成人脸注册</string>
     <string name="please_register_card">请完成身份证注册</string>
+    <string name="init_loading_data">正在初始化数据…</string>
+    <string name="init_loading_data1">正在初始化数据.</string>
+    <string name="init_loading_data2">正在初始化数据..</string>
+    <string name="sd_name">圣点科技</string>
+    <string name="init_finger_data_fail">指静脉数据初始化失败!</string>
+    <string name="dont_equls_user_no">用户编号重复，请重填!</string>
 
 
 </resources>

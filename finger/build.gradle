@@ -68,7 +68,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation(name: 'TGFinger661J-release', ext: 'aar')
+    api(name: 'TGFinger661J-release', ext: 'aar')
     implementation project(':baselibrary')
     annotationProcessor rootProject.ext.dependencies["router-compiler"]
 }

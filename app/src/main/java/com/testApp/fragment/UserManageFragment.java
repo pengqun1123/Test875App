@@ -16,16 +16,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
 import com.baselibrary.callBack.PwCallBack;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.pojo.Face;
@@ -40,9 +42,12 @@ import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
-import com.finger.callBack.FingerRegisterCallBack;
-import com.finger.fingerApi.FingerApiUtil;
+import com.finger.callBack.OnCancelFingerImg;
+import com.finger.fingerApi.FingerApi;
+import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
+import com.sd.tgfinger.CallBack.RegisterCallBack;
+import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.activity.SearchActivity;
@@ -53,6 +58,7 @@ import com.testApp.dialog.AskDialog;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,11 +74,18 @@ public class UserManageFragment extends BaseFragment
     private int type;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItemPosition;
+    private byte[] allFingerData;
+    private int allFingerSize;
+    private List<String> workNoList;
 
-    public static UserManageFragment instance(int type) {
+    public static UserManageFragment instance(int type, byte[] fingerData, int fingerSize) {
         UserManageFragment userManageFragment = new UserManageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        if (type == 2) {
+            bundle.putByteArray(AppConstant.FINGER_DATA, fingerData);
+            bundle.putInt(AppConstant.FINGER_SIZE, fingerSize);
+        }
         userManageFragment.setArguments(bundle);
         return userManageFragment;
     }
@@ -110,6 +123,17 @@ public class UserManageFragment extends BaseFragment
 
     @Override
     protected void initData() {
+
+        if (type == 2) {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
+                allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
+                Logger.d("UserManagerFragment 1 指静脉模板数量：" + allFingerSize);
+            }
+            queryAllUserNo();
+        }
+
 
     }
 
@@ -262,6 +286,40 @@ public class UserManageFragment extends BaseFragment
     }
 
     /*************** 用户注册--Start **************/
+
+    private void queryAllUserNo() {
+        //查出所有用户的工号
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        QueryBuilder<User> queryBuilder = dbUtil.getQueryBuilder(User.class);
+        dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
+
+            }
+
+            @Override
+            public void onSuccess(List<User> result) {
+                if (result.size() > 0) {
+                    workNoList = new ArrayList<>();
+                    for (int i = 0; i < result.size(); i++) {
+                        String workNum = result.get(i).getWorkNum();
+                        workNoList.add(workNum);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).queryAsyncAll(User.class, queryBuilder);
+    }
+
     private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
     private AppCompatTextView fingerModel, faceModel, idCardModel, pwModel;
     private AppCompatButton registerBtn;
@@ -356,6 +414,19 @@ public class UserManageFragment extends BaseFragment
             staffNoLine.setBackgroundColor(R.color.red);
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_input_staff_no));
             return;
+        } else {
+            //查询是否有相同的工号
+            if (workNoList != null && workNoList.size() > 0) {
+                for (String no : workNoList) {
+                    if (staffNo.equals(no)) {
+                        ToastUtils.showSquareImgToast(getActivity(),
+                                getString(R.string.dont_equls_user_no),
+                                ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
+                                        R.drawable.cry_icon));
+                        staffNoEt.getText().clear();
+                    }
+                }
+            }
         }
         if (sex.equals("")) {
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
@@ -379,20 +450,11 @@ public class UserManageFragment extends BaseFragment
         }
         //先插入各验证模式的数据
         User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
-        if (pwd != null) {
-            insertOrReplacePw(pwd);
-        }
-        if (fingerData != null) {
-            insertOrReplaceFinger(fingerData);
-        }
-        // TODO: 2019/10/10  身份证，人脸
-
         if (pwd == null && fg6 == null && idCard == null && face == null) {
             ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
             return;
         }
-
         if (pwd != null) {
             newUser.setPwId(pwd.getUId());
             newUser.setPw(pwd);
@@ -401,15 +463,6 @@ public class UserManageFragment extends BaseFragment
             newUser.setFinger6Id(fg6.getUId());
             newUser.setFinger6(fg6);
         }
-        if (idCard != null) {
-            newUser.setCardId(idCard.getUId());
-            newUser.setIdCard(idCard);
-        }
-        if (face != null) {
-            newUser.setFaceId(face.getUId());
-            newUser.setFace(face);
-        }
-
         insertUser(newUser);
     }
 
@@ -470,10 +523,7 @@ public class UserManageFragment extends BaseFragment
         PwFactory.createPw(getActivity(), new PwCallBack() {
             @Override
             public void pwCallBack(Pw pw) {
-                //可插入到pw表中的pwd
-                UserManageFragment.this.pwd = pw;
-                registerBtn.setVisibility(View.VISIBLE);
-//                insertOrReplacePw(pw);
+                insertOrReplacePw(pwd);
             }
         });
     }
@@ -491,6 +541,7 @@ public class UserManageFragment extends BaseFragment
                 Logger.d("Pw成功插入：" + result);
                 //可添加到User表的pwd
                 UserManageFragment.this.pwd = result;
+                registerBtn.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -508,25 +559,36 @@ public class UserManageFragment extends BaseFragment
 
     //指静脉注册
     private void fingerRegister() {
-        FingerApiUtil.getInstance().fingerRegister(Objects.requireNonNull(getActivity()),
-                new FingerRegisterCallBack() {
+        FingerApi.getInstance().cancelFingerImg(Objects.requireNonNull(getActivity())
+                , new OnCancelFingerImg() {
                     @Override
-                    public void fingerRegisterCallBack(Integer res, String tipMsg, byte[] fingerData) {
-                        if (res == 8) {
-                            ToastUtils.showSquareImgToast(getActivity(), getString(R.string.finger_register_success),
-                                    ActivityCompat.getDrawable(getActivity(), R.drawable.ic_emoje));
-                            //可插入finger表的指静脉模板
-                            UserManageFragment.this.fingerData = fingerData;
-                            registerBtn.setVisibility(View.VISIBLE);
-                            //insertOrReplaceFinger(fingerData);
-                        } else {
-                            ToastUtils.showSingleToast(getActivity(), tipMsg);
+                    public void cancelFingerImg(int res) {
+                        if (res == 1) {
+                            Logger.d("UserManagerFragment 2 指静脉模板数量：" + allFingerSize);
+                            FingerApi.getInstance().register(Objects.requireNonNull(getActivity()),
+                                    allFingerData, allFingerSize, new RegisterCallBack() {
+                                        @Override
+                                        public void registerResult(Msg msg) {
+                                            if (msg.getResult() == 8) {
+                                                ToastUtils.showSquareImgToast(getActivity(),
+                                                        getString(R.string.finger_register_success),
+                                                        ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
+                                                                , R.drawable.ic_emoje));
+                                                //可插入finger表的指静脉模板
+                                                UserManageFragment.this.fingerData = msg.getFingerData();
+                                                insertOrReplaceFinger(msg.getFingerData());
+                                            } else {
+                                                ToastUtils.showSingleToast(getActivity(), msg.getTip());
+                                            }
+                                        }
+                                    });
                         }
                     }
                 });
+
     }
 
-    //目前只考虑注册liu特征模式
+    //目前只考虑注册6特征模式
     private void insertOrReplaceFinger(byte[] fingerData) {
         Finger6 finger6 = new Finger6();
         finger6.setFinger6Feature(fingerData);
@@ -537,6 +599,8 @@ public class UserManageFragment extends BaseFragment
                 Logger.d("Fg6成功插入：" + result);
                 //可插入User表的数据
                 UserManageFragment.this.fg6 = result;
+                registerBtn.setVisibility(View.VISIBLE);
+                FingerServiceUtil.getInstance().addFinger(result.getFinger6Feature());
             }
 
             @Override

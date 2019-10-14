@@ -1,22 +1,40 @@
 package com.testApp.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Looper;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.WindowManager;
+
 import com.baselibrary.base.BaseActivity;
-import com.baselibrary.base.BaseApplication;
-import com.baselibrary.dao.db.DBUtil;
-import com.baselibrary.pojo.User;
+import com.baselibrary.callBack.OnStartServiceListener;
+import com.baselibrary.constant.AppConstant;
+import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
+import com.finger.callBack.FingerDevStatusCallBack;
+import com.finger.fingerApi.FingerApi;
+import com.finger.service.FingerServiceUtil;
+import com.orhanobut.logger.Logger;
 import com.pw.pwApi.PwApi;
 
+import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.testApp.R;
 import com.testApp.dialog.AskDialog;
 
-public class DefaultVerifyActivity extends BaseActivity {
+import java.util.ArrayList;
+
+public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack {
+
+    private ArrayList<Finger6> fingerList;
+
+//    private byte[] allFingerData;
+//    private int allFingerSize;
 
     @Override
     protected Integer contentView() {
@@ -44,23 +62,58 @@ public class DefaultVerifyActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-      /*  DBUtil dbUtil = BaseApplication.getDbUtil();
-        User user=new User();
-        user.setAge("25");
-        user.setName("小明");
-        user.setSex("男");
-        user.setPhone("12435667894");
-        user.setWorkNum("1");
-        user.setSection("研发组");
-        dbUtil.insert(user);
-         user=new User();
-        user.setAge("28");
-        user.setName("小红");
-        user.setSex("女");
-        user.setPhone("1888888888");
-        user.setWorkNum("2");
-        user.setSection("硬件组");
-        dbUtil.insert(user);*/
+        //接收指静脉设备的连接状态
+        FingerApi.getInstance().receiveFingerDevConnectStatus(this);
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+//                allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
+//                allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
+                fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
+                Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerList.size());
+                FingerServiceUtil.getInstance().setFingerData(fingerList);
+            }
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Logger.d("   验证页面  onResume");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Logger.d("   验证页面  onNewIntent");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Logger.d("    验证页面  onReStart");
+        FingerServiceUtil.getInstance().reStartFingerVerify();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Logger.d("   验证页面 onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Logger.d("   验证页面 onStop");
+        FingerServiceUtil.getInstance().pauseFingerVerify();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FingerServiceUtil.getInstance().unbindDevService(this);
     }
 
     @Override
@@ -74,8 +127,18 @@ public class DefaultVerifyActivity extends BaseActivity {
                     @Override
                     public void managerPwdVerifyCallBack(Boolean isVerify) {
                         if (isVerify) {
-                            SkipActivityUtil.skipActivity(DefaultVerifyActivity.this,
-                                    ManagerActivity.class);
+                            if (fingerList != null) {
+                                Bundle bundle = new Bundle();
+                                Logger.d("指静脉数据的数量：" + fingerList.size());
+//                            bundle.putByteArray(AppConstant.FINGER_DATA, allFingerData);
+//                            bundle.putInt(AppConstant.FINGER_SIZE, allFingerSize);
+                                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
+                                SkipActivityUtil.skipDataActivity(DefaultVerifyActivity.this,
+                                        ManagerActivity.class, bundle);
+                            } else {
+                                SkipActivityUtil.skipActivity(DefaultVerifyActivity.this,
+                                        ManagerActivity.class);
+                            }
                         } else {
                             ToastUtils.showSquareImgToast(DefaultVerifyActivity.this,
                                     getString(R.string.manager_pwd_verify_fail),
@@ -94,5 +157,18 @@ public class DefaultVerifyActivity extends BaseActivity {
         }
     }
 
+    private static Boolean isStartService = false;
 
+    @Override
+    public void fingerDevStatus(int res, String msg) {
+        if (res == 1 && !isStartService) {
+            FingerServiceUtil.getInstance().startFingerService(this,
+                    new OnStartServiceListener() {
+                        @Override
+                        public void startServiceListener(Boolean isStart) {
+                            isStartService = isStart;
+                        }
+                    });
+        }
+    }
 }

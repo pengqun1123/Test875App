@@ -1,5 +1,7 @@
 package com.testApp.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,11 @@ import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
 
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.adapter.MyFragmentStatePagerAdapter;
 import com.testApp.dialog.AskDialog;
@@ -25,6 +29,9 @@ import java.util.List;
 
 public class ManagerActivity extends BaseActivity {
 
+    private byte[] allFingerData;
+    private int allFingerSize;
+
     @Override
     protected Integer contentView() {
         return R.layout.activity_manager;
@@ -32,6 +39,13 @@ public class ManagerActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
+            allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
+            Logger.d("ManagerActivity 1 指静脉模板数量："+allFingerSize);
+        }
         TabLayout manageTab = bindViewWithClick(R.id.manageTab, false);
         ViewPager managePg = bindViewWithClick(R.id.managePg, false);
         bindViewWithClick(R.id.backPreviousBtn, true);
@@ -63,7 +77,6 @@ public class ManagerActivity extends BaseActivity {
                     //回到人脸识别页面
 
                 } else {
-                    SkipActivityUtil.skipActivity(this, DefaultVerifyActivity.class);
                     finish();
                 }
                 break;
@@ -94,9 +107,10 @@ public class ManagerActivity extends BaseActivity {
         if (fragments.size() > 0) {
             fragments.clear();
         }
-        fragments.add(UserManageFragment.instance(1));//用户管理
-        fragments.add(UserManageFragment.instance(2));//用户注册
-        fragments.add(UserManageFragment.instance(3));//管理员列表
+        Logger.d("managerFragment 2 指静脉模板数量："+allFingerSize);
+        fragments.add(UserManageFragment.instance(1, null, 0));//用户管理
+        fragments.add(UserManageFragment.instance(2, allFingerData, allFingerSize));//用户注册
+        fragments.add(UserManageFragment.instance(3, null, 0));//管理员列表
         return fragments;
     }
 

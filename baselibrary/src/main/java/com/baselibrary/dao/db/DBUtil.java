@@ -465,8 +465,10 @@ public class DBUtil {
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
                     mCallBack.onNotification(true);
+                    mCallBack.onSuccess(null);
                 } else if (operation.isFailed() && mCallBack != null) {
                     mCallBack.onNotification(false);
+                    mCallBack.onFailed();
                 }
             }
         });

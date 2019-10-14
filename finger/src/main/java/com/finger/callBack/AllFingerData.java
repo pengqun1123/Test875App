@@ -12,4 +12,6 @@ public interface AllFingerData {
 
     void allFingerData(List<Finger6> fingerList);
 
+    void allFingerFail();
+
 }

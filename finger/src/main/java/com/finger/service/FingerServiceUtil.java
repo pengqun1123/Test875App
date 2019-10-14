@@ -9,14 +9,19 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.baselibrary.callBack.OnStartServiceListener;
+import com.baselibrary.constant.AppConstant;
+import com.baselibrary.pojo.Finger6;
 import com.finger.constant.FingerConstant;
-import com.sd.tgfinger.tgApi.Constant;
+
+import java.util.ArrayList;
 
 /**
  * Created By pq
@@ -33,10 +38,21 @@ public class FingerServiceUtil {
     }
 
     private Activity activity;
+    //    private byte[] fingerData;
+//    private int fingerDataSize;
+    private ArrayList<Finger6> finger6ArrayList;
+    private OnStartServiceListener startServiceListener;
 
-    public void startFingerService(Activity activity) {
+    public void setFingerData(ArrayList<Finger6> fingerList/*byte[] fingerData, int fingerDataSize*/) {
+//        this.fingerData = fingerData;
+//        this.fingerDataSize = fingerDataSize;
+        this.finger6ArrayList = fingerList;
+    }
+
+    public void startFingerService(Activity activity, OnStartServiceListener startServiceListener) {
         if (activity != null) {
             this.activity = activity;
+            this.startServiceListener = startServiceListener;
             Intent intent = new Intent();
             intent.setAction(FingerService.ACTION);
             intent.addCategory(FingerService.CATEGORY);
@@ -53,15 +69,77 @@ public class FingerServiceUtil {
                 ComponentName componentName = new ComponentName(packageName, name);
                 intent.setComponent(componentName);
                 activity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+                startServiceListener.startServiceListener(true);
+            } else {
+                startServiceListener.startServiceListener(false);
             }
+        } else {
+            startServiceListener.startServiceListener(false);
         }
     }
 
     public void unbindDevService(Context context) {
+        this.startServiceListener.startServiceListener(false);
         context.unbindService(serviceConnection);
     }
 
+
     private Messenger fingerServiceMessenger;
+
+    public void pauseFingerVerify() {
+        if (fingerServiceMessenger != null) {
+            try {
+                Message message = new Message();
+                message.what = FingerConstant.PAUSE_VERIFY_CODE;
+                fingerServiceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void reStartFingerVerify() {
+        if (fingerServiceMessenger != null) {
+            try {
+                Message message = new Message();
+                message.what = FingerConstant.RESTART_VERIFY_CODE;
+                fingerServiceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void addFinger(byte[] newFinger) {
+        if (fingerServiceMessenger != null) {
+            try {
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                message.what = FingerConstant.ADD_FINGER_CODE;
+                bundle.putByteArray(AppConstant.ADD_FINGER, newFinger);
+                message.setData(bundle);
+                fingerServiceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteFinger(int position) {
+        if (fingerServiceMessenger != null) {
+            try {
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                message.what = FingerConstant.DELETE_FINGER_CODE;
+                bundle.putInt(AppConstant.DELETE_FINGER, position);
+                message.setData(bundle);
+                fingerServiceMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -71,6 +149,11 @@ public class FingerServiceUtil {
                 message.what = FingerConstant.SEND_CODE;
                 message.obj = activity;
                 message.replyTo = fingerUtilMessenger;
+                Bundle bundle = new Bundle();
+//                bundle.putByteArray(AppConstant.FINGER_DATA, fingerData);
+//                bundle.putInt(AppConstant.FINGER_SIZE, fingerDataSize);
+                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, finger6ArrayList);
+                message.setData(bundle);
                 fingerServiceMessenger.send(message);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -103,5 +186,6 @@ public class FingerServiceUtil {
             }
         }
     });
+
 
 }
