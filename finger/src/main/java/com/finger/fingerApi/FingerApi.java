@@ -186,6 +186,7 @@ public class FingerApi {
 
     /**
      * 获取设备的状态
+     *
      * @param activity activity
      * @param callBack 监听回调
      */
@@ -193,12 +194,21 @@ public class FingerApi {
         TGBApi.getTGAPI().getDevStatus(activity, callBack);
     }
 
-    //设备关闭
+    /**
+     * 设备关闭
+     *
+     * @param activity activity
+     * @param callBack 监听回调
+     */
     public void closeDev(@NonNull Activity activity, DevCloseCallBack callBack) {
         TGBApi.getTGAPI().closeDev(activity, callBack);
     }
 
-    //接收指静脉的连接状态
+    /**
+     * 接收指静脉的连接状态
+     *
+     * @param callBack 监听回调
+     */
     public void receiveFingerDevConnectStatus(FingerDevStatusCallBack callBack) {
         TGBApi.getTGAPI().setDevStatusCallBack(new DevStatusCallBack() {
             @Override
@@ -208,12 +218,20 @@ public class FingerApi {
         });
     }
 
-    //获取设备打开的状态
+    /**
+     * 获取设备打开的状态
+     *
+     * @return 返回结果
+     */
     public static Boolean getDevOpenSatus() {
         return TGBApi.getTGAPI().isDevOpen();
     }
 
-    //获取所有的指静脉数据
+    /**
+     * 获取所有的指静脉数据
+     *
+     * @param callBack 监听回调
+     */
     public void getAllFingerData(AllFingerData callBack) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         QueryBuilder<Finger6> queryBuilder = dbUtil.getQueryBuilder(Finger6.class);
@@ -245,6 +263,11 @@ public class FingerApi {
 
     private Boolean isStart = false;
 
+    /**
+     * 开启指静脉验证Service的监听
+     *
+     * @param context context
+     */
     public void startReStartFinger(Context context) {
         if (!isStart) {
             TGBApi.getTGAPI().startDevService(context, new OnStartDevStatusServiceListener() {

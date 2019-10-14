@@ -18,7 +18,6 @@ import com.sd.tgfinger.CallBack.DevCloseCallBack;
 import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.pojos.Msg;
-import com.sd.tgfinger.tgApi.TGBApi;
 
 import java.util.ArrayList;
 

@@ -5,6 +5,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.baselibrary.callBack.FingerDevCloseListener;
+import com.baselibrary.callBack.FingerDevOpenListener;
+import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.pojo.Finger6;
@@ -29,6 +32,26 @@ public class FingerFactory {
         if (fingerFactory == null)
             fingerFactory = new FingerFactory();
         return fingerFactory;
+    }
+
+    public void openFingerDev(@NonNull Activity activity, Boolean isSound,
+                              FingerDevOpenListener fingerDevOpenListener,
+                              FingerDevStatusConnectListener listener){
+        if (fingerRouterService != null) {
+            fingerRouterService.openFingerDev(activity,isSound,fingerDevOpenListener,listener);
+        }
+    }
+
+    public void closeFingerDev(@NonNull Activity activity, FingerDevCloseListener fingerDevCloseListener){
+        if (fingerRouterService != null) {
+            fingerRouterService.closeFingerDev(activity,fingerDevCloseListener);
+        }
+    }
+
+    public void fingerDevConnectStatus(FingerDevStatusConnectListener listener){
+        if (fingerRouterService != null) {
+            fingerRouterService.fingerDevConnectStatus(listener);
+        }
     }
 
     public void startFingerService(@NonNull Activity activity, OnStartServiceListener startServiceListener) {
