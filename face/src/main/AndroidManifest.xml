@@ -2,9 +2,11 @@
     package="com.face">
 
     <application>
-        <activity android:name=".activity.FaceActivity" />
-        <activity android:name=".activity.V3FaceRecActivity"/>
-        <activity android:name=".activity.SingleCameraRecActivity"/>
+        <activity android:name=".activity.FaceActivity"  />
+        <activity android:name=".activity.V3FaceRecActivity" android:theme="@style/face_AppTheme"/>
+        <activity android:name=".activity.FaceAndIdCardActivity" android:theme="@style/face_AppTheme"/>
+        <activity android:name=".activity.UserAddActivity" android:theme="@style/face_AppTheme"/>
+        <activity android:name=".activity.FaceCaptureActivity" android:theme="@style/face_AppTheme"/>
     </application>
 
 </manifest>

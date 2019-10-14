@@ -3,18 +3,21 @@ package com.face.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.routerTest.IdCardService;
 import com.baselibrary.util.ToastUtils;
+import com.face.R;
 import com.face.common.FaceConfig;
 import com.face.utils.FaceUtils;
 import com.orhanobut.logger.Logger;
@@ -36,14 +39,16 @@ import com.zqzn.android.face.processor.FaceDetectProcessor;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * 单目摄像头人脸识别示例
  * <p>
  * 此示例中使用单目活体检测模型防止活体攻击
  */
-public class SingleCameraRecActivity extends AbstractFaceDetectActivity implements CardInfoListener {
-    private static final String TAG = SingleCameraRecActivity.class.getSimpleName();
+@Route(path = ARouterConstant.FACE_IDCARD_ACTIVITY)
+public class FaceAndIdCardActivity extends AbstractFaceDetectActivity implements CardInfoListener {
+    private static final String TAG = FaceAndIdCardActivity.class.getSimpleName();
 
     /**
      * 人脸特征抽取器
@@ -99,14 +104,11 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
             nirImageConverter = FaceConfig.getInstance().getFaceSDK().getNirImageConverter();
 
             idCardService = ARouter.getInstance().navigation(IdCardService.class);
-            // idCardService.register_IdCard(this);
-//            String path = Environment.getExternalStorageDirectory() + "/idcard/";
-//            File file = new File(path,"4445.jpg");
-//            idcard_feature = FaceUtils.extractFaceFeature(file);
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    idCardService.verify_IdCard(SingleCameraRecActivity.this);
+                    idCardService.verify_IdCard(FaceAndIdCardActivity.this);
                 }
             }).start();
         } catch (Exception e) {
@@ -114,10 +116,7 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
             Toast.makeText(this, "获取SDK模型失败", Toast.LENGTH_SHORT).show();
             finish();
         }
-
-
  }
-
 
     @Override
     protected void onResume() {
@@ -128,21 +127,6 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
             @Override
             public boolean handleMessage(Message msg) {
                 switch (msg.what){
-                    case OBSERVAER_TASH:
-                        Log.d("444","face_feature:"+face_feature+"---idcard_feature"+idcard_feature);
-//                        if (face_feature!=null & idcard_feature!=null){
-//                            compare_feature();
-//                        }else {
-//                            searchHandler.sendEmptyMessageDelayed(OBSERVAER_TASH,500);
-//                        }
-                        if (idcard_feature==null){
-                            String path = Environment.getExternalStorageDirectory() + "/idcard/";
-                            File file = new File(path,"4445.jpg");
-                            idcard_feature = FaceUtils.extractFaceFeature(file);
-                        }else{
-                         //   searchHandler.sendEmptyMessageDelayed(OBSERVAER_TASH,2000);
-                        }
-                        break;
                     case SEARCH_FEATURE:
                         if (lastedFaceDetectData == null) {
                             return false;
@@ -157,9 +141,7 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
                 return false;
             }
 
-
         });
-      //  searchHandler.sendEmptyMessageDelayed(OBSERVAER_TASH,2000);
     }
 
     @Override
@@ -197,6 +179,12 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
         super.onFaceDetected(faceDetectData);
         Log.d("444","onFaceDetected里面的idcard_feature值为:"+idcard_feature);
         //调用父类方法以绘制人脸框
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startAnimator();
+            }
+        });
         if (idcard_feature!=null) {
             //调用1：N人脸搜索
             lastedFaceDetectData = faceDetectData;
@@ -207,8 +195,22 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
     }
 
     @Override
+    public void onFaceChanged(FaceDetectData faceDetectData, List<FaceData> addList, List<FaceData> lostList) {
+        super.onFaceChanged(faceDetectData, addList, lostList);
+    if (faceDetectData==null){
+        sight_rotate.pause();
+        in_rotate.pause();
+        tv_result.setVisibility(View.GONE);
+      }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (in_rotate!=null){
+            in_rotate.cancel();
+            sight_rotate.cancel();
+        }
         if (idCardService!=null) {
             idCardService.destroyIdCard();
         }
@@ -286,7 +288,7 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
                 //离线1：1搜索
                 long start = System.currentTimeMillis();
                 if (idcard_feature!=null & face_feature!=null){
-                    synchronized (SingleCameraRecActivity.this){
+                    synchronized (FaceAndIdCardActivity.this){
                         if (idcard_feature!=null & face_feature!=null) {
                             double sim = Tool.calcSimilarity(FaceConfig.getInstance().getOriginalSimilarityThreshold(), face_feature, idcard_feature);
                             DecimalFormat format = new DecimalFormat("#.######");
@@ -304,7 +306,10 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tv_direct.setText(" 相似度: " + similar);
+                                        tv_result.setText(getString(R.string.face_verify_success));
+                                        tv_result.setTextColor(getResources().getColor(R.color.blue_6));
+                                        tv_result.setVisibility(View.VISIBLE);
+                                        //tv_direct.setText(" 相似度: " + similar);
                                     }
                                 });
                                 //设置需要显示在UI层人脸框下面的信息
@@ -321,28 +326,28 @@ public class SingleCameraRecActivity extends AbstractFaceDetectActivity implemen
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tv_direct.setText("比对失败");
+                                        tv_result.setText(getString(R.string.face_verify_fail));
+                                        tv_result.setTextColor(getResources().getColor(R.color.red_2));
+                                        tv_result.setVisibility(View.VISIBLE);
                                     }
                                 });
 
                                 // showMessage("比对失败");
                                 Logger.d(TAG, "追踪ID: " + faceData.getTrackId() + "比对失败");
                             }
-                         //   face_feature=null;
                             idcard_feature=null;
-                         //   searchHandler.sendEmptyMessageDelayed(OBSERVAER_TASH,2000);
-
                         }
                     }
                 }
 
             } catch (FaceException e) {
                // showMessage("比对失败");
+                tv_result.setText(getString(R.string.face_verify_fail));
+                tv_result.setTextColor(getResources().getColor(R.color.red_2));
+                tv_result.setVisibility(View.VISIBLE);
                 Logger.d(TAG, "searchOneUser: 比对失败", e);
-               tv_direct.setText("比对失败");
+              // tv_direct.setText("比对失败");
             }
-
-       // searchHandler.sendEmptyMessageDelayed(OBSERVAER_TASH,500);
     }
 
     /**

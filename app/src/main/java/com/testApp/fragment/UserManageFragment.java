@@ -254,7 +254,7 @@ public class UserManageFragment extends BaseFragment
 //            }
 //
 //            @Override
-//            public void onNotification(boolean result) {
+//            public void onNotification(boolean result)
 //
 //            }
 //        }).queryAsync();

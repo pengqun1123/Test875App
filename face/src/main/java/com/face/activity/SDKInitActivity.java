@@ -28,10 +28,9 @@ import com.zqzn.android.face.exceptions.SDKAuthExpireException;
 import com.zqzn.android.face.exceptions.SDKNotAuthException;
 import com.zqzn.android.face.model.FaceSDK;
 import com.zqzn.android.face.model.FaceSearchLibrary;
-import com.face.db.User;
-import com.face.db.UserManager;
 
-import java.io.File;
+
+
 import java.util.List;
 
 /**
@@ -101,8 +100,7 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
             Toast.makeText(getApplicationContext(), "开始加载人员数据", Toast.LENGTH_SHORT).show();
             tvErrorInfo.setText("正在加载人员数据");
         });
-        //获取用户数据管理器
-        UserManager userManager = FaceConfig.getInstance().getUserManager();
+
         //获取离线1：N搜索库
         faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
         int offset = 0;
@@ -130,15 +128,6 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
         Logger.i(TAG, "用户加载完成，总数：" + offset);
         final int finalCount = offset;
         runOnUiThread(() -> Toast.makeText(getApplicationContext(), "用户加载完成，总数：" + finalCount, Toast.LENGTH_SHORT).show());
-    }
-
-    private void addUserToSearchLibrary(User user) {
-        try {
-            user.addToSearchLibrary(faceSearchLibrary);
-            Logger.d(TAG, "加载用户到缓存成功：" + user.getId() + ", " + user.getName());
-        } catch (FaceException e) {
-            Logger.e(TAG, "加载用户到缓存失败：" + user.getId() + "," + user.getName(), e);
-        }
     }
 
     @Override

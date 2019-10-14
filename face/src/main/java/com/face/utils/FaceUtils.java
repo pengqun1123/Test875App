@@ -9,8 +9,6 @@ import android.widget.Toast;
 import com.baselibrary.pojo.Face;
 import com.face.callback.FaceListener;
 import com.face.common.FaceConfig;
-import com.face.db.User;
-import com.face.db.UserManager;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.data.AddedPerson;
 import com.zqzn.android.face.data.FaceData;

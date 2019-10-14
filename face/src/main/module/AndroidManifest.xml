@@ -32,7 +32,7 @@
         <activity android:name=".activity.CompareTwoActivity"/>
         <activity android:name=".activity.UserAddActivity"/>
         <activity android:name=".activity.V3FaceRecActivity"/>
-        <activity android:name=".activity.SingleCameraRecActivity"/>
+        <activity android:name=".activity.FaceAndIdCardActivity"/>
 
     </application>
 

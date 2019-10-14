@@ -4,4 +4,10 @@
     <string name="face_manager_set" >管理员设置</string>
     <string name="face_user_center">个人中心</string>
     <string name="face_password_verify">密码验证</string>
+    <string name="face_verifying">识别中</string>
+    <string name="face_verify_success">验证成功</string>
+    <string name="face_verify_fail">验证失败</string>
+    <string name="face_verify">人脸识别</string>
+    <string name="face_verify_idCard">人脸加身份证验证</string>
+    <string name="face_verify_finger">人脸加指静脉验证</string>
 </resources>

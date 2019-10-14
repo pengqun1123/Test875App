@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, CompareTwoActivity.class));
 
         } else if (i == R.id.btn_single_camera) {
-            startActivity(new Intent(MainActivity.this, SingleCameraRecActivity.class));
+            startActivity(new Intent(MainActivity.this, FaceAndIdCardActivity.class));
 
         } else if (i == R.id.btn_dual_camera) {//   startActivity(new Intent(MainActivity.this, DualCameraRecActivity.class));
 
