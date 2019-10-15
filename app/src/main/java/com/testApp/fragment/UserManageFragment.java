@@ -16,9 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,9 +27,7 @@ import com.baselibrary.base.BaseFragment;
 import com.baselibrary.callBack.PwCallBack;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
-import com.baselibrary.dao.db.DaoSession;
 import com.baselibrary.dao.db.DbCallBack;
-import com.baselibrary.dao.db.ManagerDao;
 import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger3;
@@ -53,7 +49,6 @@ import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
-import com.testApp.activity.ManagerActivity;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.ManagerAdapter;
 import com.testApp.adapter.UserManageAdapter;
@@ -69,7 +64,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.testApp.dialog.AskDialog.reviseMaxManagerNum;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,9 +91,7 @@ public class UserManageFragment extends BaseFragment
         return userManageFragment;
     }
 
-    public UserManageFragment() {
-        // Required empty public constructor
-    }
+    public UserManageFragment() { }
 
     @Override
     protected Integer contentView() {

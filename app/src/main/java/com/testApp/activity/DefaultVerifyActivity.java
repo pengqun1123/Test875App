@@ -2,9 +2,6 @@ package com.testApp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -30,7 +27,6 @@ import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
 import com.pw.pwApi.PwApi;
 
-import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.testApp.R;
 import com.testApp.dialog.AskDialog;
 
@@ -184,10 +180,10 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            ToastUtils.showSquareTvToast(this, getString(com.id_card.R.string.id_card_verify_fail));
+            ToastUtils.showSquareTvToast(this, getString(R.string.id_card_verify_fail));
         } else {
             Log.d("999",idCard.getName());
-            ToastUtils.showSquareTvToast(this,  getString(com.id_card.R.string.id_card_verify_success));
+            ToastUtils.showSquareTvToast(this,  getString(R.string.id_card_verify_success));
         }
     }
 

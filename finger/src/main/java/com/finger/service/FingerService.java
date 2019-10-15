@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.Parcelable;
 import android.os.RemoteException;
 
 import com.baselibrary.callBack.FingerVerifyResultListener;
@@ -20,7 +19,6 @@ import com.finger.constant.FingerConstant;
 import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.CancelImgCallBack;
-import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.Verify1_NCallBack;
 import com.sd.tgfinger.pojos.Msg;
 import com.sd.tgfinger.tgApi.TGBApi;
@@ -62,8 +60,6 @@ public class FingerService extends Service {
                 fingerUtilMessenger = msg.replyTo;
                 sendMsg1();
                 Bundle data = msg.getData();
-//                fingerData = data.getByteArray(AppConstant.FINGER_DATA);
-//                fingerDataSize = data.getInt(AppConstant.FINGER_SIZE);
                 finger6ArrayList = data.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
                 updateFingerArrayToByte(finger6ArrayList);
                 taskSchedule();
@@ -137,7 +133,6 @@ public class FingerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Logger.d("fingerService 的 onBind ");
         timer = new Timer();
         myTask = new MyTask();
         return messenger.getBinder();
@@ -146,21 +141,17 @@ public class FingerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.d("fingerService 的 onCreate ");
-
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.d("fingerService 的 onStartCommand");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Logger.d("fingerService 的 onDestroy");
         releaseTimerTask();
         stopSelf();
     }

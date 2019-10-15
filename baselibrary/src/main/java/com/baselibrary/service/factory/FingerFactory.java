@@ -59,6 +59,7 @@ public class FingerFactory {
                                    OnStartServiceListener startServiceListener) {
         if (fingerRouterService != null) {
             fingerRouterService.startFingerService(activity, startServiceListener);
+            fingerRouterService.setFingerVerifyResultListener(fingerVerifyResultListener);
         }
     }
 

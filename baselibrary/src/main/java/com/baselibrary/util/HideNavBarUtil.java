@@ -2,7 +2,6 @@ package com.baselibrary.util;
 
 import android.app.Activity;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;

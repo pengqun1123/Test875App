@@ -110,6 +110,7 @@
     <string name="worker_no">用户工号</string>
     <string name="phone_no">手 机 号</string>
     <string name="section_name">部门名称</string>
+    <string name="verify_set">验证设置</string>
 
 
 </resources>
