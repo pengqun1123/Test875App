@@ -178,16 +178,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     }
 
     @Override
-    public void onRegisterResult(boolean result, IdCard idCard) {
-        if (result) {
-            ToastUtils.showSquareImgToast(this, getString(R.string.face_verify_fail),
-                    ActivityCompat.getDrawable(this, R.drawable.ic_emoje));
-            Log.d("999", idCard.getName());
-        } else {
-            ToastUtils.showSquareImgToast(this, getString(R.string.face_verify_success),
-                    ActivityCompat.getDrawable(this, R.drawable.cry_icon));
-        }
-    }
+    public void onRegisterResult(boolean result, IdCard idCard) { }
 
     @Override
     public void fingerVerifyResult(int res, String msg, int score,
