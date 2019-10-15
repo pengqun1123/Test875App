@@ -37,7 +37,7 @@ import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.service.FaceService;
 import com.face.ui.FaceRecBoxView;
-import com.finger.service.FingerServiceUtil;
+
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.data.FaceData;
@@ -47,6 +47,7 @@ import com.zqzn.android.face.processor.BaseFaceRecProcessor;
 import com.zqzn.android.face.processor.FaceDetectProcessor;
 import com.face.common.FaceConfig;
 import com.face.ui.FaceRecView;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -67,8 +68,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     private BaseFaceRecProcessor.FaceRecConfig faceRecConfig;
     private File logFilePath;
     private SurfaceView nirPreview;
-    private String serialNumber="VG9D-QVA7-956E-RE97 ";
-    
+    private String serialNumber = "VG9D-QVA7-956E-RE97 ";
+
     /**
      * 所需的所有权限信息
      */
@@ -82,10 +83,10 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     private FaceSearchLibrary faceSearchLibrary;
     private AppCompatImageView iv_in;
     private AppCompatImageView iv_sight;
-    private ObjectAnimator  sight_rotate;
+    private ObjectAnimator sight_rotate;
 
 
-    private ObjectAnimator  in_rotate;
+    private ObjectAnimator in_rotate;
     private TextView tv_result;
     private TextView tv_type;
     private ArrayList<Finger6> fingerList;
@@ -118,8 +119,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     protected void initData() {
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
-        }else {
-            FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
+        } else {
+            FaceService.getInstance().initCamera(visCameraView, faceRecBoxView, nirCamera, this);
         }
         tv_type.setText(getString(R.string.face_verify));
         FingerFactory.getInstance().fingerDevConnectStatus(this);
@@ -129,7 +130,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             if (bundle != null) {
                 fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
                 Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerList.size());
-                   FingerFactory.getInstance().setFingerData(fingerList);
+                FingerFactory.getInstance().setFingerData(fingerList);
             }
         }
         idCardService = ARouter.getInstance().navigation(IdCardService.class);
@@ -140,21 +141,21 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             }
         }).start();
 
-           sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
-            sight_rotate.setDuration(4000);
-            sight_rotate.setInterpolator(new LinearInterpolator());
-            sight_rotate.setRepeatMode(ObjectAnimator.RESTART);
-            sight_rotate.setRepeatCount(Animation.INFINITE);
+        sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
+        sight_rotate.setDuration(4000);
+        sight_rotate.setInterpolator(new LinearInterpolator());
+        sight_rotate.setRepeatMode(ObjectAnimator.RESTART);
+        sight_rotate.setRepeatCount(Animation.INFINITE);
 
-           in_rotate = ObjectAnimator.ofFloat(iv_in, "rotation", 0.0f, -360.0f);
-            //in_rotate = new RotateAnimation(0, -360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            in_rotate.setDuration(4000);
-            in_rotate.setInterpolator(new LinearInterpolator());
-            in_rotate.setRepeatMode(ObjectAnimator.RESTART);
-            in_rotate.setRepeatCount(Animation.INFINITE);
+        in_rotate = ObjectAnimator.ofFloat(iv_in, "rotation", 0.0f, -360.0f);
+        //in_rotate = new RotateAnimation(0, -360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        in_rotate.setDuration(4000);
+        in_rotate.setInterpolator(new LinearInterpolator());
+        in_rotate.setRepeatMode(ObjectAnimator.RESTART);
+        in_rotate.setRepeatCount(Animation.INFINITE);
 
-              sight_rotate.start();
-              in_rotate.start();
+        sight_rotate.start();
+        in_rotate.start();
 
 //        sight_rotate.setAnimationListener(new Animation.AnimationListener() {
 //            @Override
@@ -179,7 +180,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         super.onViewClick(view);
     }
 
-    private void startAnimator(){
+    private void startAnimator() {
 //        if (sight_rotate.isStarted()){
 //            if (sight_rotate.isPaused()){
 //                tv_result.setText(getString(R.string.face_verifying));
@@ -220,8 +221,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 isAllGranted &= (grantResult == PackageManager.PERMISSION_GRANTED);
             }
             if (isAllGranted) {
-               // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
-                FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
+                // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+                FaceService.getInstance().initCamera(visCameraView, faceRecBoxView, nirCamera, this);
             } else {
                 Toast.makeText(this, "权限拒绝！", Toast.LENGTH_SHORT).show();
             }
@@ -233,7 +234,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (in_rotate!=null){
+            if (in_rotate != null) {
                 in_rotate.cancel();
                 sight_rotate.cancel();
             }
@@ -254,19 +255,19 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onFaceDetected(FaceDetectData faceDetectData) {
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (tv_result.getVisibility()==View.GONE) {
-                        //  startAnimator();
-                        tv_result.setText(getString(R.string.face_verifying));
-                        tv_result.setTextColor(getResources().getColor(R.color.blue_10));
-                        tv_result.setVisibility(View.VISIBLE);
-                    }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (tv_result.getVisibility() == View.GONE) {
+                    //  startAnimator();
+                    tv_result.setText(getString(R.string.face_verifying));
+                    tv_result.setTextColor(getResources().getColor(R.color.blue_10));
+                    tv_result.setVisibility(View.VISIBLE);
                 }
-            });
+            }
+        });
 
-        Log.d("555","onFaceDetected"+faceDetectData);
+        Log.d("555", "onFaceDetected" + faceDetectData);
 
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
@@ -274,7 +275,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     public void onLivenessDetected(FaceDetectData faceDetectData) {
-             Log.d("555","活体检测");
+        Log.d("555", "活体检测");
     }
 
     @Override
@@ -286,8 +287,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 faceRecBoxView.sendFaceData(faceDetectData);
                 if (faceDetectData == null) {
                     tv_result.setVisibility(View.GONE);
-                 //   in_rotate.pause();
-                //    sight_rotate.pause();
+                    //   in_rotate.pause();
+                    //    sight_rotate.pause();
 
                 }
             }
@@ -297,11 +298,11 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData, BaseFaceRecProcessor.FaceTrackData faceTrackData) {
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
-      // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
+        // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS ").format(new Date());
-        Log.d("888","onFaceRecCompleted");
-        try  {
+        Log.d("888", "onFaceRecCompleted");
+        try {
             //后面根据recId保存识别相关记录
             String recId = Long.toString(System.currentTimeMillis());
             String livenessScore = "不判断";
@@ -320,17 +321,17 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
                         }
                     });
-                }else if (faceTrackData.searchPass) {
+                } else if (faceTrackData.searchPass) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             tv_result.setText(getString(R.string.face_verify_success));
                             tv_result.setTextColor(getResources().getColor(R.color.green_8));
-                           // tv_result.setVisibility(View.VISIBLE);
+                            // tv_result.setVisibility(View.VISIBLE);
                         }
                     });
 
-                }else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -341,7 +342,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                         }
                     });
                 }
-            }else {
+            } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -379,17 +380,17 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             log.append(String.format(" {质量检测次数: %d, 活体检测次数: %d, 搜索次数: %d}", faceTrackData.qualityDetectTimes.get(),
                     faceTrackData.livenessDetectTimes.get(), faceTrackData.searchTimes.get()));
             log.append("\r\n");
-          //  fileOutputStream.write(log.toString().getBytes());
-           // File path = new File(String.format("%s/images/%s", logFilePath.getAbsolutePath(), subDir));
-           // path.mkdirs();
+            //  fileOutputStream.write(log.toString().getBytes());
+            // File path = new File(String.format("%s/images/%s", logFilePath.getAbsolutePath(), subDir));
+            // path.mkdirs();
             //保存可见光图片
-        //    Tool.save(faceDetectData.getImage().toBitmap(), new File(String.format("%s/%s_vis.jpg", path.getAbsolutePath(), recId)));
-       //     Tool.save(faceDetectData.getImage().drawFacesToBitmap(faceData), new File(String.format("%s/%s_vis_track.jpg", path.getAbsolutePath(), recId)));
+            //    Tool.save(faceDetectData.getImage().toBitmap(), new File(String.format("%s/%s_vis.jpg", path.getAbsolutePath(), recId)));
+            //     Tool.save(faceDetectData.getImage().drawFacesToBitmap(faceData), new File(String.format("%s/%s_vis_track.jpg", path.getAbsolutePath(), recId)));
             FaceDetectProcessor.FaceDetectProcessorMonitorData monitorData = (FaceDetectProcessor.FaceDetectProcessorMonitorData) faceDetectData.getMonitorData();
             //if (faceRecConfig.livenessDetectMode == BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS) {
-                //如果是红外活体识别模式，保存红外图片
+            //如果是红外活体识别模式，保存红外图片
             //    Tool.save(monitorData.getNirImage().toBitmap(), new File(String.format("%s/%s_nir.jpg", path.getAbsolutePath(), recId)));
-          //  }
+            //  }
             log.append(String.format(", track: %s, conv: %s, nir_liv: %s",
                     String.valueOf(monitorData.getDetectTime()),
                     String.valueOf(monitorData.getImageConvertTime()),
@@ -405,7 +406,9 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
 
     }
+
     private static Boolean isStartService = false;
+
     @Override
     public void fingerDevStatusConnect(int res, String msg) {
         if (res == 1 && !isStartService) {
@@ -427,20 +430,20 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            ToastUtils.showSquareTvToast(this, getString(com.id_card.R.string.id_card_verify_fail));
+            ToastUtils.showSquareTvToast(this, getString(R.string.id_card_verify_fail));
         } else {
-            Log.d("999",idCard.getName());
-            ToastUtils.showSquareTvToast(this,  getString(com.id_card.R.string.id_card_verify_success));
-    }
+            Log.d("999", idCard.getName());
+            ToastUtils.showSquareTvToast(this, getString(R.string.id_card_verify_success));
+        }
     }
 
     @Override
     public void onRegisterResult(boolean result, IdCard idCard) {
-       if (result){
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_fail));
-           Log.d("999",idCard.getName());
-       }else {
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_success));
-       }
+        if (result) {
+            ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_fail));
+            Log.d("999", idCard.getName());
+        } else {
+            ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_success));
+        }
     }
 }

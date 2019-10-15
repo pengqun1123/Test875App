@@ -20,4 +20,6 @@
     <string name="pw_register_success">密码注册成功!</string>
     <string name="register_password">录入密码</string>
 
+    <string name="id_card_verify_fail">身份证验证失败</string>
+    <string name="id_card_verify_success">身份证验证成功</string>
 </resources>

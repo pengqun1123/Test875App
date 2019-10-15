@@ -43,9 +43,7 @@
             android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.SearchActivity"
-            android:theme="@style/activityPublicStyle">
-
-        </activity>
+            android:theme="@style/activityPublicStyle"></activity>
     </application>
 
 </manifest>

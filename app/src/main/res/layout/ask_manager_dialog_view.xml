@@ -90,15 +90,6 @@
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <!--<android.support.v7.widget.AppCompatCheckBox-->
-            <!--android:id="@+id/cbOpenFace"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="@dimen/dp_20"-->
-            <!--android:visibility="gone"-->
-            <!--android:background="?android:attr/selectableItemBackground"-->
-            <!--android:checked="false" />-->
-
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

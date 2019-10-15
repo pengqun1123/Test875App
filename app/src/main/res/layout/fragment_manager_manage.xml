@@ -37,63 +37,16 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/verify_set"
-                android:drawableTop="@drawable/ic_menu"/>
+                android:id="@+id/verifySet"
+                style="@style/manage_register_style"
+                android:drawableTop="@drawable/ic_verify"
+                android:text="@string/verify_set" />
 
-        </LinearLayout>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_12"
-            android:text="@string/set_need_verify_model"
-            android:textColor="@color/blue_5"
-            android:textSize="@dimen/sp_17" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/dp_10"
-            android:paddingEnd="@dimen/dp_10">
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cbPw"
-                style="@style/manager_checkbox"
-                android:layout_marginEnd="@dimen/dp_25"
-                android:checked="false"
-                android:text="@string/pw"
-                android:textColor="@color/black_0" />
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cbFinger"
-                style="@style/manager_checkbox"
-                android:layout_marginStart="@dimen/dp_25"
-                android:layout_marginEnd="@dimen/dp_25"
-                android:checked="false"
-                android:text="@string/finger_register"
-                android:textColor="@color/black_0" />
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cbFace"
-                style="@style/manager_checkbox"
-                android:layout_marginStart="@dimen/dp_25"
-                android:layout_marginEnd="@dimen/dp_25"
-                android:checked="false"
-                android:text="@string/face_register"
-                android:textColor="@color/black_0" />
-
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cbCard"
-                style="@style/manager_checkbox"
-                android:layout_marginStart="@dimen/dp_25"
-                android:checked="false"
-                android:text="@string/card_register"
-                android:textColor="@color/black_0" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/addNewManager"
+                style="@style/manage_register_style"
+                android:drawableTop="@drawable/ic_add_manager"
+                android:text="@string/add_new_manager" />
 
         </LinearLayout>
 
@@ -108,7 +61,8 @@
             android:padding="@dimen/dp_10"
             android:text="@string/current_register_max_manager_mun"
             android:textColor="@color/black_0"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_16"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/maxRegisterNumLine"
@@ -117,19 +71,6 @@
             android:layout_marginStart="@dimen/dp_10"
             android:layout_marginEnd="@dimen/dp_10"
             android:background="@color/common_line" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/addManager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_7"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="@drawable/ic_add_manager"
-            android:gravity="center_vertical"
-            android:padding="@dimen/dp_10"
-            android:text="@string/add_new_manager"
-            android:textColor="@color/black_0"
-            android:textSize="@dimen/sp_16" />
 
         <View
             android:id="@+id/addManagerLine"
@@ -156,9 +97,19 @@
             android:id="@+id/managerRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/topView"
             android:background="@color/white"
             android:scrollbars="vertical" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/showAllData"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:background="@color/white_grey"
+            android:gravity="center"
+            android:text="@string/show_all_data"
+            android:textColor="@color/black_2"
+            android:textSize="@dimen/sp_18"
+            android:visibility="gone" />
 
     </LinearLayout>
 

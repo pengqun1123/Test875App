@@ -38,7 +38,7 @@
     </style>
 
     <style name="spinner" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">@dimen/dp_70</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <!--设置 spinner 显示位置往下偏移 actionBarSize 的高度, 默认显示是直接显示在 Spinner 的选中项的上方-->
@@ -94,6 +94,16 @@
         <item name="android:textSize">@dimen/sp_16</item>
     </style>
 
+    <style name="manage_register_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/dp_120</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_10</item>
+        <item name="android:textColor">@color/black_0</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+    </style>
+
     <style name="manage_et_style">
         <item name="android:layout_width">@dimen/dp_160</item>
         <item name="android:layout_height">wrap_content</item>
@@ -112,7 +122,20 @@
     <style name="manager_checkbox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/dp_5</item>
+        <item name="android:layout_marginTop">@dimen/dp_25</item>
+        <item name="android:layout_marginStart">@dimen/dp_30</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+        <item name="android:textColor">@color/black_0</item>
+        <item name="android:checked">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="checkBox_title_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/dp_15</item>
+        <item name="android:layout_marginTop">@dimen/dp_25</item>
+        <item name="android:padding">@dimen/dp_5</item>
+        <item name="android:textColor">@color/black_0</item>
         <item name="android:textSize">@dimen/sp_17</item>
     </style>
 </resources>

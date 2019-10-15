@@ -48,13 +48,14 @@ public class SPUtil {
     }
 
     //人脸的注册码
-    public static void putFaceActiveCode(String code){
+    public static void putFaceActiveCode(String code) {
         instance().putString("faceCode", code);
     }
 
-    public static String getFaceActiveCode(){
-      return    instance().getString("faceCode",null);
+    public static String getFaceActiveCode() {
+        return instance().getString("faceCode", null);
     }
+
     //存储密码注册的标记模式
     public static void putPwVerifyFlag(Boolean flag) {
         instance().putBoolean(AppConstant.PW_VERIFY_MODEL, flag);
@@ -93,6 +94,16 @@ public class SPUtil {
     //获取身份证/IC卡的标记
     public static Boolean getCardVerifyFlag() {
         return instance().getBoolean(AppConstant.CARD_VERIFY_MODEL, false);
+    }
+
+    //存储验证的逻辑关系
+    public static void putVerifyLogic(Boolean verifyLogic) {
+        instance().putBoolean(AppConstant.VERIFY_AND, verifyLogic);
+    }
+
+    //获取验证的逻辑
+    public static Boolean getVerifyLogic() {
+        return instance().getBoolean(AppConstant.VERIFY_AND, false);
     }
 
 }

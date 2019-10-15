@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.custom.CEditText;
@@ -34,6 +37,7 @@ import com.testApp.callBack.PositionBtnClickListener;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.baselibrary.util.SPUtil.putHasManagerPwd;
 
@@ -179,9 +183,71 @@ public class AskDialog {
 
     }
 
+    /**
+     * 设置验证方式的Dialog
+     *
+     * @param activity                 activity
+     */
+    public static void showVerifyMethodSetDialog(@NonNull Activity activity) {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.verify_method_set_dialog_view, null);
+        AppCompatCheckBox cbPw = dialogView.findViewById(R.id.cbPw);
+        AppCompatCheckBox cbFinger = dialogView.findViewById(R.id.cbFinger);
+        AppCompatCheckBox cbFace = dialogView.findViewById(R.id.cbFace);
+        AppCompatCheckBox cbCard = dialogView.findViewById(R.id.cbCard);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+        AppCompatRadioButton radioBtn1 = dialogView.findViewById(R.id.radioBtn1);
+        AppCompatRadioButton radioBtn2 = dialogView.findViewById(R.id.radioBtn2);
+        AppCompatTextView cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatTextView positiveBtn = dialogView.findViewById(R.id.positiveBtn);
+        AtomicBoolean openPw = new AtomicBoolean(false);
+        AtomicBoolean openFinger = new AtomicBoolean(false);
+        AtomicBoolean openFace = new AtomicBoolean(false);
+        AtomicBoolean openCard = new AtomicBoolean(false);
+        AtomicBoolean verifyLogic = new AtomicBoolean(false);
+        openPw.set(SPUtil.getPwVerifyFlag());
+        openCard.set(SPUtil.getCardVerifyFlag());
+        openFinger.set(SPUtil.getFingerVerifyFlag());
+        openFace.set(SPUtil.getFaceVerifyFlag());
+        verifyLogic.set(SPUtil.getVerifyLogic());
+        cbPw.setOnCheckedChangeListener((compoundButton, b) -> openPw.set(true));
+        cbFinger.setOnCheckedChangeListener((compoundButton, b) -> openFinger.set(true));
+        cbFace.setOnCheckedChangeListener((compoundButton, b) -> openFace.set(true));
+        cbCard.setOnCheckedChangeListener((compoundButton, b) -> openCard.set(true));
+        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+            if (radioBtn1.getId() == i) {
+                verifyLogic.set(true);
+            } else if (radioBtn2.getId() == i) {
+                verifyLogic.set(false);
+            }
+        });
+        Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
+        cancelBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        positiveBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                SPUtil.putPwVerifyFlag(openPw.get());
+                SPUtil.putCardVerifyFlag(openCard.get());
+                SPUtil.putFingerVerifyFlag(openFinger.get());
+                SPUtil.putFaceVerifyFlag(openFace.get());
+                SPUtil.putVerifyLogic(verifyLogic.get());
+                dialog.dismiss();
+            }
+        });
+    }
+
     static int lastLength = 0;
 
-    //展示设置管理员密码和启用人脸识别
+    /**
+     * 展示设置管理员密码和启用人脸识别
+     *
+     * @param activity activity
+     * @param callBack 回调接口
+     */
     public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
@@ -193,14 +259,11 @@ public class AskDialog {
         LinearLayout openFaceAsk = dialogView.findViewById(R.id.openFaceAsk);
         AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
         AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
-        //AppCompatCheckBox cbOpenFace = dialogView.findViewById(R.id.cbOpenFace);
         AppCompatEditText activationCodeEt = dialogView.findViewById(R.id.activationCodeEt);
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
-
-
         activationCodeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -304,9 +367,9 @@ public class AskDialog {
                     SPUtil.putOpenFace(true);
                     callBack.activationCodeCallBack(code);
                 }
-                dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
                 SoftInputKeyboardUtils.hiddenKeyboard(activationCodeEt);
+                dialog.dismiss();
             }
         });
         dismissBtn.setOnClickListener(new OnceClickListener() {
@@ -314,8 +377,8 @@ public class AskDialog {
             public void onNoDoubleClick(View v) {
                 pw1[0] = null;
                 pw1[1] = null;
-                dialog.dismiss();
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                dialog.dismiss();
                 callBack.positiveCallBack();
             }
         });

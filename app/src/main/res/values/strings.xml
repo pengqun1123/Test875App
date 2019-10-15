@@ -71,7 +71,7 @@
     <string name="user_section">用户部门</string>
     <string name="no_data">暂无数据</string>
     <string name="current_register_max_manager_mun">当前可最多注册的管理员人数为:</string>
-    <string name="add_new_manager">增加新的管理员</string>
+    <string name="add_new_manager">新增管理员</string>
     <string name="revise">修改</string>
     <string name="revise_manager_num">修改可注册的管理员的最大数量:</string>
     <string name="revise_success">修改成功</string>
@@ -111,6 +111,11 @@
     <string name="phone_no">手 机 号</string>
     <string name="section_name">部门名称</string>
     <string name="verify_set">验证设置</string>
+    <string name="verify_method">验证方式:</string>
+    <string name="and">与</string>
+    <string name="or">或</string>
+    <string name="verify_logic">验证逻辑:</string>
+    <string name="show_all_data">已经呈现全部数据</string>
 
 
 </resources>

@@ -27,11 +27,14 @@ public final class AppConstant {
     public static final String ADD_FINGER = "add_finger";
     public static final String DELETE_FINGER = "delete_finger";
 
-    //注册时标记必须注册的验证模式
+    //注册时标记必须注册的验证方式
     public static final String PW_VERIFY_MODEL= "pw_verify";
     public static final String FINGER_VERIFY_MODEL = "finger_verify";
     public static final String FACE_VERIFY_MODEL = "face_verify";
     public static final String CARD_VERIFY_MODEL = "card_verify";
+    //注册时标记的验证逻辑
+    public static final String VERIFY_AND = "verify_and";
+
     //更新库中模板的阈值分数
     public static final Integer UPDATE_THRESHOLDBOOLEAN = 75;
 

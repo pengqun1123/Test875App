@@ -2,6 +2,7 @@ package com.testApp.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -91,7 +92,8 @@ public class UserManageFragment extends BaseFragment
         return userManageFragment;
     }
 
-    public UserManageFragment() { }
+    public UserManageFragment() {
+    }
 
     @Override
     protected Integer contentView() {
@@ -169,7 +171,7 @@ public class UserManageFragment extends BaseFragment
                 //修改可注册的管理员的最大数量
                 reviseMaxManagerNum(Objects.requireNonNull(getActivity()));
                 break;
-            case R.id.addManager:
+            case R.id.addNewManager:
                 //新增管理员
                 AskDialog.showManagerDialog(Objects.requireNonNull(getActivity()),
                         new AskDialog.PositiveCallBack() {
@@ -183,6 +185,9 @@ public class UserManageFragment extends BaseFragment
 
                             }
                         });
+                break;
+            case R.id.verifySet:
+                AskDialog.showVerifyMethodSetDialog(Objects.requireNonNull(getActivity()));
                 break;
 
         }
@@ -658,20 +663,14 @@ public class UserManageFragment extends BaseFragment
 
     private void managerLayout() {
         AppCompatTextView registerManagerMaxNum = bindViewWithClick(R.id.registerManagerMaxNum, true);
-        bindViewWithClick(R.id.addManager, true);
-        // SwipeRefreshLayout managerRefresh = bindViewWithClick(R.id.managerRefresh, false);
-        AppCompatCheckBox cbPw = bindViewWithClick(R.id.cbPw, false);
-        AppCompatCheckBox cbFinger = bindViewWithClick(R.id.cbFinger, false);
-        AppCompatCheckBox cbFace = bindViewWithClick(R.id.cbFace, false);
-        AppCompatCheckBox cbCard = bindViewWithClick(R.id.cbCard, false);
+        bindViewWithClick(R.id.addNewManager, true);
         RecyclerView managerRv = bindViewWithClick(R.id.managerRv, false);
+        AppCompatTextView showAllData = bindViewWithClick(R.id.showAllData, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
-        setVerifyModel(cbFinger, 1);
-        setVerifyModel(cbPw, 2);
-        setVerifyModel(cbFace, 3);
-        setVerifyModel(cbCard, 4);
+        bindViewWithClick(R.id.verifySet, true);
+        bindViewWithClick(R.id.addNewManager, true);
+
         noData.setVisibility(View.VISIBLE);
-        //managerRefresh.setRefreshing(false);
         registerManagerMaxNum.setText(MessageFormat.format("{0}{1}",
                 getString(R.string.current_register_max_manager_mun), SPUtil.getMacManagerNum()));
         managerRv.setHasFixedSize(true);
@@ -681,46 +680,22 @@ public class UserManageFragment extends BaseFragment
         managerRv.setItemAnimator(new DefaultItemAnimator());
         ManagerAdapter managerAdapter = new ManagerAdapter(callBack);
         managerRv.setAdapter(managerAdapter);
-        queryAllManagerData(managerAdapter, noData);
+        queryAllManagerData(managerAdapter, noData, showAllData);
 
-    }
-
-    private void setVerifyModel(AppCompatCheckBox checkBox, int type) {
-        checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                compoundButton.setTextColor(R.color.gold);
-                if (type == 1) {
-                    SPUtil.putFingerVerifyFlag(true);
-                } else if (type == 2) {
-                    SPUtil.putPwVerifyFlag(true);
-                } else if (type == 3) {
-                    SPUtil.putFaceVerifyFlag(true);
-                } else if (type == 4) {
-                    SPUtil.putCardVerifyFlag(true);
-                }
-            } else {
-                compoundButton.setTextColor(R.color.black_0);
-                if (type == 1) {
-                    SPUtil.putFingerVerifyFlag(false);
-                } else if (type == 2) {
-                    SPUtil.putPwVerifyFlag(false);
-                } else if (type == 3) {
-                    SPUtil.putFaceVerifyFlag(false);
-                } else if (type == 4) {
-                    SPUtil.putCardVerifyFlag(false);
-                }
-            }
-        });
     }
 
     //查询manager的数据
-    private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData) {
+    private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData
+            , AppCompatTextView showAllData) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         List<Manager> managers = dbUtil.queryAll(Manager.class);
-        Logger.d("管理员数据查询成功");
+        Long count = dbUtil.count(Manager.class);
         if (managers.size() > 0) {
             managerAdapter.addData(managers);
             noData.setVisibility(View.GONE);
+        }
+        if (managerAdapter.getItemCount() == count) {
+            showAllData.setVisibility(View.VISIBLE);
         }
     }
 
