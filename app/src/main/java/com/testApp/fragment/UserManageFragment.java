@@ -53,6 +53,7 @@ import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
+import com.testApp.activity.ManagerActivity;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.ManagerAdapter;
 import com.testApp.adapter.UserManageAdapter;
@@ -79,18 +80,18 @@ public class UserManageFragment extends BaseFragment
     private int type;
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItemPosition;
+    private ArrayList<Finger6> finger6ArrayList;
     private byte[] allFingerData;
     private int allFingerSize;
     private List<String> workNoList;
     private User newUser;
 
-    public static UserManageFragment instance(int type, byte[] fingerData, int fingerSize) {
+    public static UserManageFragment instance(int type, ArrayList<Finger6> fingerList) {
         UserManageFragment userManageFragment = new UserManageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         if (type == 2) {
-            bundle.putByteArray(AppConstant.FINGER_DATA, fingerData);
-            bundle.putInt(AppConstant.FINGER_SIZE, fingerSize);
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
         }
         userManageFragment.setArguments(bundle);
         return userManageFragment;
@@ -133,9 +134,9 @@ public class UserManageFragment extends BaseFragment
         if (type == 2) {
             Bundle bundle = getArguments();
             if (bundle != null) {
-                allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
-                allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
-                Logger.d("UserManagerFragment 1 指静脉模板数量：" + allFingerSize);
+                finger6ArrayList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
+                fingerListToFingerByte(finger6ArrayList);
+                Logger.d("UserManagerFragment 1 指静脉模板数量：" + finger6ArrayList.size());
             }
             queryAllUserNo();
         }
@@ -566,6 +567,20 @@ public class UserManageFragment extends BaseFragment
                         }
                     }
                 });
+    }
+
+    private void fingerListToFingerByte(ArrayList<Finger6> fingerList) {
+        if (fingerList != null && fingerList.size() > 0) {
+            int fingerSize = fingerList.size();
+            byte[] fingerData = new byte[AppConstant.FINGER6_DATA_SIZE * fingerSize];
+            for (int i = 0; i < fingerSize; i++) {
+                byte[] finger6Feature = fingerList.get(i).getFinger6Feature();
+                System.arraycopy(finger6Feature, 0, fingerData,
+                        AppConstant.FINGER6_DATA_SIZE * i, AppConstant.FINGER6_DATA_SIZE);
+            }
+            this.allFingerData = fingerData;
+            this.allFingerSize = fingerSize;
+        }
     }
 
     public Boolean checkRegisterContent() {
