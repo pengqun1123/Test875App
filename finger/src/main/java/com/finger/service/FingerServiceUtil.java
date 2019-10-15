@@ -43,6 +43,7 @@ public class FingerServiceUtil {
 //    private int fingerDataSize;
     private ArrayList<Finger6> finger6ArrayList;
     private OnStartServiceListener startServiceListener;
+    private FingerVerifyResultListener fingerVerifyResultListener;
 
     public void setFingerData(ArrayList<Finger6> fingerList/*byte[] fingerData, int fingerDataSize*/) {
 //        this.fingerData = fingerData;
@@ -50,8 +51,8 @@ public class FingerServiceUtil {
         this.finger6ArrayList = fingerList;
     }
 
-    public void setFingerVerifyResult(FingerVerifyResultListener fingerVerifyResultListener){
-
+    public void setFingerVerifyResult(FingerVerifyResultListener verifyResultListener) {
+        this.fingerVerifyResultListener = verifyResultListener;
     }
 
     public void startFingerService(Activity activity, OnStartServiceListener startServiceListener) {
@@ -162,16 +163,6 @@ public class FingerServiceUtil {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-//            devServiceMessenger = new Messenger(iBinder);
-//            //如果设备开启
-//            Message tg661JMessage = new Message();
-//            tg661JMessage.what = Constant.SEND_MESSAGE_CODE;
-//            tg661JMessage.replyTo = tg661JMessenger;
-//            try {
-//                devServiceMessenger.send(tg661JMessage);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
         }
 
         @Override
@@ -185,8 +176,17 @@ public class FingerServiceUtil {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == FingerConstant.RECEIVE_CODE) {
-
+            if (msg.what == FingerConstant.SEND_MSG_1) {
+                if (fingerServiceMessenger != null) {
+                    try {
+                        Message message = new Message();
+                        message.what = FingerConstant.SEND_MSG_2;
+                        message.obj = fingerVerifyResultListener;
+                        fingerServiceMessenger.send(message);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     });

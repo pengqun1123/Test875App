@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
+import android.os.RemoteException;
 
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
@@ -43,14 +44,10 @@ public class FingerService extends Service {
     public FingerService() {
     }
 
-    private Messenger fingerUtilMessennger;
+    private Messenger fingerUtilMessenger;
     private Activity activity;
     private Boolean isLoop = false;
     private FingerVerifyResultListener fingerVerifyResultListener;
-
-    public void setFingerVerifyResultListener(FingerVerifyResultListener listener) {
-        this.fingerVerifyResultListener = listener;
-    }
 
     private Messenger messenger = new Messenger(new FingerServiceHandler());
 
@@ -62,7 +59,8 @@ public class FingerService extends Service {
             super.handleMessage(msg);
             if (msg.what == FingerConstant.SEND_CODE) {
                 activity = (Activity) msg.obj;
-                fingerUtilMessennger = msg.replyTo;
+                fingerUtilMessenger = msg.replyTo;
+                sendMsg1();
                 Bundle data = msg.getData();
 //                fingerData = data.getByteArray(AppConstant.FINGER_DATA);
 //                fingerDataSize = data.getInt(AppConstant.FINGER_SIZE);
@@ -95,6 +93,23 @@ public class FingerService extends Service {
                 Bundle bundle = msg.getData();
                 int position = bundle.getInt(AppConstant.DELETE_FINGER);
                 deleteFinger(position);
+            } else if (msg.what == FingerConstant.SEND_MSG_2) {
+                fingerVerifyResultListener = (FingerVerifyResultListener) msg.obj;
+            }
+        }
+    }
+
+    /**
+     * 发送消息到FingerServiceUtil
+     */
+    private void sendMsg1() {
+        if (fingerUtilMessenger != null) {
+            try {
+                Message message = new Message();
+                message.what = FingerConstant.SEND_MSG_1;
+                fingerUtilMessenger.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -188,7 +203,11 @@ public class FingerService extends Service {
                             @Override
                             public void verify1_NCallBack(Msg msg) {
                                 if (fingerVerifyResultListener != null) {
-                                    fingerVerifyResultListener.fingerfVerifyResult(msg.getResult(), msg.getTip());
+                                    Integer index = msg.getIndex();
+                                    Long fingerId = finger6ArrayList.get(index).getUId();
+                                    fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
+                                            msg.getTip(), msg.getScore(), index,
+                                            fingerId, msg.getFingerData());
                                 }
                                 ToastUtils.showSingleToast(activity, msg.getTip());
                                 Logger.d("指静脉验证:" + msg.getTip());

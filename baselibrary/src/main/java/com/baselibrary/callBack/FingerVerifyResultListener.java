@@ -5,5 +5,7 @@ package com.baselibrary.callBack;
  * on 2019/10/14
  */
 public interface FingerVerifyResultListener {
-     void fingerfVerifyResult(int res,String msg);
+    void fingerVerifyResult(int res, String msg, int score,
+                             int index, Long fingerId,
+                             byte[] updateFinger);
 }

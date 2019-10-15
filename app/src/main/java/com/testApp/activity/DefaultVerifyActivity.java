@@ -174,8 +174,10 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         }
     }
 
+
     @Override
-    public void fingerfVerifyResult(int res, String msg) {
+    public void fingerVerifyResult(int res, String msg, int score
+            , int index, Long fingerId, byte[] updateFinger) {
 
     }
 }

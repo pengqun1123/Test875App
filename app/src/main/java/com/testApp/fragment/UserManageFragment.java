@@ -90,7 +90,7 @@ public class UserManageFragment extends BaseFragment
         UserManageFragment userManageFragment = new UserManageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
-        if (type == 2) {
+        if (type == 1) {
             bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
         }
         userManageFragment.setArguments(bundle);
@@ -131,7 +131,7 @@ public class UserManageFragment extends BaseFragment
     @Override
     protected void initData() {
 
-        if (type == 2) {
+        if (type == 1) {
             Bundle bundle = getArguments();
             if (bundle != null) {
                 finger6ArrayList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
