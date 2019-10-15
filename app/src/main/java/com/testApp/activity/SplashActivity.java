@@ -3,6 +3,7 @@ package com.testApp.activity;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -79,10 +80,9 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-        clearData();
+//        clearData();
 
         checkMyPermissions(per);
-
 
     }
 
@@ -154,6 +154,12 @@ public class SplashActivity extends BaseActivity {
             if (!devOpenStatus) {
                 //开启指静脉
                 initFingerFv();
+            }
+            boolean openFace = SPUtil.getOpenFace();
+          // openFace=false;
+            if (!openFace){
+                faceLoadOver=true;
+                return;
             }
             String faceActiveCode = SPUtil.getFaceActiveCode();
             if (!TextUtils.isEmpty(faceActiveCode)) {
@@ -307,14 +313,25 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void skipVerifyActivity(ArrayList<Finger6> finger6List/*byte[] finerData, int fingerSize*/) {
-        cancelLoad();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                cancelLoad();
+            }
+        });
+
         Boolean openFace = SPUtil.getOpenFace();
+      //  openFace=false;
         if (openFace) {
             // TODO: 2019/10/11 请携带指静脉数据到人脸识别页面
-            Logger.d("SplashActivity 1 指静脉模板数量：" + finger6List.size());
-
+            //跳转不带人脸识别的页面
+            Bundle bundle = new Bundle();
+//            bundle.putByteArray(AppConstant.FINGER_DATA, finerData);
+//            bundle.putInt(AppConstant.FINGER_SIZE, fingerSize);
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,finger6List);
+            Logger.d("SplashActivity 2 指静脉模板数量：" + finger6List.size());
             //跳转人脸识别页面
-            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
         } else {
             //跳转不带人脸识别的页面
             Bundle bundle = new Bundle();

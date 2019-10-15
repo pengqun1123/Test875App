@@ -7,6 +7,8 @@
     <string name="face_verifying">识别中</string>
     <string name="face_verify_success">验证成功</string>
     <string name="face_verify_fail">验证失败</string>
+    <string name="face_register_success">注册成功</string>
+    <string name="face_register_fail">注册失败</string>
     <string name="face_verify">人脸识别</string>
     <string name="face_verify_idCard">人脸加身份证验证</string>
     <string name="face_verify_finger">人脸加指静脉验证</string>

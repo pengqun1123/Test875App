@@ -3,6 +3,7 @@ package com.id_card.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -72,9 +73,13 @@ public class IDCardActivity extends AppCompatActivity {
         }else {
           //  startIDCardReader();
            instance = IdController.getInstance(this);
-           //instance.queryAll();
         }
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     @Override

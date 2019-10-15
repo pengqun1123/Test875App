@@ -8,7 +8,7 @@ import android.util.Log;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.callBack.CardInfoListener;
-import com.baselibrary.service.routerTest.IdCardService;
+import com.baselibrary.service.IdCardService;
 
 import java.io.File;
 

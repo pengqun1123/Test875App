@@ -1,4 +1,8 @@
 <resources>
     <string name="id_card_app_name">id_card</string>
     <string name="id_card_permission_denied">权限被拒绝！</string>
+    <string name="id_card_register_success">身份证注册成功</string>
+    <string name="id_card_register_fail">身份证注册失败</string>
+    <string name="id_card_verify_fail">身份证验证失败</string>
+    <string name="id_card_verify_success">身份证验证成功</string>
 </resources>

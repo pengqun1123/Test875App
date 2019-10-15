@@ -15,7 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.pojo.IdCard;
-import com.baselibrary.service.routerTest.IdCardService;
+import com.baselibrary.service.IdCardService;
 import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.common.FaceConfig;
@@ -400,28 +400,44 @@ public class FaceAndIdCardActivity extends AbstractFaceDetectActivity implements
 
     @Override
     public void onGetCardInfo(IdCard idCard) {
-        if (idCard==null){
-            this.idCard=null;
-            isIdCardVerify=false;
-            ToastUtils.showSquareTvToast(this,"身份证验证失败!");
-        }else {
+        if (idCard == null) {
+            this.idCard = null;
+            isIdCardVerify = false;
+            ToastUtils.showSquareTvToast(this, "身份证验证失败!");
+        } else {
             Toast.makeText(this, "身份证验证成功！", Toast.LENGTH_SHORT).show();
-            isIdCardVerify=true;
-            this.idCard=idCard;
+            isIdCardVerify = true;
+            this.idCard = idCard;
             Bitmap bitmap = idCardService.getBitmap();
             File idCardFile = idCardService.getIdCardFile();
 
-            if(idCardFile!=null) {
-                 idcard_feature = FaceUtils.extractFaceFeature(idCardFile);
-                 if (idcard_feature!=null) {
-                     idCardFile.delete();
-                     Toast.makeText(this, "身份证图片特征提取成功!", Toast.LENGTH_SHORT).show();
+            if (idCardFile != null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        idcard_feature = FaceUtils.extractFaceFeature(idCardFile);
+                        if (idcard_feature != null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    idCardFile.delete();
+                                    ToastUtils.showSingleToast(FaceAndIdCardActivity.this, "身份证图片特征提取成功!");
+                                }
+                            });
 
-                     // faceDetectProcessor.setDetect(true);
-                 }else {
-                     Toast.makeText(this, "身份证图片特征提取失败!", Toast.LENGTH_SHORT).show();
-                 }
-             }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtils.showSingleToast(FaceAndIdCardActivity.this, "身份证图片特征提取失败!");
+                                }
+                            });
+
+                        }
+                    }
+
+                }).start();
+            }
         }
     }
 

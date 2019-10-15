@@ -7,17 +7,23 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
+import com.baselibrary.service.IdCardService;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
+import com.face.activity.V3FaceRecActivity;
 import com.finger.callBack.FingerDevStatusCallBack;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
@@ -31,9 +37,10 @@ import com.testApp.dialog.AskDialog;
 import java.util.ArrayList;
 
 public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
-        FingerVerifyResultListener {
+        CardInfoListener {
 
     private ArrayList<Finger6> fingerList;
+    private IdCardService idCardService;
 
 //    private byte[] allFingerData;
 //    private int allFingerSize;
@@ -77,6 +84,13 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                 FingerServiceUtil.getInstance().setFingerData(fingerList);
             }
         }
+        idCardService = ARouter.getInstance().navigation(IdCardService.class);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                idCardService.verify_IdCard(DefaultVerifyActivity.this);
+            }
+        }).start();
 
     }
 
@@ -163,21 +177,28 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
 
     @Override
     public void fingerDevStatus(int res, String msg) {
-        if (res == 1 && !isStartService) {
-            FingerServiceUtil.getInstance().startFingerService(this,
-                    new OnStartServiceListener() {
-                        @Override
-                        public void startServiceListener(Boolean isStart) {
-                            isStartService = isStart;
-                        }
-                    });
-        }
+
     }
 
 
     @Override
-    public void fingerVerifyResult(int res, String msg, int score
-            , int index, Long fingerId, byte[] updateFinger) {
-
+    public void onGetCardInfo(IdCard idCard) {
+        if (idCard == null) {
+            ToastUtils.showSquareTvToast(this, getString(com.id_card.R.string.id_card_verify_fail));
+        } else {
+            Log.d("999",idCard.getName());
+            ToastUtils.showSquareTvToast(this,  getString(com.id_card.R.string.id_card_verify_success));
+        }
     }
+
+    @Override
+    public void onRegisterResult(boolean result, IdCard idCard) {
+        if (result){
+            ToastUtils.showSquareTvToast(this, getString(com.face.R.string.face_verify_fail));
+            Log.d("999",idCard.getName());
+        }else {
+            ToastUtils.showSquareTvToast(this, getString(com.face.R.string.face_verify_success));
+        }
+    }
+
 }

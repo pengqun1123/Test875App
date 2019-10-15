@@ -42,7 +42,7 @@ import java.util.List;
  * <p>
  * 此类实现的 FaceDetectProcessor.FaceDetectCallback是在FaceDetectProcessor进行人脸识别成功后接收回调信息时使用的接口
  */
-public abstract class AbstractFaceDetectActivity extends BaseActivity implements FaceDetectProcessor.FaceDetectCallback {
+public abstract class AbstractFaceDetectActivity extends FaceBaseActivity implements FaceDetectProcessor.FaceDetectCallback {
 
     private static final String TAG = AbstractFaceDetectActivity.class.getSimpleName();
 
@@ -93,6 +93,7 @@ public abstract class AbstractFaceDetectActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
+        super.initView();
         svPreview = (TextureView) findViewById(R.id.sv_preview);
         fbvFaceRect = (FaceBoxView) findViewById(R.id.fbv_face_rect);
         //tv_direct = (TextView) findViewById(R.id.tv_direct);

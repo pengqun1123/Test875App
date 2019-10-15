@@ -6,33 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".activity.SearchActivity">
 
+    <include layout="@layout/normal_toolbar"
+        android:id="@+id/topBar"/>
+
     <LinearLayout
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_below="@+id/topBar"
         android:paddingBottom="@dimen/dp_5">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/searchUserEt"
             android:layout_width="match_parent"
-            android:imeOptions="actionSearch"
-            android:singleLine="true"
-            android:textCursorDrawable="@drawable/my_cursor"
             android:layout_height="@dimen/dp_45"
+            android:layout_marginEnd="@dimen/dp_15"
             android:layout_marginStart="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_15"
-            android:layout_marginEnd="@dimen/dp_15"
             android:background="@drawable/search_bg"
             android:ellipsize="end"
             android:gravity="center"
+            android:hint="@string/username_userno"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:lines="1"
             android:maxLength="15"
-            android:paddingStart="@dimen/dp_20"
             android:paddingEnd="@dimen/dp_20"
-            android:hint="@string/username_userno"
+            android:paddingStart="@dimen/dp_20"
+            android:singleLine="true"
             android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/my_cursor"
             android:textSize="@dimen/sp_16" />
 
     </LinearLayout>
@@ -51,6 +54,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/no_data_view"/>
+    <include layout="@layout/no_data_view" />
 
 </RelativeLayout>

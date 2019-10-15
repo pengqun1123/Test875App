@@ -29,7 +29,7 @@ public class FingerFactory {
         fingerRouterService = ARouter.getInstance().navigation(FingerRouterService.class);
     }
 
-    private static synchronized FingerFactory getInstance() {
+    public static synchronized FingerFactory getInstance() {
         if (fingerFactory == null)
             fingerFactory = new FingerFactory();
         return fingerFactory;

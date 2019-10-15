@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created By pq
@@ -75,6 +77,7 @@ public class DBUtil {
             daoMaster = new DaoMaster(devOpenHelper.getEncryptedReadableDb(passWord));
         }
         daoSession = daoMaster.newSession();
+
     }
 
     public static DBUtil getInstance(Application application) {
@@ -388,7 +391,7 @@ public class DBUtil {
      * @param builder
      * @param <T>
      */
-    public <T> void queryAsyncAll(Class<T> claz, QueryBuilder<T> builder) {
+    public   <T>  void  queryAsyncAll(Class<T> claz, QueryBuilder<T> builder) {
         setCurrentDao(claz);
         String name = claz.getName();
         Logger.d("  类名 :" + name);

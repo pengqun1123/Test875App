@@ -158,6 +158,7 @@ public class IdController {
        }
 
 
+
        //验证
        public void  verify_IdCard(CardInfoListener cardInfoListener){
 
@@ -216,7 +217,6 @@ public class IdController {
                        });
                        if (type==1) {
                            //注册
-                           User user = new User();
                            dbUtil.insertAsyncSingle(idCard);
                        }else {
                            String id = idCard.getId();
@@ -257,7 +257,6 @@ public class IdController {
        }
 
        private File bitmapToFile(Bitmap bitmap) throws Exception{
-
                String path = Environment.getExternalStorageDirectory() + "/idcard/";
                File file = new File(path,"idcard_temp.jpg");
                if (!file.exists()){
@@ -385,7 +384,9 @@ public class IdController {
         }
     };
        public void closeIdCard(){
-           mHandler.removeMessages(GET_CardInfo);
+           if (mHandler!=null) {
+               mHandler.removeMessages(GET_CardInfo);
+           }
            if (idCardReader!=null) {
                IDCardReaderFactory.destroy(idCardReader);
                idCardReader=null;
