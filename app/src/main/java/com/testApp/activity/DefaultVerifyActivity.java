@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.callBack.CardInfoListener;
+import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
@@ -29,7 +30,7 @@ import com.testApp.dialog.AskDialog;
 import java.util.ArrayList;
 
 public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
-        CardInfoListener {
+        CardInfoListener, FingerVerifyResultListener {
 
     private ArrayList<Finger6> fingerList;
     private IdCardService idCardService;
@@ -160,7 +161,10 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     public void fingerDevStatus(int res, String msg) {
         if (res == 1)
             FingerServiceUtil.getInstance().startFingerService(this,
-                    isStart -> isStartService = isStart);
+                    isStart -> {
+                        isStartService = isStart;
+                        FingerServiceUtil.getInstance().setFingerVerifyResult(this);
+                    });
     }
 
     @Override
@@ -185,4 +189,9 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         }
     }
 
+    @Override
+    public void fingerVerifyResult(int res, String msg, int score,
+                                   int index, Long fingerId, byte[] updateFinger) {
+        Logger.d("指静脉验证结果：" + msg);
+    }
 }
