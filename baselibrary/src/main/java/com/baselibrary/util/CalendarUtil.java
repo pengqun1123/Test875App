@@ -12,9 +12,50 @@ import java.util.Date;
 public class CalendarUtil {
 
     /**
+     * 获取当前系统的年
+     */
+     public static int getYear(){
+         Calendar a = Calendar.getInstance();
+         return a.get(Calendar.YEAR);
+     }
+    /**
+     * 获取当前系统的月
+     */
+    public static int getMonth(){
+        Calendar a = Calendar.getInstance();
+        return a.get(Calendar.MONTH);
+    }
+    /**
+     * 获取当前系统的日
+     */
+    public static int getDay(){
+        Calendar a = Calendar.getInstance();
+        return a.get(Calendar.DAY_OF_MONTH);
+    }
+    /**
+     * 获取当前系统时
+     */
+    public static int getHour(){
+        Calendar a = Calendar.getInstance();
+        return a.get(Calendar.HOUR_OF_DAY);
+    }
+    /**
+     * 获取当前系统的分
+     */
+    public static int getMinute(){
+        Calendar a = Calendar.getInstance();
+        return a.get(Calendar.MINUTE);
+    }
+    /**
+     * 获取当前系统的秒
+     */
+    public static int getMillisecond(){
+        Calendar a = Calendar.getInstance();
+        return a.get(Calendar.MILLISECOND);
+    }
+    /**
      * 获取当月的 天数
      */
-
     public static int getCurrentMonthDay() {
 
         Calendar a = Calendar.getInstance();

@@ -26,6 +26,8 @@ public final class AppConstant {
     public static final String FINGER_SIZE = "finger_size";
     public static final String ADD_FINGER = "add_finger";
     public static final String DELETE_FINGER = "delete_finger";
+    public static final String FINGER_VERIFY_RESULT = "finger_verify_result";
+    public static final String VERIFY_RESULT_TYPE = "verify_type";
 
     //注册时标记必须注册的验证方式
     public static final String PW_VERIFY_MODEL= "pw_verify";

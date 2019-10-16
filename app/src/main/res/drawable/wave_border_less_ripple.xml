@@ -3,5 +3,5 @@
     android:color="@color/gold_15">
     <!--blue_13-->
     <!--   无边界的水波纹  -->
-    <item android:drawable="@color/white" />
+    <item android:drawable="@color/transparent" />
 </ripple>

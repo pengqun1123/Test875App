@@ -116,6 +116,10 @@
     <string name="or">或</string>
     <string name="verify_logic">验证逻辑:</string>
     <string name="show_all_data">已经呈现全部数据</string>
+    <string name="finger_registed">指静脉(已注册)</string>
+    <string name="save">保存</string>
+    <string name="please_input_user_no">请填写用户工号:</string>
+    <string name="please_select_verify_method">请选择您已注册过的验证方式进行身份验证!</string>
 
 
 </resources>

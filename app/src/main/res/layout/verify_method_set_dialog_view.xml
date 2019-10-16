@@ -95,7 +95,7 @@
             android:id="@+id/cancelBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_60"
-            android:layout_weight="0.998"
+            android:layout_weight="0.999"
             android:background="@drawable/verify_method_cancel_btn"
             android:gravity="center"
             android:text="@string/cancel"
@@ -105,14 +105,14 @@
         <View
             android:layout_width="@dimen/dp_0_8"
             android:layout_height="match_parent"
-            android:layout_weight="0.004"
+            android:layout_weight="0.002"
             android:background="@color/common_line" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/positiveBtn"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_60"
-            android:layout_weight="0.998"
+            android:layout_weight="0.999"
             android:background="@drawable/verify_method_positive_btn"
             android:gravity="center"
             android:text="@string/positive"

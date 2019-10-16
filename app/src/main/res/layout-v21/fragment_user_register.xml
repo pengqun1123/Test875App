@@ -214,7 +214,7 @@
                         android:drawableTop="@drawable/ic_finger"
                         android:text="@string/finer" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/faceModel"
                         style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_face"
@@ -226,13 +226,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/idCardModel"
                         style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_id_card"
                         android:text="@string/id_card" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/pwModel"
                         style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_password_verify"
@@ -249,10 +249,10 @@
                     android:background="@drawable/input_pw_bg_select"
                     android:gravity="center"
                     android:padding="@dimen/dp_5"
-                    android:text="@string/register"
+                    android:text="@string/save"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_18"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 

@@ -210,27 +210,15 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/fingerModel"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_120"
-                        android:layout_weight="1"
+                        style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_finger"
-                        android:gravity="center"
-                        android:padding="@dimen/dp_10"
-                        android:text="@string/finer"
-                        android:textColor="@color/black_0"
-                        android:textSize="@dimen/sp_17" />
+                        android:text="@string/finer" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/faceModel"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_120"
-                        android:layout_weight="1"
+                        style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_face"
-                        android:gravity="center"
-                        android:padding="@dimen/dp_10"
-                        android:text="@string/face1"
-                        android:textColor="@color/black_0"
-                        android:textSize="@dimen/sp_17" />
+                        android:text="@string/face1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -238,29 +226,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/idCardModel"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_120"
-                        android:layout_weight="1"
+                        style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_id_card"
-                        android:gravity="center"
-                        android:padding="@dimen/dp_10"
-                        android:text="@string/id_card"
-                        android:textColor="@color/black_0"
-                        android:textSize="@dimen/sp_17" />
+                        android:text="@string/id_card" />
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/pwModel"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp_120"
-                        android:layout_weight="1"
+                        style="@style/manage_register_style"
                         android:drawableTop="@drawable/ic_password_verify"
-                        android:gravity="center"
-                        android:padding="@dimen/dp_10"
-                        android:text="@string/pw"
-                        android:textColor="@color/black_0"
-                        android:textSize="@dimen/sp_17" />
+                        android:text="@string/pw" />
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatButton
@@ -273,13 +249,14 @@
                     android:background="@drawable/input_pw_bg_select"
                     android:gravity="center"
                     android:padding="@dimen/dp_5"
-                    android:text="@string/register"
+                    android:text="@string/save"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_18"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+
 </LinearLayout>

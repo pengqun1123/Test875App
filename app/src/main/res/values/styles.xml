@@ -129,6 +129,17 @@
         <item name="android:checked">true</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="user_center_checkBox_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:checked">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/dp_3</item>
+        <item name="android:textColor">@color/black_0</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+    </style>
+
     <style name="checkBox_title_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

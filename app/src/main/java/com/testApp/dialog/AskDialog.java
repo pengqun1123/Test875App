@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.baselibrary.base.BaseApplication;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.custom.CEditText;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
@@ -101,7 +102,54 @@ public class AskDialog {
         });
     }
 
-    //确认管理员密码
+    public static void showAskUserCenterDialog(@NonNull Activity activity, PositionBtnClickListener listener) {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_user_center_dialog_view,
+                null);
+        //AppCompatTextView tip = dialogView.findViewById(R.id.tip);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
+        AppCompatRadioButton fingerRadioButton = dialogView.findViewById(R.id.fingerRadioButton);
+        AppCompatRadioButton faceRadioButton = dialogView.findViewById(R.id.faceRadioButton);
+        AppCompatRadioButton cardRadioButton = dialogView.findViewById(R.id.cardRadioButton);
+        AppCompatRadioButton pwRadioButton = dialogView.findViewById(R.id.pwRadioButton);
+        AppCompatTextView cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatTextView positiveBtn = dialogView.findViewById(R.id.positiveBtn);
+        final int[] flag = {0};
+        radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
+            int checkedRadioButtonId = radioGroup1.getCheckedRadioButtonId();
+            Logger.d(" RadioButton 的 checkedRadioButtonId：" + checkedRadioButtonId + "  i:" + i);
+            if (i == fingerRadioButton.getId()) {
+                flag[0] = AppConstant.FINGER_MODEL;
+            } else if (i == faceRadioButton.getId()) {
+                flag[0] =  AppConstant.FACE_MODEL;
+            } else if (i == cardRadioButton.getId()) {
+                flag[0] =  AppConstant.IDCARD_MODEL;
+            } else if (i == pwRadioButton.getId()) {
+                flag[0] =  AppConstant.PW_MODEL;
+            }
+        });
+        Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
+        cancelBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        positiveBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (listener != null)
+                    listener.positionClickListener(flag[0]);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 确认管理员密码
+     *
+     * @param activity activity
+     * @param callBack 接口回调
+     */
     public static void verifyManagerPwd(@NonNull Activity activity, ManagerPwdVerifyCallBack callBack) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view,
                 null);
@@ -170,7 +218,7 @@ public class AskDialog {
             @Override
             public void onNoDoubleClick(View v) {
                 if (positionClickListener != null)
-                    positionClickListener.positionClickListener();
+                    positionClickListener.positionClickListener(0);
             }
         });
         positiveBtn.setOnClickListener(new OnceClickListener() {
@@ -186,7 +234,7 @@ public class AskDialog {
     /**
      * 设置验证方式的Dialog
      *
-     * @param activity                 activity
+     * @param activity activity
      */
     public static void showVerifyMethodSetDialog(@NonNull Activity activity) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.verify_method_set_dialog_view, null);

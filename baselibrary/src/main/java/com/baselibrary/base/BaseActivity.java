@@ -26,9 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract Integer contentView();
 
-    protected abstract void initView();
-
     protected abstract void initToolBar();
+
+    protected abstract void initView();
 
     protected abstract void initData();
 

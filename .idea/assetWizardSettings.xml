@@ -19,12 +19,12 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="45" />
+                            <entry key="height" value="56" />
                             <entry key="opacityPercent" value="95" />
-                            <entry key="outputName" value="ic_new_add" />
+                            <entry key="outputName" value="ic_up_arrow_two" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\iMac\Downloads\新增用户.svg" />
-                            <entry key="width" value="45" />
+                            <entry key="sourceFile" value="C:\Users\iMac\Downloads\箭头 右双-01.svg" />
+                            <entry key="width" value="56" />
                           </map>
                         </option>
                       </PersistentState>

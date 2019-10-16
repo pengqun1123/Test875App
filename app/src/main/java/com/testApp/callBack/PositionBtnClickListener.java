@@ -5,5 +5,6 @@ package com.testApp.callBack;
  * on 2019/10/14
  */
 public interface PositionBtnClickListener {
-    void positionClickListener();
+    void positionClickListener(int flag);
+
 }

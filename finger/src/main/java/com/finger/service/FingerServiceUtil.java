@@ -39,15 +39,11 @@ public class FingerServiceUtil {
     }
 
     private Activity activity;
-    //    private byte[] fingerData;
-//    private int fingerDataSize;
     private ArrayList<Finger6> finger6ArrayList;
     private OnStartServiceListener startServiceListener;
     private FingerVerifyResultListener fingerVerifyResultListener;
 
     public void setFingerData(ArrayList<Finger6> fingerList/*byte[] fingerData, int fingerDataSize*/) {
-//        this.fingerData = fingerData;
-//        this.fingerDataSize = fingerDataSize;
         this.finger6ArrayList = fingerList;
     }
 

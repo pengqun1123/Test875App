@@ -586,7 +586,7 @@ public class UserManageFragment extends BaseFragment
             AskDialog.showAskSaveDialog(Objects.requireNonNull(getActivity()),
                     null, null, new PositionBtnClickListener() {
                         @Override
-                        public void positionClickListener() {
+                        public void positionClickListener(int flag) {
                             save[0] = true;
                         }
                     }, new CancelBtnClickListener() {

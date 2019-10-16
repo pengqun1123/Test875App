@@ -1,8 +1,16 @@
 package com.testApp.activity;
 
+import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,18 +23,24 @@ import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
+import com.baselibrary.util.AnimatorUtils;
+import com.baselibrary.util.CalendarUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
 import com.finger.callBack.FingerDevStatusCallBack;
+import com.finger.constant.FingerConstant;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
 import com.pw.pwApi.PwApi;
 
 import com.testApp.R;
+import com.testApp.callBack.PositionBtnClickListener;
+import com.testApp.callBack.UserCenterFingerVerifyListener;
 import com.testApp.dialog.AskDialog;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
@@ -34,6 +48,9 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
 
     private ArrayList<Finger6> fingerList;
     private IdCardService idCardService;
+    private AppCompatImageView gear1, gear2, gear3, gear4;
+    private ObjectAnimator gear1Anim, gear2Anim, gear3Anim, gear4Anim;
+    private AppCompatTextView currentTime, currentDate;
 
     @Override
     protected Integer contentView() {
@@ -42,9 +59,18 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
 
     @Override
     protected void initView() {
-        bindViewWithClick(R.id.pwVerify, true);
-        bindViewWithClick(R.id.manageMenu, true);
-        bindViewWithClick(R.id.userCenter, true);
+        bindViewWithClick(R.id.homeMenu, true);
+        currentTime = bindViewWithClick(R.id.currentTime, true);
+        currentDate = bindViewWithClick(R.id.currentDate, true);
+        gear1 = bindViewWithClick(R.id.gear1, true);
+        gear2 = bindViewWithClick(R.id.gear2, true);
+        gear3 = bindViewWithClick(R.id.gear3, true);
+        gear4 = bindViewWithClick(R.id.gear4, true);
+
+        gear1Anim = AnimatorUtils.rotateAnim(gear1, 3900L, 359F);
+        gear2Anim = AnimatorUtils.rotateAnim(gear2, 3100L, -359F);
+        gear3Anim = AnimatorUtils.rotateAnim(gear3, 3400L, 359F);
+        gear4Anim = AnimatorUtils.rotateAnim(gear4, 2800L, -359F);
     }
 
     @Override
@@ -79,12 +105,25 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                 idCardService.verify_IdCard(DefaultVerifyActivity.this);
             }
         }).start();
-
+        getSystemTime();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
         super.onResume();
+        if (gear1Anim != null) {
+            AnimatorUtils.resumeAnim(gear1Anim);
+        }
+        if (gear2Anim != null) {
+            AnimatorUtils.resumeAnim(gear2Anim);
+        }
+        if (gear3Anim != null) {
+            AnimatorUtils.resumeAnim(gear3Anim);
+        }
+        if (gear4Anim != null) {
+            AnimatorUtils.resumeAnim(gear4Anim);
+        }
     }
 
     @Override
@@ -98,14 +137,28 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         FingerServiceUtil.getInstance().reStartFingerVerify();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPause() {
         super.onPause();
+        if (gear1Anim != null) {
+            AnimatorUtils.pauseAnim(gear1Anim);
+        }
+        if (gear2Anim != null) {
+            AnimatorUtils.pauseAnim(gear2Anim);
+        }
+        if (gear3Anim != null) {
+            AnimatorUtils.pauseAnim(gear3Anim);
+        }
+        if (gear4Anim != null) {
+            AnimatorUtils.pauseAnim(gear4Anim);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Logger.d(" DefaultActivity  的onStop方法");
         FingerServiceUtil.getInstance().pauseFingerVerify();
     }
 
@@ -116,40 +169,30 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         isStartService = false;
         if (idCardService != null)
             idCardService.destroyIdCard();
+        if (gear1Anim != null) {
+            AnimatorUtils.cancelAnim(gear1Anim);
+        }
+        if (gear2Anim != null) {
+            AnimatorUtils.cancelAnim(gear2Anim);
+        }
+        if (gear3Anim != null) {
+            AnimatorUtils.cancelAnim(gear3Anim);
+        }
+        if (gear4Anim != null) {
+            AnimatorUtils.cancelAnim(gear4Anim);
+        }
     }
 
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
-            case R.id.pwVerify:
-                PwApi.pwInputVerify(this);
-                break;
-            case R.id.manageMenu:
-                AskDialog.verifyManagerPwd(this, new AskDialog.ManagerPwdVerifyCallBack() {
-                    @Override
-                    public void managerPwdVerifyCallBack(Boolean isVerify) {
-                        if (isVerify) {
-                            if (fingerList != null) {
-                                Bundle bundle = new Bundle();
-                                Logger.d("指静脉数据的数量：" + fingerList.size());
-                                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-                                SkipActivityUtil.skipDataActivity(DefaultVerifyActivity.this,
-                                        ManagerActivity.class, bundle);
-                            } else {
-                                SkipActivityUtil.skipActivity(DefaultVerifyActivity.this,
-                                        ManagerActivity.class);
-                            }
-                        } else {
-                            ToastUtils.showSquareImgToast(DefaultVerifyActivity.this,
-                                    getString(R.string.manager_pwd_verify_fail),
-                                    ActivityCompat.getDrawable(DefaultVerifyActivity.this,
-                                            R.drawable.cry_icon));
-                        }
-                    }
-                });
-                break;
-            case R.id.userCenter:
-                SkipActivityUtil.skipActivity(this, UserCenterActivity.class);
+//            case R.id.pwVerify:
+//                PwApi.pwInputVerify(this);
+//                break;
+            case R.id.homeMenu:
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
+                SkipActivityUtil.skipDataActivity(this, MenuActivity.class, bundle);
                 break;
 
         }
@@ -178,11 +221,61 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     }
 
     @Override
-    public void onRegisterResult(boolean result, IdCard idCard) { }
+    public void onRegisterResult(boolean result, IdCard idCard) {
+        if (result)
+            Logger.d("身份证注册的结果：" + idCard.toString());
+    }
 
     @Override
     public void fingerVerifyResult(int res, String msg, int score,
                                    int index, Long fingerId, byte[] updateFinger) {
         Logger.d("指静脉验证结果：" + msg);
+        if (res == 1) {
+            Intent intent = new Intent();
+            intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
+            intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
+            sendBroadcast(intent);
+        }
     }
+
+    /**
+     * 注册实时获取系统时间的广播
+     */
+    private void getSystemTime() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_TIME_TICK);
+        registerReceiver(systemTimeReceiver, filter);
+    }
+
+    private BroadcastReceiver systemTimeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //获取系统时间
+            String action = intent.getAction();
+            if (action != null && action.equals(Intent.ACTION_TIME_TICK)) {
+                String hour = String.valueOf(CalendarUtil.getHour());
+                String minute = String.valueOf(CalendarUtil.getMinute());
+                String year = String.valueOf(CalendarUtil.getYear());
+                String month = String.valueOf(CalendarUtil.getMonth());
+                String day = String.valueOf(CalendarUtil.getDay());
+                if (hour.length() == 1) {
+                    hour = "0" + hour;
+                }
+                if (minute.length() == 1) {
+                    minute = "0" + minute;
+                }
+                if (year.length() == 1) {
+                    year = "0" + year;
+                }
+                if (month.length() == 1) {
+                    month = "0" + month;
+                }
+                if (day.length() == 1) {
+                    day = "0" + day;
+                }
+                currentTime.setText(MessageFormat.format("{0}:{1}", hour, minute));
+                currentDate.setText(MessageFormat.format("{0}-{1}-{2}", year, month, day));
+            }
+        }
+    };
 }
