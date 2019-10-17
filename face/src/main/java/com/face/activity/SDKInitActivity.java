@@ -28,7 +28,8 @@ import com.zqzn.android.face.exceptions.SDKAuthExpireException;
 import com.zqzn.android.face.exceptions.SDKNotAuthException;
 import com.zqzn.android.face.model.FaceSDK;
 import com.zqzn.android.face.model.FaceSearchLibrary;
-
+import com.zqzn.android.zqznfacesdk.ZqznFaceSDK;
+import com.zqzn.android.zqznfacesdk.ZqznFaceSearchLibrary;
 
 
 import java.util.List;
@@ -103,6 +104,14 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
 
         //获取离线1：N搜索库
         faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
+        float[] features=new float[256];
+        FaceSearchLibrary searchLibrary=  ZqznFaceSDK.instance.getFaceSearchLibrary();
+        try {
+            searchLibrary.search(features,1,null);
+        } catch (FaceException e) {
+            e.printStackTrace();
+        }
+        // faceSearchLibrary.search()
         int offset = 0;
         int limit = 10;
         while (true) {

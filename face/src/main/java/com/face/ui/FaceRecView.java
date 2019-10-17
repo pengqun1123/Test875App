@@ -28,7 +28,7 @@ public class FaceRecView extends FaceCameraView {
 
     @Override
     protected void setLayoutMargin(int left, int top, int right, int bottom) {
-        super.setLayoutMargin(0, 0, 0, 0);
+        super.setLayoutMargin(-62, 0, -62, 0);
         if (faceDataView != null) {
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) faceDataView.getLayoutParams();
             params.setMargins(left, top, right, bottom);

@@ -16,4 +16,9 @@
         <attr name="isDrawCircle" format="boolean" />
         <attr name="isDrawLine" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="WaveView">
+      <attr name="type" format="integer"/>
+    </declare-styleable>
+
 </resources>

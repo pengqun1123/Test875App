@@ -4,10 +4,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.base.BaseApplication;
+import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.pojo.Face;
+import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.common.FaceConfig;
 import com.face.ui.FaceRecBoxView;
+import com.face.utils.FaceUtils;
+import com.face.utils.FileHelper;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
 import com.zqzn.android.face.camera.FaceCameraView;
@@ -19,8 +30,11 @@ import com.zqzn.android.face.exceptions.FaceException;
 import com.zqzn.android.face.exceptions.FaceQualityException;
 import com.zqzn.android.face.jni.Tool;
 import com.zqzn.android.face.model.FaceQualityDetector;
+import com.zqzn.android.face.model.FaceSearchLibrary;
 import com.zqzn.android.face.processor.FaceDetectProcessor;
 import com.face.ui.FaceRecView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,20 +45,25 @@ import java.util.List;
  * <p>
  * 主要用于人脸采集过程
  */
+@Route(path = ARouterConstant.FACE_RIGSTER_ACTIVITY)
 public class FaceCaptureActivity extends AppCompatActivity implements FaceDetectProcessor.FaceDetectCallback {
 
     private static final String TAG = FaceCaptureActivity.class.getSimpleName();
-
+    private boolean isExtractFeature=false;
     /**
      * 人脸图片存储目录
      */
     private File faceImageDir;
-    private File faceImageFile;
     private FaceRecView visCameraView;
     private FaceRecBoxView faceRecBoxView;
     private FaceCamera visCamera;
     private FaceDetectProcessor faceDetectProcessor;
     private FaceQualityDetector faceQualityDetector;
+    private String name;
+    private FaceSearchLibrary faceSearchLibrary;
+    private File confirmedFaceImage;
+    private Face face;
+    private Long faceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +73,24 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
         initCamera();
+        initData();
+
+    }
+
+    private void initData() {
+        name = getIntent().getStringExtra("name");
+        faceId = getIntent().getLongExtra("faceId",-1);
         try {
             faceQualityDetector = FaceConfig.getInstance().getFaceSDK().getFaceQualityDetector();
         } catch (FaceException e) {
             Logger.e(TAG, "获取人脸质量检测器失败", e);
         }
+
+
+        faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
         faceImageDir = new File(FaceConfig.getInstance().getAppRootDir(), "face_image");
         faceImageDir.mkdirs();
-        faceImageFile = new File(faceImageDir, "temp_face.jpg");
+
     }
 
     private void initCamera() {
@@ -92,6 +121,9 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
 
+        if (isExtractFeature){
+            return;
+        }
         FaceData[] faceList = faceDetectData.getFaceList();
         if (faceList == null || faceList.length == 0) {
             return;
@@ -116,13 +148,12 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
                         faceRect.getRight(), faceRect.getBottom(), 2.0f);
 
                 //存储图片
-                Tool.saveToJpeg(faceBitmap, faceImageFile);
+                confirmedFaceImage = new File(faceImageDir, "" + System.currentTimeMillis() + ".jpg");
+                Tool.saveToJpeg(faceBitmap, confirmedFaceImage);
 
-                //将截取的图片地址返回给调用Activity
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("face_image", faceImageFile.getAbsolutePath());
-                setResult(RESULT_OK, resultIntent);
-                finish();
+                        saveUser(faceBitmap);
+
+
             }
         } catch (FaceQualityException e) {
             Logger.e(TAG, "onFaceDetected: 人脸质量检测不符合要求: " + faceQualityToString(e.getFaceQuality()));
@@ -130,6 +161,110 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
             Logger.e(TAG, "onFaceDetected: 人脸质量检测失败", e);
         }
     }
+
+    private void stopPreview() {
+        try {
+            visCamera.stopPreview();
+
+        } catch (IOException e) {
+            Logger.e(TAG, "摄像头关闭预览失败", e);
+            Toast.makeText(FaceCaptureActivity.this, "摄像头关闭预览失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        try {
+            visCamera.release();
+        } catch (IOException e) {
+            Logger.e(TAG, "释放可见光摄像头异常", e);
+        }
+    }
+
+
+
+    private void saveUser(Bitmap bitmap) {
+        //抽取特征
+        float[] feature = FaceUtils.extractFeatureBybitmap(bitmap);
+        if (feature == null) {
+            ToastUtils.showSingleToast(this,"特征提取失败");
+            return;
+        }
+        isExtractFeature=true;
+        //持久化用户信息
+        try {
+            persistentUser(name, feature);
+        } catch (IOException e) {
+            runOnUiThread(() -> {
+                ToastUtils.showSingleToast(this, "保存人员失败: " + e.getMessage());
+            });
+        }
+    }
+
+
+    /**
+     * 持久化用户信息
+     *
+     * @param name
+     * @param feature
+     */
+    int count=0;
+    private void persistentUser(String name, float[] feature) throws IOException {
+        //  user.setImagePath(confirmedFaceImage.getAbsolutePath());
+        //将用户信息写入数据库
+        if (face!=null){
+            return;
+        }
+        face = new Face();
+        if (faceId!=-1){
+            face.setUId(faceId);
+        }
+        face.setName(name);
+        face.setFeature(feature);
+        face.setImagePath(confirmedFaceImage.getAbsolutePath());
+        count++;
+        Log.d("777","count="+count);
+        //  long personId = userManager.addOne(user);
+        try {
+            DBUtil dbUtil = BaseApplication.getDbUtil();
+            dbUtil.insertOrReplace(face);
+            //写数据成功，将用户信息加载到离线1：N搜索库中
+            boolean addSearchLibraryRet = addUserToSearchLibrary(face);
+            if (addSearchLibraryRet) {
+                EventBus.getDefault().post(face);
+                finish();
+            }
+        }catch (Exception e){
+            ToastUtils.showSingleToast(FaceCaptureActivity.this, "增加失败");
+        }
+
+        }
+
+
+    /**
+     * 将新加的用户信息加载到离线1：N搜索库中
+     *
+     * @param face
+     * @return
+     */
+    private boolean addUserToSearchLibrary(Face face) {
+        try {
+            //确保之前在搜索库中的用户信息已经被移除
+            faceSearchLibrary.removePersons(new long[]{face.getUId()});
+        } catch (FaceException ignore) {
+        }
+        try {
+            //将用户特征信息加载到离线1：N搜索库中
+            FaceUtils.addToSearchLibrary(face);
+            Logger.d(TAG, "加载用户到缓存成功：" + face.getUId() + "," + face.getName());
+            runOnUiThread(() -> ToastUtils.showSingleToast(this, "增加成功"));
+            return true;
+        } catch (FaceException e) {
+            Logger.e(TAG, "加载用户到缓存失败：" +face.getUId() + "," + face.getName(), e);
+            runOnUiThread(() -> {
+                ToastUtils.showSingleToast(this, "写入离线1：N搜索库失败: " + e.getMessage());
+            });
+            return false;
+        }
+    }
+
+
 
     @Override
     public void onLivenessDetected(FaceDetectData faceDetectData) {
@@ -146,6 +281,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
     protected void onDestroy() {
         try {
             super.onDestroy();
+        //    stopPreview();
         } finally {
             try {
                 visCameraView.releaseCamera();

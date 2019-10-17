@@ -7,29 +7,16 @@
     android:orientation="vertical"
     tools:context=".activity.V3FaceRecActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:background="@color/green_1"
-            android:id="@+id/tv_type"
-            android:padding="10dp"
-            android:gravity="center"
-            android:textSize="@dimen/dp_18"
-            android:textColor="@color/white"
-            android:text="人脸识别"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:focusableInTouchMode="true">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -39,6 +26,8 @@
                     android:id="@+id/camera_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+
+
             </FrameLayout>
 
             <com.face.ui.FaceRecBoxView
@@ -46,129 +35,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <LinearLayout
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+            <FrameLayout
+                android:id="@+id/face_animator"
+                android:layout_gravity="bottom|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+              >
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_sight"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/face_circle"
+                    tools:ignore="VectorDrawableCompat" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_in"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/face_cogwheel"
+                    tools:ignore="VectorDrawableCompat" />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/password_verify"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/dp_5"
-                            android:layout_marginEnd="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_10"
-                            android:layout_marginTop="@dimen/dp_5"
-                            android:layout_weight="1"
-                            android:background="@drawable/face_menu_select_bg"
-                            android:gravity="center"
-                            android:padding="@dimen/dp_10"
-                            android:text="@string/face_password_verify"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_16" />
+                <TextView
+                    android:id="@+id/tv_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/face_verify_success"
+                    android:textColor="@color/blue_6"
+                    android:textSize="@dimen/dp_18"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </FrameLayout>
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/user_center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/dp_5"
-                            android:layout_marginEnd="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_10"
-                            android:layout_marginTop="@dimen/dp_5"
-                            android:layout_weight="1"
-                            android:background="@drawable/face_menu_select_bg"
-                            android:gravity="center"
-                            android:padding="@dimen/dp_10"
-                            android:text="@string/face_user_center"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_16" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/manage_set_"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/dp_5"
-                            android:layout_marginEnd="@dimen/dp_5"
-                            android:layout_marginStart="@dimen/dp_10"
-                            android:layout_marginTop="@dimen/dp_5"
-                            android:layout_weight="1"
-                            android:background="@drawable/face_menu_select_bg"
-                            android:gravity="center"
-                            android:padding="@dimen/dp_10"
-                            android:text="@string/face_manager_set"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp_16" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_sight"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/face_circle"
-                        tools:ignore="VectorDrawableCompat" />
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_in"
-                        android:layout_width="250dp"
-                        android:layout_height="250dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/face_cogwheel"
-                        tools:ignore="VectorDrawableCompat" />
-
-                    <TextView
-                        android:id="@+id/tv_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/face_verify_success"
-                        android:textColor="@color/blue_6"
-                        android:textSize="@dimen/dp_18"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-                </FrameLayout>
-            </LinearLayout>
         </FrameLayout>
 
-
-
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

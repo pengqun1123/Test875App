@@ -18,13 +18,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
+import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.PwCallBack;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
@@ -37,6 +42,7 @@ import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
+import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.PwFactory;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
@@ -57,8 +63,12 @@ import com.testApp.callBack.CancelBtnClickListener;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +106,12 @@ public class UserManageFragment extends BaseFragment
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected Integer contentView() {
         type = getArguments().getInt("type");
         if (type == 0) {
@@ -124,7 +140,8 @@ public class UserManageFragment extends BaseFragment
 
     @Override
     protected void initData() {
-
+        EventBus.getDefault().register(this);
+        query();
         if (type == 1) {
             Bundle bundle = getArguments();
             if (bundle != null) {
@@ -155,12 +172,12 @@ public class UserManageFragment extends BaseFragment
             case R.id.faceModel:
                 //人脸注册
                 registerBtn.setText(getString(R.string.register));
-
+                faceRegister();
                 break;
             case R.id.idCardModel:
                 //身份证注册
                 registerBtn.setText(getString(R.string.register));
-
+                idCardRegister();
                 break;
             case R.id.pwModel:
                 //密码模式注册
@@ -506,6 +523,74 @@ public class UserManageFragment extends BaseFragment
             }
         });
     }
+
+    //身份证注册
+    private void idCardRegister() {
+        Long idCardId =-1l;
+       if (this.idCard!=null){
+           idCardId=idCard.getUId();
+       }
+
+        IdCardService idCardService = ARouter.getInstance().navigation(IdCardService.class);
+        Long finalIdCardId = idCardId;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                idCardService.register_IdCard(new CardInfoListener() {
+                    @Override
+                    public void onGetCardInfo(IdCard idCard) {
+
+                    }
+
+                    @Override
+                    public void onRegisterResult(boolean result, IdCard idCard) {
+                        if (result) {
+                            //可插入User表的数据
+                            UserManageFragment.this.idCard = idCard;
+                            registerBtn.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, finalIdCardId);
+            }
+        }).start();
+    }
+    // 普通事件的处理
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleEvent(Face face) {
+        UserManageFragment.this.face = face;
+        Log.d("777",face.getImagePath());
+        registerBtn.setVisibility(View.VISIBLE);
+
+    }
+
+    private void query(){
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        List<Face> faces = dbUtil.queryAll(Face.class);
+    }
+    //人脸注册
+    private void faceRegister() {
+        Boolean openFace = SPUtil.getOpenFace();
+        if (openFace) {
+            String userName = nameEt.getText().toString().trim();
+            if (TextUtils.isEmpty(userName)) {
+                ToastUtils.showSingleToast(getContext(), getResources().getString(R.string.please_input_name));
+            } else {
+                Bundle bundle=new Bundle();
+                if (face!=null){
+                    bundle.putLong("faceId",face.getUId());
+                    File file = new File(face.getImagePath());
+                    file.delete();
+                }
+                bundle.putString("name",userName);
+
+                ARouterUtil.navigation(ARouterConstant.FACE_RIGSTER_ACTIVITY,bundle);
+            }
+        }else {
+            ToastUtils.showSingleToast(getContext(),getString(R.string.please_select_open_face));
+        }
+    }
+
 
     private void insertOrReplacePw(Pw pw) {
         DBUtil dbUtil = BaseApplication.getDbUtil();

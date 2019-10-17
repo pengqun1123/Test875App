@@ -14,7 +14,9 @@ import com.zqzn.android.zqznfacesdk.ZqznSDKConfig;
 import com.zqzn.android.zqznfacesdk.ZqznSdkEnvConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 全局单例APP配置类
@@ -196,8 +198,14 @@ public class FaceConfig {
     private void initCamera() {
         //todo 这里使用我们的硬件适配工具生成的适配参数来初始化摄像头(为了适配各种设备上的摄像头参数)
         // todo 如果摄像头参数是固定的，直接在这里new FaceCamera(CameraParams)并设置好相应的参数就行，不需要从EnvConfig里获取
+     //   new FaceCamera();
         visCamera = envConfig.getVisCamera();
         nirCamera = envConfig.getNirCamera();
+        try {
+            visCamera.setPreviewSize(800,1232);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (visCamera != null) {
             visCamera.setImageConverter(faceSDK.getVisImageConverter());
         }

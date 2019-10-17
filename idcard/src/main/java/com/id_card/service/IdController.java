@@ -69,6 +69,7 @@ public class IdController {
     private  File ImageFile;
 
     Disposable mDisposable;
+    private Long cardId;
 
     private IdController(Context context) {
         this.mContext=context;
@@ -250,8 +251,8 @@ public class IdController {
        }
 
 
-       public void register_IdCard(CardInfoListener cardInfoListener){
-
+       public void register_IdCard(CardInfoListener cardInfoListener,Long idcardId){
+          this.cardId=idcardId;
           process_IdCard(cardInfoListener,1);
 
        }
@@ -374,7 +375,7 @@ public class IdController {
                 int type = message.getData().getInt("type");
                 CardInfoListener cardInfoListener= (CardInfoListener) message.obj;
                 if (type==1){
-                    register_IdCard(cardInfoListener);
+                    register_IdCard(cardInfoListener,cardId);
                 }else if (type==2){
                     verify_IdCard(cardInfoListener);
                 }

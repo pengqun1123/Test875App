@@ -20,9 +20,9 @@ import com.baselibrary.util.ToastUtils;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+//    static {
+//        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+//    }
 
     protected abstract Integer contentView();
 
@@ -35,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //点击事件
     protected abstract void onViewClick(View view);
 
-    //系统ui变化监听（一般都是状态栏和导航栏）
+   //系统ui变化监听（一般都是状态栏和导航栏）
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

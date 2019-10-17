@@ -56,6 +56,8 @@ public class GetUIDimens {
         return heightPixels;
     }
 
+    //获取屏幕的尺寸
+
     public static int getWindowW(Context context){
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int widthPixels = metrics.widthPixels;

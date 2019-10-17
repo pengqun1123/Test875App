@@ -43,7 +43,7 @@ import java.util.List;
 /**
  * 增加用户示例
  */
-@Route(path = ARouterConstant.FACE_RIGSTER_ACTIVITY)
+
 public class UserAddActivity extends AppCompatActivity {
 
     private static final int FACE_CAPTURE_REQUEST_CODE = 2;
@@ -222,7 +222,7 @@ public class UserAddActivity extends AppCompatActivity {
         try {
             //确保之前在搜索库中的用户信息已经被移除
             faceSearchLibrary.removePersons(new long[]{face.getUId()});
-        } catch (FaceException ignore) {
+          } catch (FaceException ignore) {
         }
         try {
             //将用户特征信息加载到离线1：N搜索库中

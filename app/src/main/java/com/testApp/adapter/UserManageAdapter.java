@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.glidUtils.GlideUtil;
 
@@ -69,7 +70,12 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         User user = users.get(i);
-        String imagePath = user.getFace().getImagePath();
+        Face face = user.getFace();
+        String imagePath=null;
+        if (face!=null){
+            imagePath = face.getImagePath();
+        }
+
 //        String imagePath=null;
         GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
                 imagePath, holder.userAvatar);

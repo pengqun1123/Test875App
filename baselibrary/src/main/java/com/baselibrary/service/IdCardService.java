@@ -16,7 +16,7 @@ public interface IdCardService extends IProvider {
     void verify_IdCard(CardInfoListener cardInfoListener);
 
     //身份证信息注册
-    void register_IdCard(CardInfoListener cardInfoListener);
+    void register_IdCard(CardInfoListener cardInfoListener,Long idCardId);
 
     //获取身份证照片
     Bitmap getBitmap();

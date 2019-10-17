@@ -6,7 +6,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <application>
-        <activity android:name=".activity.FaceActivity"  />
+        <activity android:name=".activity.FaceActivity" android:theme="@style/face_AppTheme" />
         <activity android:name=".activity.V3FaceRecActivity" android:theme="@style/face_AppTheme"/>
         <activity android:name=".activity.FaceAndIdCardActivity" android:theme="@style/face_AppTheme"/>
         <activity android:name=".activity.UserAddActivity" android:theme="@style/face_AppTheme"/>

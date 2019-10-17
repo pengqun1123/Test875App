@@ -503,7 +503,7 @@ public class DBUtil {
         asyncSession.runInTx(new Runnable() {
             @Override
             public void run() {
-                daoSession.insert(entity);
+                daoSession.insertOrReplace(entity);
             }
         });
     }

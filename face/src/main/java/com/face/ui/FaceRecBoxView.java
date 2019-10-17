@@ -98,8 +98,14 @@ public class FaceRecBoxView extends View {
                                 }
                             }
                         }
+                        int padding=80;
 
-                        FaceRect faceRect = d.getFaceRect().scale(widthRatio, heightRatio);
+                        FaceRect faceRect = d.getFaceRect().scale(widthRatio+0.2F, heightRatio+0.2F);
+                        faceRect.setLeft(faceRect.getLeft()-25);
+                        faceRect.setRight(faceRect.getRight()-40);
+                        faceRect.setTop(faceRect.getTop()-90);
+                        faceRect.setBottom(faceRect.getBottom()-90);
+
                         canvas.drawLine((float)faceRect.getLeft(), (float)faceRect.getTop(), (float)faceRect.getLeft()+LINE_LENGTH, (float)faceRect.getTop(), paint);//
                         canvas.drawLine((float)faceRect.getRight(), (float)faceRect.getTop(), (float)faceRect.getRight()-LINE_LENGTH, (float)faceRect.getTop(), paint);//
 

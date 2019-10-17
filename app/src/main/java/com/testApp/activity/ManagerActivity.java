@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 
 import com.baselibrary.constant.AppConstant;

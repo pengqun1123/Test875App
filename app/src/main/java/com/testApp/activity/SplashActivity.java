@@ -156,7 +156,7 @@ public class SplashActivity extends BaseActivity {
                 initFingerFv();
             }
             boolean openFace = SPUtil.getOpenFace();
-          // openFace=false;
+          //  openFace=false;
             if (!openFace){
                 faceLoadOver=true;
                 return;
@@ -321,7 +321,7 @@ public class SplashActivity extends BaseActivity {
         });
 
         Boolean openFace = SPUtil.getOpenFace();
-      //  openFace=false;
+       // openFace=false;
         if (openFace) {
             // TODO: 2019/10/11 请携带指静脉数据到人脸识别页面
             //跳转不带人脸识别的页面

@@ -29,9 +29,9 @@ public class IdCardServiceImpl implements IdCardService {
     }
 
     @Override
-    public void register_IdCard(CardInfoListener cardInfoListener) {
+    public void register_IdCard(CardInfoListener cardInfoListener,Long idCardId) {
         if (instance!=null) {
-            instance.register_IdCard(cardInfoListener);
+            instance.register_IdCard(cardInfoListener,idCardId);
         }
     }
 

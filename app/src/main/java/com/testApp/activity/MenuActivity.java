@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.constant.AppConstant;
@@ -22,7 +24,7 @@ import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
 import java.util.ArrayList;
-
+@Route(path = ARouterConstant.MENU_ACTIVITY)
 public class MenuActivity extends BaseActivity {
 
     private ArrayList<Finger6> fingerDataList;
