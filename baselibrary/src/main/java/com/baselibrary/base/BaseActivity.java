@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(contentView());
-//        HideNavBarUtil.hideBottomUIMenu1(this);
+        HideNavBarUtil.hideBottomUIMenu1(this);
         initToolBar();
         initView();
         initData();

@@ -22,6 +22,7 @@ public final class AppConstant {
     public static final String MAX_MANAGER = "max_manager";
     //指静脉的数据
     public static final String FINGER_DATA = "finger_data";
+    public static final String FACE_ID = "faceId";
     public static final String FINGER_DATA_LIST = "finger_list";
     public static final String FINGER_SIZE = "finger_size";
     public static final String ADD_FINGER = "add_finger";

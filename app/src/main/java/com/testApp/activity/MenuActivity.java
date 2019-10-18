@@ -27,6 +27,7 @@ import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
 import java.util.ArrayList;
+
 @Route(path = ARouterConstant.MENU_ACTIVITY)
 public class MenuActivity extends BaseActivity {
 
@@ -63,14 +64,12 @@ public class MenuActivity extends BaseActivity {
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backBtn:
-                if (SPUtil.getOpenFace()){
+                if (SPUtil.getOpenFace()) {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,fingerDataList);
+                    bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
                     Logger.d("SplashActivity 2 指静脉模板数量：" + fingerDataList.size());
                     //跳转人脸识别页面
-                    SkipActivityUtil.skipDataActivity(MenuActivity.this, V3FaceRecActivity.class,bundle);
-                  //  ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
-                    finish();
+                    SkipActivityUtil.skipDataActivity(MenuActivity.this, V3FaceRecActivity.class, bundle);
                 }
                 finish();
                 break;
@@ -112,6 +111,7 @@ public class MenuActivity extends BaseActivity {
                         } else if (flag == AppConstant.PW_MODEL) {
                             BaseApplication.AP.playInputPw();
                         }
+                        finish();
                     }
                 });
                 break;
@@ -141,8 +141,6 @@ public class MenuActivity extends BaseActivity {
                 int fingerVerifyResult = intent.getIntExtra(AppConstant.FINGER_VERIFY_RESULT, 0);
                 if (fingerVerifyResult == 1) {
 
-//                    SkipActivityUtil.skipActivity(MenuActivity.this
-//                            , UserCenterActivity.class);
                 }
             }
         }

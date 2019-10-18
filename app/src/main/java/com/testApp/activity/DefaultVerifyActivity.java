@@ -68,8 +68,8 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         gear4 = bindViewWithClick(R.id.gear4, true);
 
         gear1Anim = AnimatorUtils.rotateAnim(gear1, 3900L, 359F);
-        gear2Anim = AnimatorUtils.rotateAnim(gear2, 3100L, -359F);
-        gear3Anim = AnimatorUtils.rotateAnim(gear3, 3400L, 359F);
+        gear2Anim = AnimatorUtils.rotateAnim(gear2, 3100L, 359F);
+        gear3Anim = AnimatorUtils.rotateAnim(gear3, 3400L, -359F);
         gear4Anim = AnimatorUtils.rotateAnim(gear4, 2800L, -359F);
 
         setCurrentTime();

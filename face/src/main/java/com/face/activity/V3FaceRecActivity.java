@@ -58,7 +58,8 @@ import java.util.Date;
 import java.util.List;
 
 @Route(path = ARouterConstant.FACE_1_N_ACTIVITY)
-public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecProcessor.FaceRecCallback, FingerDevStatusConnectListener, CardInfoListener {
+public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecProcessor.FaceRecCallback,
+        FingerDevStatusConnectListener, CardInfoListener {
 
     private static final String TAG = V3FaceRecActivity.class.getSimpleName();
 
@@ -103,7 +104,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
-        tv_result= bindViewWithClick(R.id.homeMenu,true);
+        tv_result = bindViewWithClick(R.id.homeMenu, true);
 
 
        /* iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
@@ -122,12 +123,12 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         super.initData();
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
-        }else {
-            FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
+        } else {
+            FaceService.getInstance().initCamera(visCameraView, faceRecBoxView, nirCamera, this);
         }
         tv_result.setTextColor(getResources().getColor(R.color.blue_10));
         tv_result.setText("管理");
-    //    tv_result.setVisibility(View.VISIBLE);
+        //    tv_result.setVisibility(View.VISIBLE);
 
         FingerFactory.getInstance().fingerDevConnectStatus(this);
 
@@ -135,7 +136,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         new Thread(new Runnable() {
             @Override
             public void run() {
-                idCardService.register_IdCard(V3FaceRecActivity.this,-1l);
+                idCardService.register_IdCard(V3FaceRecActivity.this, -1l);
             }
         }).start();
 
@@ -175,10 +176,10 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     protected void onViewClick(View view) {
-      super.onViewClick(view);
+        super.onViewClick(view);
     }
 
-    private void startAnimator(){
+    private void startAnimator() {
 //        if (sight_rotate.isStarted()){
 //            if (sight_rotate.isPaused()){
 //                tv_result.setText(getString(R.string.face_verifying));
@@ -219,8 +220,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 isAllGranted &= (grantResult == PackageManager.PERMISSION_GRANTED);
             }
             if (isAllGranted) {
-               // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
-                FaceService.getInstance().initCamera(visCameraView,faceRecBoxView,nirCamera,this);
+                // FaceConfig.getInstance().init(this, serialNumber.toUpperCase(), this);
+                FaceService.getInstance().initCamera(visCameraView, faceRecBoxView, nirCamera, this);
             } else {
                 Toast.makeText(this, "权限拒绝！", Toast.LENGTH_SHORT).show();
             }
@@ -243,9 +244,11 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     protected void onDestroy() {
         try {
             super.onDestroy();
-            FingerFactory.getInstance().unbindDevService(this);
-            isStartService = false;
-            if (idCardService!=null) {
+            if (isStartService) {
+                FingerFactory.getInstance().unbindDevService(this);
+                isStartService = false;
+            }
+            if (idCardService != null) {
                 idCardService.destroyIdCard();
             }
         } finally {
@@ -265,17 +268,17 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onFaceDetected(FaceDetectData faceDetectData) {
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                  if (tv_result.getText().toString().equals("管理")) {
-                        tv_result.setText(getString(R.string.face_verifying));
-                        tv_result.setTextColor(getResources().getColor(R.color.blue_10));
-                    }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (tv_result.getText().toString().equals("管理")) {
+                    tv_result.setText(getString(R.string.face_verifying));
+                    tv_result.setTextColor(getResources().getColor(R.color.blue_10));
                 }
-            });
+            }
+        });
 
-        Log.d("555","onFaceDetected"+faceDetectData);
+        Log.d("555", "onFaceDetected" + faceDetectData);
 
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
@@ -283,7 +286,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     public void onLivenessDetected(FaceDetectData faceDetectData) {
-             Log.d("555","活体检测");
+        Log.d("555", "活体检测");
     }
 
     @Override
@@ -305,11 +308,11 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData, BaseFaceRecProcessor.FaceTrackData faceTrackData) {
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
-      // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
+        // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS ").format(new Date());
-        Log.d("888","onFaceRecCompleted");
-        try  {
+        Log.d("888", "onFaceRecCompleted");
+        try {
             //后面根据recId保存识别相关记录
             String recId = Long.toString(System.currentTimeMillis());
             String livenessScore = "不判断";
@@ -327,7 +330,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
                         }
                     });
-                }else if (faceTrackData.searchPass) {
+                } else if (faceTrackData.searchPass) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -336,7 +339,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                         }
                     });
 
-                }else {
+                } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -346,12 +349,12 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                         }
                     });
                 }
-            }else {
+            } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         tv_result.setText(getString(R.string.face_verify_fail));
-                       tv_result.setTextColor(getResources().getColor(R.color.red_2));
+                        tv_result.setTextColor(getResources().getColor(R.color.red_2));
 
                     }
                 });
@@ -383,17 +386,17 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             log.append(String.format(" {质量检测次数: %d, 活体检测次数: %d, 搜索次数: %d}", faceTrackData.qualityDetectTimes.get(),
                     faceTrackData.livenessDetectTimes.get(), faceTrackData.searchTimes.get()));
             log.append("\r\n");
-          //  fileOutputStream.write(log.toString().getBytes());
-           // File path = new File(String.format("%s/images/%s", logFilePath.getAbsolutePath(), subDir));
-           // path.mkdirs();
+            //  fileOutputStream.write(log.toString().getBytes());
+            // File path = new File(String.format("%s/images/%s", logFilePath.getAbsolutePath(), subDir));
+            // path.mkdirs();
             //保存可见光图片
-        //    Tool.save(faceDetectData.getImage().toBitmap(), new File(String.format("%s/%s_vis.jpg", path.getAbsolutePath(), recId)));
-       //     Tool.save(faceDetectData.getImage().drawFacesToBitmap(faceData), new File(String.format("%s/%s_vis_track.jpg", path.getAbsolutePath(), recId)));
+            //    Tool.save(faceDetectData.getImage().toBitmap(), new File(String.format("%s/%s_vis.jpg", path.getAbsolutePath(), recId)));
+            //     Tool.save(faceDetectData.getImage().drawFacesToBitmap(faceData), new File(String.format("%s/%s_vis_track.jpg", path.getAbsolutePath(), recId)));
             FaceDetectProcessor.FaceDetectProcessorMonitorData monitorData = (FaceDetectProcessor.FaceDetectProcessorMonitorData) faceDetectData.getMonitorData();
             //if (faceRecConfig.livenessDetectMode == BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS) {
-                //如果是红外活体识别模式，保存红外图片
+            //如果是红外活体识别模式，保存红外图片
             //    Tool.save(monitorData.getNirImage().toBitmap(), new File(String.format("%s/%s_nir.jpg", path.getAbsolutePath(), recId)));
-          //  }
+            //  }
             log.append(String.format(", track: %s, conv: %s, nir_liv: %s",
                     String.valueOf(monitorData.getDetectTime()),
                     String.valueOf(monitorData.getImageConvertTime()),
@@ -404,17 +407,19 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
     }
 
-    private static Boolean isStartService = false;
+    private  Boolean isStartService = false;
+
     @Override
     public void fingerDevStatusConnect(int res, String msg) {
         if (res == 1 && !isStartService) {
             FingerFactory.getInstance().startFingerService(this, new FingerVerifyResultListener() {
                 @Override
-                public void fingerVerifyResult(int res, String msg, int score, int index, Long fingerId, byte[] updateFinger) {
-                    if (res==1){
-                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this, "身份证验证成功",null);
+                public void fingerVerifyResult(int res, String msg, int score,
+                                               int index, Long fingerId, byte[] updateFinger) {
+                    if (res == 1) {
+                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this, "身份证验证成功", null);
 
-                    }else {
+                    } else {
                         ToastUtils.showSquareImgToast(V3FaceRecActivity.this
                                 , "指静脉验证失败"
                                 , ActivityCompat.getDrawable(V3FaceRecActivity.this
@@ -439,19 +444,19 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                     , ActivityCompat.getDrawable(V3FaceRecActivity.this
                             , R.drawable.cry_icon));
         } else {
-            Log.d("999",idCard.getName());
-            ToastUtils.showSquareImgToast(this, "身份证验证成功",null);
+            Log.d("999", idCard.getName());
+            ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
         }
     }
 
     @Override
     public void onRegisterResult(boolean result, IdCard idCard) {
-       if (result){
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_register_success));
-           Log.d("999",idCard.getName());
-       }else {
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_register_fail));
-       }
+        if (result) {
+            ToastUtils.showSquareTvToast(this, getString(R.string.face_register_success));
+            Log.d("999", idCard.getName());
+        } else {
+            ToastUtils.showSquareTvToast(this, getString(R.string.face_register_fail));
+        }
     }
 
 }

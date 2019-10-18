@@ -48,7 +48,7 @@
     <string name="finger_1_verify">指静脉验证1</string>
     <string name="card_verify">身份证验证</string>
     <string name="manager_set">管理员设置</string>
-    <string name="please_manager_pw">请输入管理员密码</string>
+    <string name="please_manager_pw">请输入管理员密码:</string>
     <string name="ask_open_face">是否启用人脸识别?</string>
     <string name="please_select_open_face">请选择是否启用人脸验证:</string>
     <string name="pw_no_eq">前后两次密码不相等</string>

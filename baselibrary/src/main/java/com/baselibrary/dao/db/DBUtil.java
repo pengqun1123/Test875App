@@ -576,33 +576,6 @@ public class DBUtil {
         asyncSession.updateInTx(cls, tList);
     }
 
-//    /**
-//     * 关闭DaoSession
-//     */
-//    private void closeDaoSession() {
-//        if (mDaoSession != null) {
-//            mDaoSession.clear();
-//            mDaoSession = null;
-//        }
-//    }
-//
-//    /**
-//     * 关闭Helper
-//     */
-//    private void closeHelper() {
-//        if (mHelper != null) {
-//            mHelper.close();
-//            mHelper = null;
-//        }
-//    }
-//
-//    /**
-//     * 关闭所有的操作
-//     */
-//    public void closeConnection() {
-//        closeDaoSession();
-//        closeHelper();
-//    }
 
 
 }
