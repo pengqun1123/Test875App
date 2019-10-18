@@ -288,7 +288,7 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    private void skipVerifyActivity(ArrayList<Finger6> finger6List/*byte[] finerData, int fingerSize*/) {
+    private void skipVerifyActivity(ArrayList<Finger6> finger6List) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
