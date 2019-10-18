@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingBottom="@dimen/dp_5">
+        android:paddingBottom="@dimen/dp_25">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/searchUserBtn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45"
-            android:layout_marginStart="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_15"
-            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_25"
+            android:layout_marginEnd="@dimen/dp_20"
             android:background="@drawable/search_bg"
             android:gravity="center"
             android:paddingStart="@dimen/dp_20"
@@ -34,7 +34,8 @@
         android:id="@+id/userRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchView">
+        android:layout_below="@+id/searchView"
+        android:layout_marginTop="@dimen/dp_15">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/userRv"
@@ -44,6 +45,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/no_data_view"/>
+    <include layout="@layout/no_data_view" />
 
 </RelativeLayout>

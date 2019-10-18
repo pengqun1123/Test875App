@@ -122,6 +122,7 @@
     <string name="please_select_verify_method">请选择您已注册过的验证方式进行身份验证!</string>
     <string name="manage_no_had">该管理员密码已存在,请重新输入</string>
     <string name="wellcom_tip">欢迎光临!</string>
+    <string name="user_company">用户所在公司</string>
 
 
 </resources>

@@ -1,7 +1,9 @@
 package com.testApp.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,12 +16,14 @@ import com.baselibrary.base.BaseActivity;
 
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.User;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.face.activity.V3FaceRecActivity;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.adapter.MyFragmentStatePagerAdapter;
+import com.testApp.callBack.RegisterUserCallBack;
 import com.testApp.callBack.SaveUserInfo;
 import com.testApp.fragment.ManagerFragment;
 import com.testApp.fragment.UserManageFragment;
@@ -29,10 +33,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ManagerActivity extends BaseActivity {
+@SuppressLint("ParcelCreator")
+public class ManagerActivity extends BaseActivity implements RegisterUserCallBack {
 
     private UserRegisterFragment userRegisterFragment;
     private ArrayList<Finger6> fingerList;
+    private UserManageFragment manageFragment;
 
     @Override
     protected Integer contentView() {
@@ -41,14 +47,6 @@ public class ManagerActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-//            allFingerData = bundle.getByteArray(AppConstant.FINGER_DATA);
-//            allFingerSize = bundle.getInt(AppConstant.FINGER_SIZE);
-            fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-            Logger.d("ManagerActivity 1 指静脉模板数量：" + fingerList.size());
-        }
         TabLayout manageTab = bindViewWithClick(R.id.manageTab, false);
         ViewPager managePg = bindViewWithClick(R.id.managePg, false);
         bindViewWithClick(R.id.backPreviousBtn, true);
@@ -70,7 +68,12 @@ public class ManagerActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
+            Logger.d("ManagerActivity 1 指静脉模板数量：" + fingerList.size());
+        }
     }
 
     //跳转验证页面
@@ -128,11 +131,27 @@ public class ManagerActivity extends BaseActivity {
             fragments.clear();
         }
         Logger.d("managerFragment 2 指静脉模板数量：" + fingerList.size());
-        fragments.add(UserManageFragment.instance());
-        userRegisterFragment = UserRegisterFragment.instance(fingerList);
+        manageFragment = UserManageFragment.instance();
+        userRegisterFragment = UserRegisterFragment.instance(fingerList, this);
+        fragments.add(manageFragment);
         fragments.add(userRegisterFragment);
         fragments.add(ManagerFragment.instance());
         return fragments;
     }
 
+    @Override
+    public void registerUserCallBack(User user) {
+        if (manageFragment != null) {
+            manageFragment.addNewUser(user);
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    }
 }

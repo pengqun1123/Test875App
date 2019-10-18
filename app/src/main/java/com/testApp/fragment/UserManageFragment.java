@@ -85,8 +85,7 @@ public class UserManageFragment extends BaseFragment
 
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItemPosition;
-
-
+    private UserManageAdapter userManageAdapter;
 
 
     public static UserManageFragment instance() {
@@ -104,35 +103,9 @@ public class UserManageFragment extends BaseFragment
         return R.layout.fragment_user_manage;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void initView() {
-        setUserManageView();
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void onViewClick(View view) {
-        switch (view.getId()) {
-            case R.id.searchUserBtn:
-                SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
-                break;
-            case R.id.registerManagerMaxNum:
-                //修改可注册的管理员的最大数量
-                reviseMaxManagerNum(Objects.requireNonNull(getActivity()));
-                break;
-
-
-        }
-    }
-
-    /*************** 用户管理--Start **************/
-
-    @SuppressLint("ResourceAsColor")
-    private void setUserManageView() {
         bindViewWithClick(R.id.searchUserBtn, true);
         SwipeRefreshLayout userRefresh = bindViewWithClick(R.id.userRefresh, false);
         RecyclerView userRv = bindViewWithClick(R.id.userRv, false);
@@ -153,7 +126,7 @@ public class UserManageFragment extends BaseFragment
                 OrientationHelper.VERTICAL, false);
         userRv.setLayoutManager(mLayoutManager);
         userRv.setItemAnimator(new DefaultItemAnimator());
-        UserManageAdapter userManageAdapter = new UserManageAdapter();
+        userManageAdapter = new UserManageAdapter();
         userRv.setAdapter(userManageAdapter);
 
         userRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -180,6 +153,26 @@ public class UserManageFragment extends BaseFragment
     }
 
     @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void onViewClick(View view) {
+        switch (view.getId()) {
+            case R.id.searchUserBtn:
+                SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
+                break;
+            case R.id.registerManagerMaxNum:
+                //修改可注册的管理员的最大数量
+                reviseMaxManagerNum(Objects.requireNonNull(getActivity()));
+                break;
+
+
+        }
+    }
+
+    @Override
     public void onRefresh() {
 
     }
@@ -197,6 +190,12 @@ public class UserManageFragment extends BaseFragment
     private List<User> getUsers(int pageSize) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         return dbUtil.getQueryBuilder(User.class).offset(pageSize * 20).limit(20).list();
+    }
+
+    public void addNewUser(User user) {
+        if (userManageAdapter != null) {
+            userManageAdapter.addData(user);
+        }
     }
 
 

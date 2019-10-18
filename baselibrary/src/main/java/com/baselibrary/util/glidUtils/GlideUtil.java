@@ -284,7 +284,7 @@ public class GlideUtil {
         RequestOptions options = new RequestOptions();
         options.centerCrop();
         options.placeholder(placeHolder);
-        options.error(R.drawable.place_holder_img);
+        options.error(R.drawable.ic_default_user_avatar);
         options.transform(new GlideCircleTransform(mContext, 0.8f,
                 mContext.getResources().getColor(R.color.white)));
 //        options.diskCacheStrategy(DiskCacheStrategy.NONE);

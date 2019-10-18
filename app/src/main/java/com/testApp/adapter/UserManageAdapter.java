@@ -14,6 +14,7 @@ import com.baselibrary.util.glidUtils.GlideUtil;
 
 import com.testApp.R;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +42,11 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         notifyDataSetChanged();
     }
 
-    public void setData(List<User> users){
-        this.users=users;
+    public void setData(List<User> users) {
+        this.users = users;
         notifyDataSetChanged();
     }
+
     public void removeData(User user) {
         this.users.remove(user);
         notifyDataSetChanged();
@@ -71,19 +73,18 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         User user = users.get(i);
         Face face = user.getFace();
-        String imagePath=null;
-        if (face!=null){
+        String imagePath = null;
+        if (face != null) {
             imagePath = face.getImagePath();
         }
-
-//        String imagePath=null;
         GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
                 imagePath, holder.userAvatar);
         holder.userName.setText(user.getName());
         holder.userSex.setText(user.getSex());
         holder.userAge.setText(user.getAge());
-        holder.userPhone.setText(user.getPhone());
-        holder.userSection.setText(user.getSection());
+        holder.userPhone.setText(MessageFormat.format("手机号:{0}", user.getPhone()));
+        holder.userSection.setText(MessageFormat.format("部门:{0}", user.getSection()));
+        holder.userCompany.setText(MessageFormat.format("公司:{0}", user.getOrganizName()));
 
     }
 
@@ -99,7 +100,7 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         private final AppCompatTextView userSex;
         private final AppCompatTextView userAge;
         private final AppCompatTextView userPhone;
-        private final AppCompatTextView userSection;
+        private final AppCompatTextView userSection, userCompany;
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +110,7 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
             userAge = itemView.findViewById(R.id.userAge);
             userPhone = itemView.findViewById(R.id.userPhone);
             userSection = itemView.findViewById(R.id.userSection);
+            userCompany = itemView.findViewById(R.id.userCompany);
 
         }
     }

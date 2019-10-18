@@ -45,6 +45,7 @@ import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.callBack.CancelBtnClickListener;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.callBack.QueryUserNo;
+import com.testApp.callBack.RegisterUserCallBack;
 import com.testApp.callBack.SaveUserInfo;
 import com.testApp.dialog.AskDialog;
 
@@ -68,18 +69,20 @@ public class UserRegisterFragment extends BaseFragment {
     private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
     private AppCompatTextView fingerModel, faceModel, idCardModel, pwModel;
     private AppCompatButton registerBtn;
-    private View nameBottomLine, ageBottomLine, phoneEtLine, companyNameLine, departmentLine, staffNoLine;
     private String sex;
     private byte[] allFingerData;
     private int allFingerSize;
+    private RegisterUserCallBack registerUserCallBack;
 
     public UserRegisterFragment() {
         // Required empty public constructor
     }
 
-    public static UserRegisterFragment instance(ArrayList<Finger6> fingerDataList) {
+    public static UserRegisterFragment instance(ArrayList<Finger6> fingerDataList,
+                                                RegisterUserCallBack callBack) {
         UserRegisterFragment userRegisterFragment = new UserRegisterFragment();
         Bundle bundle = new Bundle();
+        bundle.putParcelable("userListener", callBack);
         bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
         userRegisterFragment.setArguments(bundle);
         return userRegisterFragment;
@@ -103,12 +106,6 @@ public class UserRegisterFragment extends BaseFragment {
         faceModel = bindViewWithClick(R.id.faceModel, true);
         idCardModel = bindViewWithClick(R.id.idCardModel, true);
         pwModel = bindViewWithClick(R.id.pwModel, true);
-        nameBottomLine = bindViewWithClick(R.id.nameBottomLine, false);
-        ageBottomLine = bindViewWithClick(R.id.ageBottomLine, false);
-        phoneEtLine = bindViewWithClick(R.id.ageBottomLine, false);
-        companyNameLine = bindViewWithClick(R.id.companyNameLine, false);
-        departmentLine = bindViewWithClick(R.id.departmentLine, false);
-        staffNoLine = bindViewWithClick(R.id.staffNoLine, false);
         SoftInputKeyboardUtils.hiddenKeyboard(nameEt);
         spinnerListener();
         //隐藏注册的按钮，当用户至少选择了一种验证模式注册完成后才显示注册按钮
@@ -126,6 +123,7 @@ public class UserRegisterFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             fingerDataList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
+            registerUserCallBack = bundle.getParcelable("userListener");
             fingerListToFingerByte(fingerDataList);
             Logger.d("UserManagerFragment 1 指静脉模板数量：" + fingerDataList.size());
         }
@@ -225,18 +223,15 @@ public class UserRegisterFragment extends BaseFragment {
             return;
         } else {
             //查询是否有相同的工号
-            if (workNoList != null && workNoList.size() > 0) {
-                for (String no : workNoList) {
-                    if (staffNo.equals(no)) {
-                        ToastUtils.showSquareImgToast(getActivity(),
-                                getString(R.string.dont_equls_user_no),
-                                ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
-                                        R.drawable.cry_icon));
-                        staffNoEt.getText().clear();
-                        return;
-                    }
+            queryAllUserNo(staffNo, eq -> {
+                if (eq) {
+                    ToastUtils.showSquareImgToast(getActivity(),
+                            getString(R.string.dont_equls_user_no),
+                            ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
+                                    R.drawable.cry_icon));
+                    staffNoEt.getText().clear();
                 }
-            }
+            });
         }
         if (sex.equals("")) {
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
@@ -265,6 +260,7 @@ public class UserRegisterFragment extends BaseFragment {
         }
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.insertOrReplace(newUser);
+        registerUserCallBack.registerUserCallBack(newUser);
         ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
                 , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                         R.drawable.ic_emoje));
