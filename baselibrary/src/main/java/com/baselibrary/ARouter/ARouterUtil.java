@@ -160,6 +160,16 @@ public class ARouterUtil {
                 .navigation();
     }
 
+    public static void navigation(String path ,String group ,Bundle bundle){
+        if (path==null || bundle==null){
+            return;
+        }
+        ARouter.getInstance()
+                .build(path,group)
+                .with(bundle)
+                .navigation();
+    }
+
     /**
      * 跨模块实现ForResult返回数据（activity中使用）,在fragment中使用不起作用
      * 携带参数跳转页面

@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.callBack.CardInfoListener;
+import com.baselibrary.callBack.FingerDevCloseListener;
 import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
@@ -87,7 +89,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
 
     private ObjectAnimator in_rotate;
-    private TextView tv_result;
+    private AppCompatTextView tv_result;
     private IdCardService idCardService;
 
     @Override
@@ -101,9 +103,12 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
-        iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
+        tv_result= bindViewWithClick(R.id.homeMenu,true);
+
+
+       /* iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
         iv_sight = ((AppCompatImageView) findViewById(R.id.iv_sight));
-        tv_result = ((TextView) findViewById(R.id.tv_result));
+        tv_result = ((TextView) findViewById(R.id.tv_result));*/
         nirCamera = FaceConfig.getInstance().getNirCamera();
     }
 
@@ -122,7 +127,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
         tv_result.setTextColor(getResources().getColor(R.color.blue_10));
         tv_result.setText("管理");
-        tv_result.setVisibility(View.VISIBLE);
+    //    tv_result.setVisibility(View.VISIBLE);
 
         FingerFactory.getInstance().fingerDevConnectStatus(this);
 
@@ -130,11 +135,11 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         new Thread(new Runnable() {
             @Override
             public void run() {
-                idCardService.verify_IdCard(V3FaceRecActivity.this);
+                idCardService.register_IdCard(V3FaceRecActivity.this,-1l);
             }
         }).start();
 
-           sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
+         /*  sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
             sight_rotate.setDuration(4000);
             sight_rotate.setInterpolator(new LinearInterpolator());
             sight_rotate.setRepeatMode(ObjectAnimator.RESTART);
@@ -148,7 +153,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             in_rotate.setRepeatCount(Animation.INFINITE);
 
               sight_rotate.start();
-              in_rotate.start();
+              in_rotate.start();*/
 
 //        sight_rotate.setAnimationListener(new Animation.AnimationListener() {
 //            @Override
@@ -222,14 +227,26 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FingerFactory.getInstance().reStartFingerVerify();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FingerFactory.getInstance().pauseFingerVerify();
+    }
 
     @Override
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (in_rotate!=null){
-                in_rotate.cancel();
-                sight_rotate.cancel();
+            FingerFactory.getInstance().unbindDevService(this);
+            isStartService = false;
+            if (idCardService!=null) {
+                idCardService.destroyIdCard();
             }
         } finally {
             try {
@@ -251,7 +268,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                   if (tv_result.getText().toString().equals("管理")) {
+                  if (tv_result.getText().toString().equals("管理")) {
                         tv_result.setText(getString(R.string.face_verifying));
                         tv_result.setTextColor(getResources().getColor(R.color.blue_10));
                     }
@@ -277,6 +294,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             public void run() {
                 faceRecBoxView.sendFaceData(faceDetectData);
                 if (faceDetectData == null) {
+                    tv_result.setTextColor(getResources().getColor(R.color.blue_10));
                     tv_result.setText("管理");
 
                 }
@@ -333,7 +351,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                     @Override
                     public void run() {
                         tv_result.setText(getString(R.string.face_verify_fail));
-                        tv_result.setTextColor(getResources().getColor(R.color.red_2));
+                       tv_result.setTextColor(getResources().getColor(R.color.red_2));
 
                     }
                 });
@@ -394,9 +412,13 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 @Override
                 public void fingerVerifyResult(int res, String msg, int score, int index, Long fingerId, byte[] updateFinger) {
                     if (res==1){
-                        ToastUtils.showSingleToast(V3FaceRecActivity.this,"指静脉验证成功");
+                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this, "身份证验证成功",null);
+
                     }else {
-                        ToastUtils.showSingleToast(V3FaceRecActivity.this,"指静脉验证失败");
+                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this
+                                , "指静脉验证失败"
+                                , ActivityCompat.getDrawable(V3FaceRecActivity.this
+                                        , R.drawable.cry_icon));
                     }
                 }
             }, new OnStartServiceListener() {
@@ -412,20 +434,23 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            ToastUtils.showSquareTvToast(this, "身份证验证失败");
+            ToastUtils.showSquareImgToast(V3FaceRecActivity.this
+                    , "身份证验证失败"
+                    , ActivityCompat.getDrawable(V3FaceRecActivity.this
+                            , R.drawable.cry_icon));
         } else {
             Log.d("999",idCard.getName());
-            ToastUtils.showSquareTvToast(this, "身份证验证成功");
+            ToastUtils.showSquareImgToast(this, "身份证验证成功",null);
         }
     }
 
     @Override
     public void onRegisterResult(boolean result, IdCard idCard) {
        if (result){
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_fail));
+           ToastUtils.showSquareTvToast(this, getString(R.string.face_register_success));
            Log.d("999",idCard.getName());
        }else {
-           ToastUtils.showSquareTvToast(this, getString(R.string.face_verify_success));
+           ToastUtils.showSquareTvToast(this, getString(R.string.face_register_fail));
        }
     }
 

@@ -199,8 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/verifyMethodTitle"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_centerHorizontal="true"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -243,9 +242,9 @@
                     android:id="@+id/registerBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_45"
                     android:layout_marginStart="@dimen/dp_45"
                     android:layout_marginTop="@dimen/dp_35"
-                    android:layout_marginEnd="@dimen/dp_45"
                     android:background="@drawable/input_pw_bg_select"
                     android:gravity="center"
                     android:padding="@dimen/dp_5"

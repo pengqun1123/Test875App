@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 
 import com.baselibrary.constant.AppConstant;
@@ -21,6 +22,7 @@ import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.face.activity.V3FaceRecActivity;
 import com.finger.service.FingerService;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
@@ -31,6 +33,7 @@ import com.testApp.fragment.UserManageFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ManagerActivity extends BaseActivity {
 
@@ -79,24 +82,37 @@ public class ManagerActivity extends BaseActivity {
 
     }
 
+    //跳转验证页面
+    private void skipVerify() {
+        //跳转人脸识别的界面(只要开启了人脸)
+        if (SPUtil.getOpenFace()) {
+            //回到人脸识别页面
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,fingerList);
+            Logger.d("SplashActivity 2 指静脉模板数量：" + fingerList.size());
+            //跳转人脸识别页面
+            SkipActivityUtil.skipDataActivity(ManagerActivity.this, V3FaceRecActivity.class,bundle);
+         //   ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
+            finish();
+        } else {
+            finish();
+        }
+    }
+
+
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backPreviousBtn:
-                if (SPUtil.getOpenFace()) {
-                    //回到人脸识别页面
-
-                } else {
-                    if (userRegisterFragment != null) {
-                        Boolean save = userRegisterFragment.checkRegisterContent();
-                        if (save) {
-                            userRegisterFragment.registerUser();
-                        } else {
-                            finish();
-                        }
-                    } else {
-                        finish();
+                if (userRegisterFragment != null) {
+                    Boolean save = userRegisterFragment.checkRegisterContent();
+                    if (save) {
+                        userRegisterFragment.registerUser();
+                    }else {
+                        skipVerify();
                     }
+                } else {
+                    skipVerify();
                 }
                 break;
         }

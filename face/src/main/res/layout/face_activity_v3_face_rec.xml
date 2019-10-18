@@ -36,45 +36,57 @@
                 android:layout_height="match_parent" />
 
             <FrameLayout
-                android:id="@+id/face_animator"
-                android:layout_gravity="bottom|right"
+                android:id="@+id/fl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-              >
+                 android:layout_gravity="bottom|right"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_20">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/iv_sight"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
+                    android:id="@+id/gear1"
+                    android:layout_width="@dimen/dp_180"
+                    android:layout_height="@dimen/dp_180"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/face_circle"
-                    tools:ignore="VectorDrawableCompat" />
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_ban_circle" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/iv_in"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
+                    android:id="@+id/gear2"
+                    android:layout_width="@dimen/dp_175"
+                    android:layout_height="@dimen/dp_175"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/face_cogwheel"
-                    tools:ignore="VectorDrawableCompat" />
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_gear1" />
 
-                <TextView
-                    android:id="@+id/tv_result"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/gear3"
+                    android:layout_width="@dimen/dp_118"
+                    android:layout_height="@dimen/dp_118"
                     android:layout_gravity="center"
-                    android:text="@string/face_verify_success"
-                    android:textColor="@color/blue_6"
-                    android:textSize="@dimen/dp_18"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_ban_circle2" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/gear4"
+                    android:layout_width="@dimen/dp_90"
+                    android:layout_height="@dimen/dp_90"
+                    android:layout_gravity="center"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_gear6" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/homeMenu"
+                    android:layout_width="@dimen/dp_95"
+                    android:layout_height="@dimen/dp_95"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_transparent"
+                    android:gravity="center"
+                    android:text="管理"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_15"
+                    android:textStyle="bold" />
             </FrameLayout>
-
         </FrameLayout>
-
     </FrameLayout>
 </LinearLayout>

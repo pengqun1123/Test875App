@@ -22,12 +22,14 @@ import com.baselibrary.callBack.FaceInitListener;
 import com.baselibrary.callBack.PermissionResultCallBack;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.face.activity.V3FaceRecActivity;
 import com.face.callback.FaceListener;
 import com.face.service.FaceService;
 import com.finger.callBack.AllFingerData;
@@ -80,7 +82,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-//        clearData();
+       //clearData();
 
         checkMyPermissions(per);
 
@@ -96,6 +98,7 @@ public class SplashActivity extends BaseActivity {
         DeleteAllData.getInstance(this).deleteAllUser(dbUtil);
         DeleteAllData.getInstance(this).deleteAllFinger(dbUtil);
         DeleteAllData.getInstance(this).deleteAllPw(dbUtil);
+        DeleteAllData.getInstance(this).deleteAllByClass(dbUtil, Face.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -293,7 +296,15 @@ public class SplashActivity extends BaseActivity {
         FaceService.getInstance().initFace(code, this, new FaceInitListener() {
             @Override
             public void initFail(String error) {
-                ToastUtils.showSingleToast(SplashActivity.this, error);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.showSquareImgToast(SplashActivity.this
+                                , error
+                                , ActivityCompat.getDrawable(SplashActivity.this
+                                        , com.face.R.drawable.cry_icon));
+                   }
+                });
             }
 
             @Override
@@ -302,6 +313,14 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void onLoadDataListener() {
                         Logger.d("===初始化    人脸初始化成功:");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showSquareImgToast(SplashActivity.this
+                                        , "人脸初始化成功"
+                                        , null);
+                            }
+                        });
                         SplashActivity.this.faceLoadOver = true;
                         if (SplashActivity.this.fingerLoadOver) {
                             skipVerifyActivity(SplashActivity.this.allFingerDataList);

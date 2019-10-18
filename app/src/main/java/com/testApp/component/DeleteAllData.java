@@ -105,4 +105,28 @@ public class DeleteAllData {
             }
         }).deleteAsyncAll(Finger6.class);
     }
+
+    public   <T> void  deleteAllByClass(DBUtil dbUtil,Class<T> cls) {
+        dbUtil.setDbCallBack(new DbCallBack<T>() {
+            @Override
+            public void onSuccess(T result) {
+                ToastUtils.showSingleToast(mActivity, "删除成功");
+            }
+
+            @Override
+            public void onSuccess(List<T> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).deleteAsyncAll(cls);
+    }
 }

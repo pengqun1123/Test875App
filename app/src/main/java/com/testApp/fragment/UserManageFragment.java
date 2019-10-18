@@ -420,6 +420,7 @@ public class UserManageFragment extends BaseFragment
                                 ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                                         R.drawable.cry_icon));
                         staffNoEt.getText().clear();
+                        return;
                     }
                 }
             }
@@ -458,6 +459,13 @@ public class UserManageFragment extends BaseFragment
         if (fg6 != null) {
             newUser.setFinger6Id(fg6.getUId());
             newUser.setFinger6(fg6);
+        }
+        if (idCard!=null){
+            newUser.setCardId(idCard.getUId());
+        }
+
+        if (face!=null){
+            newUser.setFaceId(face.getUId());
         }
         insertUser(newUser);
     }
@@ -545,10 +553,17 @@ public class UserManageFragment extends BaseFragment
 
                     @Override
                     public void onRegisterResult(boolean result, IdCard idCard) {
+                        idCardService.destroyIdCard();
                         if (result) {
+                            ToastUtils.showSquareImgToast(getActivity(), getString(com.id_card.R.string.id_card_register_success),
+                                    null);
                             //可插入User表的数据
                             UserManageFragment.this.idCard = idCard;
                             registerBtn.setVisibility(View.VISIBLE);
+
+                        }else {
+                            ToastUtils.showSquareImgToast(getActivity(), getString(com.id_card.R.string.id_card_register_fail),
+                                    ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
                         }
                     }
                 }, finalIdCardId);
@@ -558,9 +573,16 @@ public class UserManageFragment extends BaseFragment
     // 普通事件的处理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(Face face) {
-        UserManageFragment.this.face = face;
-        Log.d("777",face.getImagePath());
-        registerBtn.setVisibility(View.VISIBLE);
+        if (face!=null){
+            ToastUtils.showSquareImgToast(getActivity(), getString(com.face.R.string.face_register_success),
+                    null);
+            UserManageFragment.this.face = face;
+            Log.d("777",face.getImagePath());
+            registerBtn.setVisibility(View.VISIBLE);
+        }else {
+            ToastUtils.showSquareImgToast(getActivity(), getString(com.face.R.string.face_register_fail),
+                    ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
+        }
 
     }
 
@@ -791,7 +813,12 @@ public class UserManageFragment extends BaseFragment
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-
+            //回到人脸识别页面
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,finger6ArrayList);
+            Logger.d("SplashActivity 2 指静脉模板数量：" + finger6ArrayList.size());
+            //跳转人脸识别页面
+            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
         } else {
             //跳转默认的识别页面(没有开启人脸)
             SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);

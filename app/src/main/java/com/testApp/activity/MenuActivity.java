@@ -12,12 +12,15 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.face.activity.V3FaceRecActivity;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.callBack.PositionBtnClickListener;
@@ -60,7 +63,17 @@ public class MenuActivity extends BaseActivity {
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backBtn:
+                if (SPUtil.getOpenFace()){
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,fingerDataList);
+                    Logger.d("SplashActivity 2 指静脉模板数量：" + fingerDataList.size());
+                    //跳转人脸识别页面
+                    SkipActivityUtil.skipDataActivity(MenuActivity.this, V3FaceRecActivity.class,bundle);
+                  //  ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
+                    finish();
+                }
                 finish();
+
                 break;
             case R.id.manageMenu:
                 AskDialog.verifyManagerPwd(this, new AskDialog.ManagerPwdVerifyCallBack() {
@@ -77,6 +90,7 @@ public class MenuActivity extends BaseActivity {
                                 SkipActivityUtil.skipActivity(MenuActivity.this,
                                         ManagerActivity.class);
                             }
+                            finish();
                         } else {
                             ToastUtils.showSquareImgToast(MenuActivity.this,
                                     getString(R.string.manager_pwd_verify_fail),
