@@ -39,13 +39,8 @@ public class FingerServiceUtil {
     }
 
     private Activity activity;
-    private ArrayList<Finger6> finger6ArrayList;
     private OnStartServiceListener startServiceListener;
     private FingerVerifyResultListener fingerVerifyResultListener;
-
-    public void setFingerData(ArrayList<Finger6> fingerList/*byte[] fingerData, int fingerDataSize*/) {
-        this.finger6ArrayList = fingerList;
-    }
 
     public void setFingerVerifyResult(FingerVerifyResultListener verifyResultListener) {
         this.fingerVerifyResultListener = verifyResultListener;
@@ -150,11 +145,6 @@ public class FingerServiceUtil {
                 message.what = FingerConstant.SEND_CODE;
                 message.obj = activity;
                 message.replyTo = fingerUtilMessenger;
-                Bundle bundle = new Bundle();
-//                bundle.putByteArray(AppConstant.FINGER_DATA, fingerData);
-//                bundle.putInt(AppConstant.FINGER_SIZE, fingerDataSize);
-                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, finger6ArrayList);
-                message.setData(bundle);
                 fingerServiceMessenger.send(message);
             } catch (RemoteException e) {
                 e.printStackTrace();

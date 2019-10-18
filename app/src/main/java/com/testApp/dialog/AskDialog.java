@@ -301,6 +301,7 @@ public class AskDialog {
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
+        dismissBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         final String[] pw1 = new String[2];
@@ -355,20 +356,17 @@ public class AskDialog {
                 pw1[0] = null;
                 pw1[1] = null;
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                callBack.positiveCallBack(0, null);
                 dialog.dismiss();
-                callBack.positiveCallBack();
             }
         });
         cancelBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
                 if (pw1[0].equals(pw1[1])) {
-                    checkManagerPw(activity, pw1[0]);
+                    checkManagerPw(activity, pw1[0], callBack);
                 }
                 SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
-                if (callBack != null) {
-                    callBack.positiveCallBack();
-                }
                 SPUtil.putOpenFace(false);
                 dialog.dismiss();
             }
@@ -377,7 +375,7 @@ public class AskDialog {
             @Override
             public void onNoDoubleClick(View v) {
                 if (pw1[0].equals(pw1[1])) {
-                    checkManagerPw(activity, pw1[0]);
+                    checkManagerPw(activity, pw1[0], callBack);
                 }
                 callBack.activationCodeCallBack(AppConstant.FACE_ACTIVITY_CODE);
                 openFaceAsk.setVisibility(View.GONE);
@@ -389,7 +387,7 @@ public class AskDialog {
     }
 
     //最多添加10位管理员
-    private static void checkManagerPw(Activity activity, String pw) {
+    private static void checkManagerPw(Activity activity, String pw, PositiveCallBack callBack) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         QueryBuilder<Manager> queryBuilder = dbUtil.getQueryBuilder(Manager.class);
         dbUtil.setDbCallBack(new DbCallBack<Manager>() {
@@ -412,12 +410,12 @@ public class AskDialog {
                             break;
                         } else {
                             if (i == result.size() - 1) {
-                                saveManagerPwdToDB(activity, pw);
+                                saveManagerPwdToDB(activity, pw, callBack);
                             }
                         }
                     }
                 } else {
-                    saveManagerPwdToDB(activity, pw);
+                    saveManagerPwdToDB(activity, pw, callBack);
                 }
             }
 
@@ -434,7 +432,7 @@ public class AskDialog {
     }
 
     //将管理员密码存储到数据库
-    private static void saveManagerPwdToDB(Activity activity, String managerPw) {
+    private static void saveManagerPwdToDB(Activity activity, String managerPw, PositiveCallBack callBack) {
         Manager manager = new Manager();
         manager.setManage_pw(managerPw);
         DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -443,6 +441,9 @@ public class AskDialog {
                 activity.getString(R.string.manager_add_success),
                 ActivityCompat.getDrawable(activity, R.drawable.ic_emoje));
         putHasManagerPwd(true);
+        if (callBack != null) {
+            callBack.positiveCallBack(1, manager);
+        }
         Logger.d("管理员密码存储成功:");
     }
 
@@ -488,7 +489,7 @@ public class AskDialog {
     }
 
     public interface PositiveCallBack {
-        void positiveCallBack();
+        void positiveCallBack(int flag, Manager manager);
 
         void activationCodeCallBack(String code);
     }

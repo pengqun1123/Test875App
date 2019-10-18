@@ -4,10 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -16,21 +13,16 @@ import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.constant.AppConstant;
-import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.face.activity.V3FaceRecActivity;
-import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
-import java.util.ArrayList;
 @Route(path = ARouterConstant.MENU_ACTIVITY)
 public class MenuActivity extends BaseActivity {
-
-    private ArrayList<Finger6> fingerDataList;
 
     @Override
     protected Integer contentView() {
@@ -51,11 +43,6 @@ public class MenuActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            fingerDataList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-        }
         fingerVerifyResult();
     }
 
@@ -63,12 +50,9 @@ public class MenuActivity extends BaseActivity {
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backBtn:
-                if (SPUtil.getOpenFace()){
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,fingerDataList);
-                    Logger.d("SplashActivity 2 指静脉模板数量：" + fingerDataList.size());
-         //           //跳转人脸识别页面
-                    SkipActivityUtil.skipDataActivity(MenuActivity.this, V3FaceRecActivity.class, bundle);
+                if (SPUtil.getOpenFace()) {
+                    //跳转人脸识别页面
+                    SkipActivityUtil.skipActivity(MenuActivity.this, V3FaceRecActivity.class);
                 }
                 finish();
                 break;
@@ -77,16 +61,8 @@ public class MenuActivity extends BaseActivity {
                     @Override
                     public void managerPwdVerifyCallBack(Boolean isVerify) {
                         if (isVerify) {
-                            if (fingerDataList != null) {
-                                Bundle bundle = new Bundle();
-                                Logger.d("MenuActivity 指静脉数据的数量：" + fingerDataList.size());
-                                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
-                                SkipActivityUtil.skipDataActivity(MenuActivity.this,
-                                        ManagerActivity.class, bundle);
-                            } else {
-                                SkipActivityUtil.skipActivity(MenuActivity.this,
-                                        ManagerActivity.class);
-                            }
+                            SkipActivityUtil.skipActivity(MenuActivity.this,
+                                    ManagerActivity.class);
                             finish();
                         } else {
                             ToastUtils.showSquareImgToast(MenuActivity.this,
@@ -105,8 +81,8 @@ public class MenuActivity extends BaseActivity {
                             BaseApplication.AP.play_inputDownGently();
                         } else if (flag == AppConstant.FACE_MODEL) {
                             BaseApplication.AP.playFaceScreen();
-                                ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
-                                finish();
+                            ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
+                            finish();
                         } else if (flag == AppConstant.IDCARD_MODEL) {
                             BaseApplication.AP.play_rfid_card();
                         } else if (flag == AppConstant.PW_MODEL) {

@@ -14,17 +14,14 @@ import android.os.RemoteException;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.ToastUtils;
 import com.finger.constant.FingerConstant;
 import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
-import com.sd.tgfinger.CallBack.CancelImgCallBack;
-import com.sd.tgfinger.CallBack.Verify1_NCallBack;
-import com.sd.tgfinger.pojos.Msg;
 import com.sd.tgfinger.tgApi.TGBApi;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,7 +32,6 @@ public class FingerService extends Service {
 
     private Timer timer;
     private MyTask myTask;
-    private ArrayList<Finger6> finger6ArrayList;
     private byte[] fingerData;
     private int fingerDataSize;
 
@@ -59,9 +55,7 @@ public class FingerService extends Service {
                 activity = (Activity) msg.obj;
                 fingerUtilMessenger = msg.replyTo;
                 sendMsg1();
-                Bundle data = msg.getData();
-                finger6ArrayList = data.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-                updateFingerArrayToByte(finger6ArrayList);
+                updateFingerArrayToByte();
                 taskSchedule();
             } else if (msg.what == FingerConstant.PAUSE_VERIFY_CODE) {
                 pauseFingerVerify();
@@ -110,7 +104,8 @@ public class FingerService extends Service {
         }
     }
 
-    private void updateFingerArrayToByte(ArrayList<Finger6> finger6ArrayList) {
+    private void updateFingerArrayToByte() {
+        ArrayList<Finger6> finger6ArrayList = FingerListManager.getInstance().getFingerData();
         if (finger6ArrayList != null && finger6ArrayList.size() > 0) {
             int fingerSize = finger6ArrayList.size();
             byte[] fingerData = new byte[AppConstant.FINGER6_DATA_SIZE * fingerSize];
@@ -125,9 +120,10 @@ public class FingerService extends Service {
     }
 
     private void deleteFinger(int position) {
+        ArrayList<Finger6> finger6ArrayList = FingerListManager.getInstance().getFingerData();
         if (finger6ArrayList != null && finger6ArrayList.size() > 0) {
             finger6ArrayList.remove(position);
-            updateFingerArrayToByte(finger6ArrayList);
+            updateFingerArrayToByte();
         }
     }
 
@@ -169,12 +165,9 @@ public class FingerService extends Service {
     private void pauseFingerVerify() {
         isCancelVerify = true;
         if (activity != null) {
-            TGBApi.getTGAPI().cancelRegisterGetImg(activity, new CancelImgCallBack() {
-                @Override
-                public void cancelImgCallBack(Msg msg) {
-                    if (msg.getResult() == 1) {
-                        Logger.d("取消抓图");
-                    }
+            TGBApi.getTGAPI().cancelRegisterGetImg(activity, msg -> {
+                if (msg.getResult() == 1) {
+                    Logger.d("取消抓图");
                 }
             });
             FingerService.this.isLoop = false;
@@ -190,19 +183,17 @@ public class FingerService extends Service {
                 Logger.d("执行指静脉验证: fingerSize:" + fingerDataSize);
                 FingerService.this.isLoop = true;
                 FingerApi.getInstance().verifyN(activity, fingerData, fingerDataSize, false,
-                        new Verify1_NCallBack() {
-                            @Override
-                            public void verify1_NCallBack(Msg msg) {
-                                if (fingerVerifyResultListener != null) {
-                                    Integer index = msg.getIndex();
-                                    Long fingerId = finger6ArrayList.get(index).getUId();
-                                    fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
-                                            msg.getTip(), msg.getScore(), index,
-                                            fingerId, msg.getFingerData());
-                                }
-                                ToastUtils.showSingleToast(activity, msg.getTip());
-                                Logger.d("指静脉验证:" + msg.getTip());
+                        msg -> {
+                            if (fingerVerifyResultListener != null) {
+                                Integer index = msg.getIndex();
+                                Long fingerId = FingerListManager.getInstance()
+                                        .getFingerData().get(index).getUId();
+                                fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
+                                        msg.getTip(), msg.getScore(), index,
+                                        fingerId, msg.getFingerData());
                             }
+                            ToastUtils.showSingleToast(activity, msg.getTip());
+                            Logger.d("指静脉验证:" + msg.getTip());
                         });
             }
         }
@@ -219,8 +210,6 @@ public class FingerService extends Service {
             timer = null;
         }
     }
-
-    private List<Finger6> result;
 
 
 }

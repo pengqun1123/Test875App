@@ -31,6 +31,7 @@ import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.PwFactory;
+import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
@@ -64,7 +65,6 @@ import java.util.Objects;
  */
 public class UserRegisterFragment extends BaseFragment {
 
-    private ArrayList<Finger6> fingerDataList;
     private List<String> workNoList;//用户工号List
     private AppCompatEditText nameEt, ageEt, phoneEt, companyNameEt, departmentEt, staffNoEt;
     private AppCompatTextView fingerModel, faceModel, idCardModel, pwModel;
@@ -78,12 +78,10 @@ public class UserRegisterFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static UserRegisterFragment instance(ArrayList<Finger6> fingerDataList,
-                                                RegisterUserCallBack callBack) {
+    public static UserRegisterFragment instance(RegisterUserCallBack callBack) {
         UserRegisterFragment userRegisterFragment = new UserRegisterFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("userListener", callBack);
-        bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
         userRegisterFragment.setArguments(bundle);
         return userRegisterFragment;
     }
@@ -122,10 +120,8 @@ public class UserRegisterFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            fingerDataList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
             registerUserCallBack = bundle.getParcelable("userListener");
-            fingerListToFingerByte(fingerDataList);
-            Logger.d("UserManagerFragment 1 指静脉模板数量：" + fingerDataList.size());
+            fingerListToFingerByte();
         }
         //查询所有用户的工号
 
@@ -387,15 +383,14 @@ public class UserRegisterFragment extends BaseFragment {
 
     /**
      * 指静脉list转成byte[]
-     *
-     * @param fingerList 指静脉list
      */
-    private void fingerListToFingerByte(ArrayList<Finger6> fingerList) {
-        if (fingerList != null && fingerList.size() > 0) {
-            int fingerSize = fingerList.size();
+    private void fingerListToFingerByte() {
+        ArrayList<Finger6> finger6ArrayList = FingerListManager.getInstance().getFingerData();
+        if (finger6ArrayList != null && finger6ArrayList.size() > 0) {
+            int fingerSize = finger6ArrayList.size();
             byte[] fingerData = new byte[AppConstant.FINGER6_DATA_SIZE * fingerSize];
             for (int i = 0; i < fingerSize; i++) {
-                byte[] finger6Feature = fingerList.get(i).getFinger6Feature();
+                byte[] finger6Feature = finger6ArrayList.get(i).getFinger6Feature();
                 System.arraycopy(finger6Feature, 0, fingerData,
                         AppConstant.FINGER6_DATA_SIZE * i, AppConstant.FINGER6_DATA_SIZE);
             }
@@ -556,18 +551,11 @@ public class UserRegisterFragment extends BaseFragment {
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-            //回到人脸识别页面
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
-            Logger.d("SplashActivity 2 指静脉模板数量：" + fingerDataList.size());
             //跳转人脸识别页面
-            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY, bundle);
+            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
         } else {
             //跳转默认的识别页面(没有开启人脸)
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerDataList);
-            Logger.d("SplashActivity 2 指静脉模板数量：" + fingerDataList.size());
-            SkipActivityUtil.skipDataActivity(getActivity(), DefaultVerifyActivity.class, bundle);
+            SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);
         }
         Objects.requireNonNull(getActivity()).finish();
     }

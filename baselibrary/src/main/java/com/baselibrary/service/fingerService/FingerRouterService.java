@@ -10,9 +10,6 @@ import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
 import com.baselibrary.callBack.OnStartServiceListener;
-import com.baselibrary.pojo.Finger6;
-
-import java.util.ArrayList;
 
 /**
  * Created By pq
@@ -36,8 +33,6 @@ public interface FingerRouterService extends IProvider {
     void unbindDevService(Context context);
 
     void verifyGetFingerImg(OnGetVerifyFingerImgListener listener);
-
-    void setFingerData(ArrayList<Finger6> fingerList);
 
     void pauseFingerVerify();
 

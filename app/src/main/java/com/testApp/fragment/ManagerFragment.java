@@ -28,6 +28,8 @@ import java.util.Objects;
  */
 public class ManagerFragment extends BaseFragment {
 
+    private ManagerAdapter managerAdapter;
+
     public static ManagerFragment instance() {
         ManagerFragment managerFragment = new ManagerFragment();
         Bundle bundle = new Bundle();
@@ -58,7 +60,7 @@ public class ManagerFragment extends BaseFragment {
                 OrientationHelper.VERTICAL, false);
         managerRv.setLayoutManager(mLayoutManager);
         managerRv.setItemAnimator(new DefaultItemAnimator());
-        ManagerAdapter managerAdapter = new ManagerAdapter(callBack);
+        managerAdapter = new ManagerAdapter(callBack);
         managerRv.setAdapter(managerAdapter);
         queryAllManagerData(managerAdapter, noData, showAllData);
     }
@@ -75,9 +77,12 @@ public class ManagerFragment extends BaseFragment {
                 //新增管理员
                 AskDialog.showManagerDialog(Objects.requireNonNull(getActivity()),
                         new AskDialog.PositiveCallBack() {
-                            @Override
-                            public void positiveCallBack() {
 
+                            @Override
+                            public void positiveCallBack(int flag, Manager manager) {
+                                if (flag == 1 && manager != null) {
+                                    managerAdapter.addData(manager);
+                                }
                             }
 
                             @Override

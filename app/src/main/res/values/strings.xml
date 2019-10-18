@@ -123,6 +123,7 @@
     <string name="manage_no_had">该管理员密码已存在,请重新输入</string>
     <string name="wellcom_tip">欢迎光临!</string>
     <string name="user_company">用户所在公司</string>
+    <string name="user_search">用户搜索</string>
 
 
 </resources>

@@ -23,7 +23,7 @@ public final class AppConstant {
     //指静脉的数据
     public static final String FINGER_DATA = "finger_data";
     public static final String FACE_ID = "faceId";
-    public static final String FINGER_DATA_LIST = "finger_list";
+    //    public static final String FINGER_DATA_LIST = "finger_list";
     public static final String FINGER_SIZE = "finger_size";
     public static final String ADD_FINGER = "add_finger";
     public static final String DELETE_FINGER = "delete_finger";
@@ -31,11 +31,11 @@ public final class AppConstant {
     public static final String VERIFY_RESULT_TYPE = "verify_type";
 
     //视频激活码
-    public static final String FACE_ACTIVITY_CODE ="3J7D-BB84-JD8E-UA96"
-            //"3J7D-BB84-JD8E-UA9"
-            //3J7D-BB84-JD8E-UA96
-            /*TWAB-UI9E-AO90-7X8F*/;
-            //CG8A-HJ92-7W8E-EJ8F
+    public static final String FACE_ACTIVITY_CODE =
+//            "3J7D-BB84-JD8E-UA96";
+            "CG8A-HJ92-7W8E-EJ8F";
+    //3J7D-BB84-JD8E-UA96
+    /*TWAB-UI9E-AO90-7X8F*/;
 
     //注册时标记必须注册的验证方式
     public static final String PW_VERIFY_MODEL = "pw_verify";

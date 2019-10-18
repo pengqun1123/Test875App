@@ -37,7 +37,6 @@ import java.util.List;
 public class ManagerActivity extends BaseActivity implements RegisterUserCallBack {
 
     private UserRegisterFragment userRegisterFragment;
-    private ArrayList<Finger6> fingerList;
     private UserManageFragment manageFragment;
 
     @Override
@@ -68,29 +67,17 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-            Logger.d("ManagerActivity 1 指静脉模板数量：" + fingerList.size());
-        }
     }
 
     //跳转验证页面
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-            //回到人脸识别页面
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-            Logger.d("SplashActivity 2 指静脉模板数量：" + fingerList.size());
             //跳转人脸识别页面
-            SkipActivityUtil.skipDataActivity(ManagerActivity.this, V3FaceRecActivity.class, bundle);
+            SkipActivityUtil.skipActivity(ManagerActivity.this, V3FaceRecActivity.class);
             finish();
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-            SkipActivityUtil.skipDataActivity(ManagerActivity.this, DefaultVerifyActivity.class, bundle);
+            SkipActivityUtil.skipActivity(ManagerActivity.this, DefaultVerifyActivity.class);
         }
     }
 
@@ -99,6 +86,7 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backPreviousBtn:
+                // TODO: 2019/10/18 删除不保存的信息
                 if (userRegisterFragment != null) {
                     userRegisterFragment.checkRegisterContent(isSave -> skipVerify());
                 }
@@ -130,9 +118,8 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
         if (fragments.size() > 0) {
             fragments.clear();
         }
-        Logger.d("managerFragment 2 指静脉模板数量：" + fingerList.size());
         manageFragment = UserManageFragment.instance();
-        userRegisterFragment = UserRegisterFragment.instance(fingerList, this);
+        userRegisterFragment = UserRegisterFragment.instance(this);
         fragments.add(manageFragment);
         fragments.add(userRegisterFragment);
         fragments.add(ManagerFragment.instance());

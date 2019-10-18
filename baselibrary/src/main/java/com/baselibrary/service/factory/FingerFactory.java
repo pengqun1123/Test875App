@@ -69,11 +69,11 @@ public class FingerFactory {
         }
     }
 
-    public void setFingerData(@NonNull ArrayList<Finger6> fingerList) {
+  /*  public void setFingerData(@NonNull ArrayList<Finger6> fingerList) {
         if (fingerRouterService != null && fingerList.size() > 0) {
             fingerRouterService.setFingerData(fingerList);
         }
-    }
+    }*/
 
     public void verifyGetFingerImg(OnGetVerifyFingerImgListener listener) {
         if (fingerRouterService != null) {

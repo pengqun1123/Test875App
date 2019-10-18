@@ -35,6 +35,7 @@ import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.FingerFactory;
+import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.GetUIDimens;
 import com.baselibrary.util.ToastUtils;
 import com.face.R;
@@ -106,7 +107,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         faceRecBoxView.bringToFront();
         tv_result = bindViewWithClick(R.id.homeMenu, true);
 
-
+        ArrayList<Finger6> fingerData = FingerListManager.getInstance().getFingerData();
+        Logger.d(" 指静脉数据：" + fingerData.size());
        /* iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
         iv_sight = ((AppCompatImageView) findViewById(R.id.iv_sight));
         tv_result = ((TextView) findViewById(R.id.tv_result));*/
@@ -212,7 +214,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == ACTION_REQUEST_PERMISSIONS) {
             boolean isAllGranted = true;
@@ -407,7 +410,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
     }
 
-    private  Boolean isStartService = false;
+    private Boolean isStartService = false;
 
     @Override
     public void fingerDevStatusConnect(int res, String msg) {

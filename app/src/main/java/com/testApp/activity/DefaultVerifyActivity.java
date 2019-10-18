@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -20,7 +18,6 @@ import com.baselibrary.base.BaseActivity;
 import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
-import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.util.AnimatorUtils;
@@ -29,24 +26,17 @@ import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
 import com.finger.callBack.FingerDevStatusCallBack;
-import com.finger.constant.FingerConstant;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
-import com.pw.pwApi.PwApi;
 
 import com.testApp.R;
-import com.testApp.callBack.PositionBtnClickListener;
-import com.testApp.callBack.UserCenterFingerVerifyListener;
-import com.testApp.dialog.AskDialog;
-
 import java.text.MessageFormat;
-import java.util.ArrayList;
+
 
 public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
         CardInfoListener, FingerVerifyResultListener {
 
-    private ArrayList<Finger6> fingerList;
     private IdCardService idCardService;
     private AppCompatImageView gear1, gear2, gear3, gear4;
     private ObjectAnimator gear1Anim, gear2Anim, gear3Anim, gear4Anim;
@@ -91,15 +81,6 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     protected void initData() {
         //接收指静脉设备的连接状态
         FingerApi.getInstance().receiveFingerDevConnectStatus(this);
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-                Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerList.size());
-                FingerServiceUtil.getInstance().setFingerData(fingerList);
-            }
-        }
         idCardService = ARouter.getInstance().navigation(IdCardService.class);
         new Thread(new Runnable() {
             @Override
@@ -189,13 +170,8 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
-//            case R.id.pwVerify:
-//                PwApi.pwInputVerify(this);
-//                break;
             case R.id.homeMenu:
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-                SkipActivityUtil.skipDataActivity(this, MenuActivity.class, bundle);
+                SkipActivityUtil.skipActivity(this, MenuActivity.class);
                 break;
 
         }

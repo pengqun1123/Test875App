@@ -1,17 +1,17 @@
 package com.testApp.activity;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.support.v7.widget.Toolbar;
+
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
@@ -35,7 +35,6 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
 
-    private RecyclerView userRv;
     private UserManageAdapter userManageAdapter;
     private AppCompatEditText search_edit;
 
@@ -48,9 +47,10 @@ public class SearchActivity extends BaseActivity {
     protected void initView() {
         bindViewWithClick(R.id.searchView, false);
         search_edit = bindViewWithClick(R.id.searchUserEt, false);
-        userRv = bindViewWithClick(R.id.rv, false);
+        RecyclerView userRv = bindViewWithClick(R.id.rv, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         userRv.setHasFixedSize(true);
+        noData.setVisibility(View.VISIBLE);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
                 OrientationHelper.VERTICAL, false);
         userRv.setLayoutManager(mLayoutManager);
@@ -58,6 +58,13 @@ public class SearchActivity extends BaseActivity {
         userManageAdapter = new UserManageAdapter();
         userRv.setAdapter(userManageAdapter);
 
+        search_edit.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
+                SoftInputKeyboardUtils.hiddenKeyboard(search_edit);
+                search(search_edit.getText().toString());
+            }
+            return false;
+        });
     }
 
     @Override
@@ -67,53 +74,56 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i==EditorInfo.IME_ACTION_SEARCH){
-                    SoftInputKeyboardUtils.hiddenKeyboard(search_edit);
-                    search(search_edit.getText().toString());
-                }
-                return false;
-            }
-        });
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        Toolbar toolBar = bindViewWithClick(R.id.toolbar, false);
+        if (toolBar == null) {
+            return;
+        }
+        TextView toolbarTitle = bindViewWithClick(R.id.toolbar_title, false);
+        AppCompatImageView backBtn = bindViewWithClick(R.id.backBtn, true);
+        toolbarTitle.setVisibility(View.VISIBLE);
+        backBtn.setVisibility(View.VISIBLE);
+        toolbarTitle.setText(getString(R.string.user_search));
     }
 
     @Override
     protected void onViewClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.backBtn:
+                finish();
+                break;
+        }
     }
 
-    private void search(String condition ){
+    private void search(String condition) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
-         dbUtil.setDbCallBack(new DbCallBack<User>() {
-             @Override
-             public void onSuccess(User result) {
+        dbUtil.setDbCallBack(new DbCallBack<User>() {
+            @Override
+            public void onSuccess(User result) {
 
-             }
+            }
 
-             @Override
-             public void onSuccess(List<User> result) {
-                 if (result.size()==0){
-                     ToastUtils.showSingleToast(SearchActivity.this,"没有数据");
-                     return;
-                 }
-                 userManageAdapter.setData(result);
-             }
+            @Override
+            public void onSuccess(List<User> result) {
+                if (result.size() == 0) {
+                    ToastUtils.showSingleToast(SearchActivity.this, "没有数据");
+                    return;
+                }
+                userManageAdapter.setData(result);
+            }
 
-             @Override
-             public void onFailed() {
+            @Override
+            public void onFailed() {
 
-             }
+            }
 
-             @Override
-             public void onNotification(boolean result) {
+            @Override
+            public void onNotification(boolean result) {
 
-             }
-         });
+            }
+        });
 
-        dbUtil.queryAsync(User.class,UserDao.Properties.WorkNum.eq(condition), UserDao.Properties.Name.eq(condition));
+        dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition), UserDao.Properties.Name.eq(condition));
     }
 
 }

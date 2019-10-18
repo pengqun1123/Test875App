@@ -34,9 +34,8 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(contentView(), container, false);
-
-        initView();
         initData();
+        initView();
         return mView;
     }
 

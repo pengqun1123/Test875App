@@ -92,11 +92,6 @@ public class FingerRouter implements FingerRouterService {
     }
 
     @Override
-    public void setFingerData(ArrayList<Finger6> fingerList) {
-        FingerServiceUtil.getInstance().setFingerData(fingerList);
-    }
-
-    @Override
     public void pauseFingerVerify() {
         FingerServiceUtil.getInstance().pauseFingerVerify();
     }

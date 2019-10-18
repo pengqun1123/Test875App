@@ -1,11 +1,8 @@
 package com.face.activity;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,27 +10,14 @@ import android.widget.FrameLayout;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
-import com.baselibrary.constant.AppConstant;
-import com.baselibrary.pojo.Finger6;
-import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.AnimatorUtils;
-import com.baselibrary.util.FingerManager;
-import com.baselibrary.util.SkipActivityUtil;
-import com.baselibrary.util.ToastUtils;
 import com.face.R;
-import com.face.service.FaceService;
-import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wangyu on 2019/10/15.
  */
 
 public abstract  class FaceBaseActivity extends BaseActivity{
-
-    protected ArrayList<Finger6> fingerList;
 
     protected AppCompatImageView gear1, gear2, gear3, gear4;
 
@@ -109,36 +93,13 @@ public abstract  class FaceBaseActivity extends BaseActivity{
     }
 
     @Override
-    protected void initData() {
-    /*    Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                fingerList = bundle.getParcelableArrayList(AppConstant.FINGER_DATA_LIST);
-                Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerList.size());
-                FingerFactory.getInstance().setFingerData(fingerList);
-            }
-        }*/
-        ArrayList<Finger6> fingerData = FingerManager.getInstance(this).getFingerData();
-        Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerData.size());
-        FingerFactory.getInstance().setFingerData(fingerData);
-
-    }
+    protected void initData() { }
 
     @Override
     protected void onViewClick(View view) {
         if (view.getId() == R.id.homeMenu) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-            ARouterUtil.navigation(ARouterConstant.MENU_ACTIVITY, bundle);
+            ARouterUtil.navigation(ARouterConstant.MENU_ACTIVITY);
             finish();
-
         }
-    /*    if (view.getId() == R.id.face_animator) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, fingerList);
-            ARouterUtil.navigation(ARouterConstant.MENU_ACTIVITY,bundle);
-            finish();
-       }*/
     }
 }
