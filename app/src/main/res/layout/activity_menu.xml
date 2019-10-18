@@ -32,12 +32,12 @@
             android:layout_weight="1"
             android:background="@drawable/wave_border_less_ripple"
             android:drawableTop="@drawable/ic_menu"
-            android:drawablePadding="@dimen/dp_8"
+            android:drawablePadding="@dimen/dp_12"
             android:gravity="center"
             android:padding="@dimen/dp_10"
             android:text="@string/menu_set"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_26" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/userCenter"
@@ -48,12 +48,12 @@
             android:layout_weight="1"
             android:background="@drawable/wave_border_less_ripple"
             android:drawableTop="@drawable/ic_user_center"
-            android:drawablePadding="@dimen/dp_8"
+            android:drawablePadding="@dimen/dp_12"
             android:gravity="center"
             android:padding="@dimen/dp_10"
             android:text="@string/user_center"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_26" />
 
     </LinearLayout>
 

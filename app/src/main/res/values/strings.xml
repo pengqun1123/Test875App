@@ -120,6 +120,8 @@
     <string name="save">保存</string>
     <string name="please_input_user_no">请填写用户工号:</string>
     <string name="please_select_verify_method">请选择您已注册过的验证方式进行身份验证!</string>
+    <string name="manage_no_had">该管理员密码已存在,请重新输入</string>
+    <string name="wellcom_tip">欢迎光临!</string>
 
 
 </resources>

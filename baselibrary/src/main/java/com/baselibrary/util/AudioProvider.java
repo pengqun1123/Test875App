@@ -84,7 +84,7 @@ public class AudioProvider implements SoundPool.OnLoadCompleteListener {
 //                        .setAudioAttributes(audioAttributes)
 //                        .build();
 //            } else { // 5.0 以前
-                soundPool = new SoundPool(16, AudioManager.STREAM_SYSTEM, 0);  // 创建SoundPool
+            soundPool = new SoundPool(16, AudioManager.STREAM_SYSTEM, 0);  // 创建SoundPool
 //            }
             soundPool.setOnLoadCompleteListener(this);  // 设置加载完成监听
         }
@@ -325,7 +325,21 @@ public class AudioProvider implements SoundPool.OnLoadCompleteListener {
     // 请刷卡（rfid）
     public void play_rfid_card() {
         if (soundPool != null) {
-            soundPool.load(mContext, R.raw.rfid_card, 1);
+            soundPool.load(mContext, R.raw.please_card, 1);
+        }
+    }
+
+    //请脸部正对屏幕
+    public void playFaceScreen() {
+        if (soundPool != null) {
+            soundPool.load(mContext, R.raw.face_screen, 1);
+        }
+    }
+
+    //请输入密码
+    public void playInputPw() {
+        if (soundPool != null) {
+            soundPool.load(mContext, R.raw.please_input_pw, 1);
         }
     }
 

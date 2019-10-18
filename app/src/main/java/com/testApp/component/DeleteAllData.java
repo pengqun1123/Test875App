@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.ToastUtils;
@@ -103,7 +104,31 @@ public class DeleteAllData {
             public void onNotification(boolean result) {
 
             }
-        }).deleteAsyncAll(Finger6.class);
+        }).deleteAsyncAll(Pw.class);
+    }
+
+    public void deleteAllManager(DBUtil dbUtil) {
+        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
+            @Override
+            public void onSuccess(Manager result) {
+                ToastUtils.showSingleToast(mActivity, "删除成功 管理员");
+            }
+
+            @Override
+            public void onSuccess(List<Manager> result) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).deleteAsyncAll(Manager.class);
     }
 
     public   <T> void  deleteAllByClass(DBUtil dbUtil,Class<T> cls) {

@@ -73,7 +73,6 @@ public class MenuActivity extends BaseActivity {
                     finish();
                 }
                 finish();
-
                 break;
             case R.id.manageMenu:
                 AskDialog.verifyManagerPwd(this, new AskDialog.ManagerPwdVerifyCallBack() {
@@ -107,16 +106,22 @@ public class MenuActivity extends BaseActivity {
                         if (flag == AppConstant.FINGER_MODEL) {
                             BaseApplication.AP.play_inputDownGently();
                         } else if (flag == AppConstant.FACE_MODEL) {
-
+                            BaseApplication.AP.playFaceScreen();
                         } else if (flag == AppConstant.IDCARD_MODEL) {
-
+                            BaseApplication.AP.play_rfid_card();
                         } else if (flag == AppConstant.PW_MODEL) {
-
+                            BaseApplication.AP.playInputPw();
                         }
                     }
                 });
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     /**

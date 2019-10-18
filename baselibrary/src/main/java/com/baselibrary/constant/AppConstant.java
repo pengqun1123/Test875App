@@ -29,8 +29,13 @@ public final class AppConstant {
     public static final String FINGER_VERIFY_RESULT = "finger_verify_result";
     public static final String VERIFY_RESULT_TYPE = "verify_type";
 
+    //视频激活码
+    public static final String FACE_ACTIVITY_CODE ="CG8A-HJ92-7W8E-EJ8F"
+            //"3J7D-BB84-JD8E-UA9"
+            /*TWAB-UI9E-AO90-7X8F*/;
+
     //注册时标记必须注册的验证方式
-    public static final String PW_VERIFY_MODEL= "pw_verify";
+    public static final String PW_VERIFY_MODEL = "pw_verify";
     public static final String FINGER_VERIFY_MODEL = "finger_verify";
     public static final String FACE_VERIFY_MODEL = "face_verify";
     public static final String CARD_VERIFY_MODEL = "card_verify";

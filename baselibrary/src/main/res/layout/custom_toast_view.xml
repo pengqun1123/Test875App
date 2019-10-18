@@ -6,15 +6,15 @@
     android:layout_centerInParent="true"
     android:layout_gravity="center"
     android:background="@drawable/toast_bg"
-    android:paddingStart="@dimen/dp_12"
-    android:paddingEnd="@dimen/dp_12">
+    android:paddingStart="@dimen/dp_30"
+    android:paddingEnd="@dimen/dp_30">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/toastIv1"
-        android:layout_width="@dimen/dp_25"
-        android:layout_height="@dimen/dp_25"
+        android:layout_width="@dimen/dp_55"
+        android:layout_height="@dimen/dp_55"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_emoje" />
 
@@ -25,9 +25,9 @@
         android:layout_below="@+id/toastIv1"
         android:gravity="center"
         android:lines="1"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_22"
         tools:text="完成!" />
 
 </RelativeLayout>

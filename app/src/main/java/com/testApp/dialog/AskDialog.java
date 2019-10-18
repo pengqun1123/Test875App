@@ -116,15 +116,14 @@ public class AskDialog {
         final int[] flag = {0};
         radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
             int checkedRadioButtonId = radioGroup1.getCheckedRadioButtonId();
-            Logger.d(" RadioButton 的 checkedRadioButtonId：" + checkedRadioButtonId + "  i:" + i);
             if (i == fingerRadioButton.getId()) {
                 flag[0] = AppConstant.FINGER_MODEL;
             } else if (i == faceRadioButton.getId()) {
-                flag[0] =  AppConstant.FACE_MODEL;
+                flag[0] = AppConstant.FACE_MODEL;
             } else if (i == cardRadioButton.getId()) {
-                flag[0] =  AppConstant.IDCARD_MODEL;
+                flag[0] = AppConstant.IDCARD_MODEL;
             } else if (i == pwRadioButton.getId()) {
-                flag[0] =  AppConstant.PW_MODEL;
+                flag[0] = AppConstant.PW_MODEL;
             }
         });
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
@@ -302,49 +301,49 @@ public class AskDialog {
         AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
         CEditText inputPw = dialogView.findViewById(R.id.inputPw);
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
-        AppCompatButton nextActiveCodeBtn = dialogView.findViewById(R.id.nextActiveCodeBtn);
+        //AppCompatButton nextActiveCodeBtn = dialogView.findViewById(R.id.nextActiveCodeBtn);
         LinearLayout btnParent = dialogView.findViewById(R.id.btnParent);
         LinearLayout openFaceAsk = dialogView.findViewById(R.id.openFaceAsk);
         AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
         AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
-        AppCompatEditText activationCodeEt = dialogView.findViewById(R.id.activationCodeEt);
+        //AppCompatEditText activationCodeEt = dialogView.findViewById(R.id.activationCodeEt);
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
         managerSetTitle.setText(activity.getString(R.string.manager_set));
         nextBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
-        activationCodeEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                lastLength = charSequence.length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // 先移除当前监听，避免死循环。
-                activationCodeEt.removeTextChangedListener(this);
-                String string = activationCodeEt.getText().toString().toUpperCase();
-                if (string.length() > lastLength) {
-                    if (string.length() == 4) {
-                        string = string + "-";
-                    } else if (string.length() == 9) {
-                        string = string + "-";
-                    } else if (string.length() == 14) {
-                        string = string + "-";
-                    }
-                    activationCodeEt.setText(string);
-                }
-
-                // 让光标定位最后位置。
-                activationCodeEt.setSelection(string.length());
-                //操作完当前显示内容之后，再添加监听。
-                activationCodeEt.addTextChangedListener(this);
-            }
-        });
+//        activationCodeEt.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                lastLength = charSequence.length();
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                // 先移除当前监听，避免死循环。
+//                activationCodeEt.removeTextChangedListener(this);
+//                String string = activationCodeEt.getText().toString().toUpperCase();
+//                if (string.length() > lastLength) {
+//                    if (string.length() == 4) {
+//                        string = string + "-";
+//                    } else if (string.length() == 9) {
+//                        string = string + "-";
+//                    } else if (string.length() == 14) {
+//                        string = string + "-";
+//                    }
+//                    activationCodeEt.setText(string);
+//                }
+//
+//                // 让光标定位最后位置。
+//                activationCodeEt.setSelection(string.length());
+//                //操作完当前显示内容之后，再添加监听。
+//                activationCodeEt.addTextChangedListener(this);
+//            }
+//        });
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         final String[] pw1 = new String[2];
         nextBtn.setOnClickListener(new OnceClickListener() {
@@ -392,34 +391,34 @@ public class AskDialog {
                 }
             }
         });
-        nextActiveCodeBtn.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
-                if (pw1[0].equals(pw1[1])) {
-                    checkManagerPw(activity, pw1[0]);
-                }
-                //输入人脸激活码...
-                String code = activationCodeEt.getText().toString().toUpperCase();
-                if (TextUtils.isEmpty(code)) {
-                    ToastUtils.showSquareTvToast(
-                            activity, activity.getString(R.string.please_input_active_code));
-                    return;
-                }
-                if (code.length() < 19) {
-                    ToastUtils.showSquareTvToast(
-                            activity, activity.getString(com.face.R.string.face_please_input_confirm_code));
-                    return;
-                }
-                if (callBack != null) {
-                    SPUtil.putFaceActiveCode(code);
-                    SPUtil.putOpenFace(true);
-                    callBack.activationCodeCallBack(code);
-                }
-                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
-                SoftInputKeyboardUtils.hiddenKeyboard(activationCodeEt);
-                dialog.dismiss();
-            }
-        });
+//        nextActiveCodeBtn.setOnClickListener(new OnceClickListener() {
+//            @Override
+//            public void onNoDoubleClick(View v) {
+//                if (pw1[0].equals(pw1[1])) {
+//                    checkManagerPw(activity, pw1[0]);
+//                }
+//                //输入人脸激活码...
+//                String code = activationCodeEt.getText().toString().toUpperCase();
+//                if (TextUtils.isEmpty(code)) {
+//                    ToastUtils.showSquareTvToast(
+//                            activity, activity.getString(R.string.please_input_active_code));
+//                    return;
+//                }
+//                if (code.length() < 19) {
+//                    ToastUtils.showSquareTvToast(
+//                            activity, activity.getString(com.face.R.string.face_please_input_confirm_code));
+//                    return;
+//                }
+//                if (callBack != null) {
+//                    SPUtil.putFaceActiveCode(code);
+//                    SPUtil.putOpenFace(true);
+//                    callBack.activationCodeCallBack(code);
+//                }
+//                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+//                SoftInputKeyboardUtils.hiddenKeyboard(activationCodeEt);
+//                dialog.dismiss();
+//            }
+//        });
         dismissBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
@@ -440,22 +439,29 @@ public class AskDialog {
                 if (callBack != null) {
                     callBack.positiveCallBack();
                 }
+                SPUtil.putOpenFace(false);
                 dialog.dismiss();
             }
         });
         positiveBtn.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
-                managerSetTitle.setText(activity.getString(R.string.active_code));
-                managerTip.setText(activity.getString(R.string.please_input_active_code));
-                activationCodeEt.setVisibility(View.VISIBLE);
-                nextActiveCodeBtn.setVisibility(View.VISIBLE);
+                if (pw1[0].equals(pw1[1])) {
+                    checkManagerPw(activity, pw1[0]);
+                }
+                callBack.activationCodeCallBack(AppConstant.FACE_ACTIVITY_CODE);
+//                managerSetTitle.setText(activity.getString(R.string.active_code));
+//                managerTip.setText(activity.getString(R.string.please_input_active_code));
+//                activationCodeEt.setVisibility(View.VISIBLE);
+//                nextActiveCodeBtn.setVisibility(View.VISIBLE);
                 openFaceAsk.setVisibility(View.GONE);
                 btnParent.setVisibility(View.GONE);
-                activationCodeEt.setFocusable(true);
-                activationCodeEt.setFocusableInTouchMode(true);
-                activationCodeEt.requestFocus();
-                SoftInputKeyboardUtils.showKeyboard(activationCodeEt);
+//                activationCodeEt.setFocusable(true);
+//                activationCodeEt.setFocusableInTouchMode(true);
+//                activationCodeEt.requestFocus();
+//                SoftInputKeyboardUtils.showKeyboard(activationCodeEt);
+                SPUtil.putOpenFace(true);
+                dialog.dismiss();
             }
         });
     }
@@ -480,7 +486,7 @@ public class AskDialog {
                     for (int i = 0; i < result.size(); i++) {
                         String manage_pw = result.get(i).getManage_pw();
                         if (pw.equals(manage_pw)) {
-                            ToastUtils.showSingleToast(activity, activity.getString(R.string.max_manager_mun));
+                            ToastUtils.showSingleToast(activity, activity.getString(R.string.manage_no_had));
                             break;
                         } else {
                             if (i == result.size() - 1) {
@@ -491,7 +497,6 @@ public class AskDialog {
                 } else {
                     saveManagerPwdToDB(activity, pw);
                 }
-
             }
 
             @Override
@@ -511,35 +516,41 @@ public class AskDialog {
         Manager manager = new Manager();
         manager.setManage_pw(managerPw);
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
-            @Override
-            public void onSuccess(Manager result) {
-                ToastUtils.showSquareImgToast(activity,
-                        activity.getString(R.string.manager_add_success),
-                        ActivityCompat.getDrawable(activity, R.drawable.ic_emoje));
-                putHasManagerPwd(true);
-                Logger.d("管理员密码存储成功:" + result.toString());
-            }
-
-            @Override
-            public void onSuccess(List<Manager> result) {
-
-            }
-
-            @Override
-            public void onFailed() {
-                ToastUtils.showSquareImgToast(activity,
-                        activity.getString(R.string.manager_add_fail),
-                        ActivityCompat.getDrawable(activity, R.drawable.cry_icon));
-                putHasManagerPwd(false);
-                Logger.d("管理员密码存储失败");
-            }
-
-            @Override
-            public void onNotification(boolean result) {
-
-            }
-        }).insertAsyncSingle(manager);
+        dbUtil.insertOrReplace(manager);
+        ToastUtils.showSquareImgToast(activity,
+                activity.getString(R.string.manager_add_success),
+                ActivityCompat.getDrawable(activity, R.drawable.ic_emoje));
+        putHasManagerPwd(true);
+        Logger.d("管理员密码存储成功:");
+//        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
+//            @Override
+//            public void onSuccess(Manager result) {
+//                ToastUtils.showSquareImgToast(activity,
+//                        activity.getString(R.string.manager_add_success),
+//                        ActivityCompat.getDrawable(activity, R.drawable.ic_emoje));
+//                putHasManagerPwd(true);
+//                Logger.d("管理员密码存储成功:" + result.toString());
+//            }
+//
+//            @Override
+//            public void onSuccess(List<Manager> result) {
+//
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//                ToastUtils.showSquareImgToast(activity,
+//                        activity.getString(R.string.manager_add_fail),
+//                        ActivityCompat.getDrawable(activity, R.drawable.cry_icon));
+//                putHasManagerPwd(false);
+//                Logger.d("管理员密码存储失败");
+//            }
+//
+//            @Override
+//            public void onNotification(boolean result) {
+//
+//            }
+//        }).insertAsyncSingle(manager);
     }
 
     //验证管理员密码

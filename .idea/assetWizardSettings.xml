@@ -19,12 +19,12 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="56" />
+                            <entry key="height" value="96" />
                             <entry key="opacityPercent" value="95" />
-                            <entry key="outputName" value="ic_up_arrow_two" />
+                            <entry key="outputName" value="ic_error" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\iMac\Downloads\箭头 右双-01.svg" />
-                            <entry key="width" value="56" />
+                            <entry key="sourceFile" value="C:\Users\iMac\Downloads\错误.svg" />
+                            <entry key="width" value="96" />
                           </map>
                         </option>
                       </PersistentState>

@@ -166,22 +166,18 @@ public class UserManageFragment extends BaseFragment
                 break;
             case R.id.fingerModel:
                 //指静脉注册
-                registerBtn.setText(getString(R.string.register));
                 fingerRegister();
                 break;
             case R.id.faceModel:
                 //人脸注册
-                registerBtn.setText(getString(R.string.register));
                 faceRegister();
                 break;
             case R.id.idCardModel:
                 //身份证注册
-                registerBtn.setText(getString(R.string.register));
                 idCardRegister();
                 break;
             case R.id.pwModel:
                 //密码模式注册
-                registerBtn.setText(getString(R.string.register));
                 pwRegister();
                 break;
             case R.id.registerManagerMaxNum:
@@ -605,14 +601,12 @@ public class UserManageFragment extends BaseFragment
                     file.delete();
                 }
                 bundle.putString("name",userName);
-
                 ARouterUtil.navigation(ARouterConstant.FACE_RIGSTER_ACTIVITY,bundle);
             }
         }else {
             ToastUtils.showSingleToast(getContext(),getString(R.string.please_select_open_face));
         }
     }
-
 
     private void insertOrReplacePw(Pw pw) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -656,15 +650,13 @@ public class UserManageFragment extends BaseFragment
                                         @Override
                                         public void registerResult(Msg msg) {
                                             if (msg.getResult() == 8) {
-                                                ToastUtils.showSquareImgToast(getActivity(),
-                                                        getString(R.string.finger_register_success),
-                                                        ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
-                                                                , R.drawable.ic_emoje));
                                                 //可插入finger表的指静脉模板
                                                 UserManageFragment.this.fingerData = msg.getFingerData();
                                                 insertOrReplaceFinger(msg.getFingerData());
                                             } else {
-                                                ToastUtils.showSingleToast(getActivity(), msg.getTip());
+                                                ToastUtils.showSquareImgToast(getActivity()
+                                                        , msg.getTip()
+                                                ,ActivityCompat.getDrawable(getActivity(),R.drawable.cry_icon));
                                             }
                                         }
                                     });

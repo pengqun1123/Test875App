@@ -24,6 +24,9 @@ import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.Manager;
+import com.baselibrary.pojo.Pw;
+import com.baselibrary.pojo.User;
 import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
@@ -82,7 +85,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-       //clearData();
+//        clearData();
 
         checkMyPermissions(per);
 
@@ -95,10 +98,12 @@ public class SplashActivity extends BaseActivity {
 
     private void clearData() {
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        DeleteAllData.getInstance(this).deleteAllUser(dbUtil);
-        DeleteAllData.getInstance(this).deleteAllFinger(dbUtil);
-        DeleteAllData.getInstance(this).deleteAllPw(dbUtil);
-        DeleteAllData.getInstance(this).deleteAllByClass(dbUtil, Face.class);
+        dbUtil.deleteAll(User.class);
+        dbUtil.deleteAll(Manager.class);
+        dbUtil.deleteAll(Pw.class);
+        dbUtil.deleteAll(Finger6.class);
+        dbUtil.deleteAll(Face.class);
+        SPUtil.putHasManagerPwd(false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -138,6 +143,7 @@ public class SplashActivity extends BaseActivity {
 
     private void ask() {
         Boolean hasManagerPwd = SPUtil.getHasManagerPwd();
+        Logger.d("是否已经添加管理员：" + hasManagerPwd);
         if (!hasManagerPwd) {
             //询问设置添加管理员
             AskDialog.showManagerDialog(this, new AskDialog.PositiveCallBack() {
@@ -159,13 +165,13 @@ public class SplashActivity extends BaseActivity {
                 initFingerFv();
             }
             boolean openFace = SPUtil.getOpenFace();
-          //  openFace=false;
-            if (!openFace){
-                faceLoadOver=true;
+            if (!openFace) {
+                faceLoadOver = true;
                 return;
             }
             String faceActiveCode = SPUtil.getFaceActiveCode();
             if (!TextUtils.isEmpty(faceActiveCode)) {
+                Logger.d("激活码1：" + faceActiveCode);
                 initFace(faceActiveCode);
             }
         }
@@ -175,6 +181,7 @@ public class SplashActivity extends BaseActivity {
         loadingData();
         if (!TextUtils.isEmpty(code)) {
             //开启指静脉
+            SPUtil.putFaceActiveCode(code);
             initFingerFv();
             initFace(code);
         } else {
@@ -228,7 +235,7 @@ public class SplashActivity extends BaseActivity {
             public void allFingerData(List<Finger6> fingerList) {
                 SplashActivity.this.allFingerDataList = (ArrayList<Finger6>) fingerList;
                 SplashActivity.this.fingerLoadOver = true;
-                Logger.d("===初始化    指静脉初始化成功:");
+                Logger.d("===初始化    指静脉初始化成功:fingerLoadOver ：" + fingerLoadOver);
                 if (SPUtil.getOpenFace()) {
                     if (SplashActivity.this.faceLoadOver) {
                         skipVerifyActivity((ArrayList<Finger6>) fingerList);
@@ -236,7 +243,6 @@ public class SplashActivity extends BaseActivity {
                 } else {
                     skipVerifyActivity((ArrayList<Finger6>) fingerList);
                 }
-                //fingerData(fingerList);
             }
 
             @Override
@@ -249,61 +255,19 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    private void cellDataSpace(List<Finger6> fingerList, FingerDataInitCallBack callBack) {
-        this.allFinerDataSize = fingerList.size();
-        byte[] FingerData = new byte[fingerList.size() * AppConstant.FINGER6_DATA_SIZE];
-        for (int i = 0; i < fingerList.size(); i++) {
-            byte[] finger6Feature = fingerList.get(i).getFinger6Feature();
-            System.arraycopy(finger6Feature, 0, FingerData,
-                    AppConstant.FINGER6_DATA_SIZE * i, AppConstant.FINGER6_DATA_SIZE);
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                callBack.fingerDataInitCallBack(FingerData);
-            }
-        });
-    }
-
-    private byte[] allFinerData;
-    private int allFinerDataSize;
-
-    private void fingerData(List<Finger6> fingerList) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                cellDataSpace(fingerList, new FingerDataInitCallBack() {
-                    @Override
-                    public void fingerDataInitCallBack(byte[] finerData) {
-                        SplashActivity.this.allFinerData = finerData;
-                        SplashActivity.this.fingerLoadOver = true;
-                        Logger.d("===初始化    指静脉初始化成功:");
-//                        if (SPUtil.getOpenFace()) {
-//                            if (SplashActivity.this.faceLoadOver) {
-//                                skipVerifyActivity(finerData, fingerList.size());
-//                            }
-//                        } else {
-//                            skipVerifyActivity(finerData, allFinerDataSize);
-//                        }
-                    }
-                });
-            }
-        }).start();
-    }
-
     //初始化face
     private void initFace(String code) {
+        Logger.d("激活码2：" + code);
         FaceService.getInstance().initFace(code, this, new FaceInitListener() {
             @Override
             public void initFail(String error) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastUtils.showSquareImgToast(SplashActivity.this
-                                , error
-                                , ActivityCompat.getDrawable(SplashActivity.this
-                                        , com.face.R.drawable.cry_icon));
-                   }
+                        Logger.d("===初始化    人脸初始化失败:");
+                        ToastUtils.showSquareImgToast(SplashActivity.this, error,
+                                ActivityCompat.getDrawable(SplashActivity.this, R.drawable.cry_icon));
+                    }
                 });
             }
 
@@ -313,15 +277,8 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void onLoadDataListener() {
                         Logger.d("===初始化    人脸初始化成功:");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ToastUtils.showSquareImgToast(SplashActivity.this
-                                        , "人脸初始化成功"
-                                        , null);
-                            }
-                        });
                         SplashActivity.this.faceLoadOver = true;
+                        Logger.d("  指静脉数据加载完成：fingerLoadOver：" + fingerLoadOver);
                         if (SplashActivity.this.fingerLoadOver) {
                             skipVerifyActivity(SplashActivity.this.allFingerDataList);
                         }
@@ -338,25 +295,18 @@ public class SplashActivity extends BaseActivity {
                 cancelLoad();
             }
         });
-
         Boolean openFace = SPUtil.getOpenFace();
-       // openFace=false;
         if (openFace) {
-            // TODO: 2019/10/11 请携带指静脉数据到人脸识别页面
             //跳转不带人脸识别的页面
             Bundle bundle = new Bundle();
-//            bundle.putByteArray(AppConstant.FINGER_DATA, finerData);
-//            bundle.putInt(AppConstant.FINGER_SIZE, fingerSize);
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,finger6List);
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, finger6List);
             Logger.d("SplashActivity 2 指静脉模板数量：" + finger6List.size());
             //跳转人脸识别页面
-            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY,bundle);
+            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY, bundle);
         } else {
             //跳转不带人脸识别的页面
             Bundle bundle = new Bundle();
-//            bundle.putByteArray(AppConstant.FINGER_DATA, finerData);
-//            bundle.putInt(AppConstant.FINGER_SIZE, fingerSize);
-            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST,finger6List);
+            bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, finger6List);
             Logger.d("SplashActivity 2 指静脉模板数量：" + finger6List.size());
             SkipActivityUtil.skipDataActivity(SplashActivity.this,
                     DefaultVerifyActivity.class, bundle);

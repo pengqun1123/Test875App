@@ -38,7 +38,7 @@
     </style>
 
     <style name="spinner" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:layout_width">@dimen/dp_70</item>
+        <item name="android:layout_width">@dimen/dp_100</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <!--设置 spinner 显示位置往下偏移 actionBarSize 的高度, 默认显示是直接显示在 Spinner 的选中项的上方-->

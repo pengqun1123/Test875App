@@ -71,6 +71,8 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         gear2Anim = AnimatorUtils.rotateAnim(gear2, 3100L, -359F);
         gear3Anim = AnimatorUtils.rotateAnim(gear3, 3400L, 359F);
         gear4Anim = AnimatorUtils.rotateAnim(gear4, 2800L, -359F);
+
+        setCurrentTime();
     }
 
     @Override
@@ -181,6 +183,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         if (gear4Anim != null) {
             AnimatorUtils.cancelAnim(gear4Anim);
         }
+        unregisterReceiver(systemTimeReceiver);
     }
 
     @Override
@@ -253,29 +256,33 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
             //获取系统时间
             String action = intent.getAction();
             if (action != null && action.equals(Intent.ACTION_TIME_TICK)) {
-                String hour = String.valueOf(CalendarUtil.getHour());
-                String minute = String.valueOf(CalendarUtil.getMinute());
-                String year = String.valueOf(CalendarUtil.getYear());
-                String month = String.valueOf(CalendarUtil.getMonth());
-                String day = String.valueOf(CalendarUtil.getDay());
-                if (hour.length() == 1) {
-                    hour = "0" + hour;
-                }
-                if (minute.length() == 1) {
-                    minute = "0" + minute;
-                }
-                if (year.length() == 1) {
-                    year = "0" + year;
-                }
-                if (month.length() == 1) {
-                    month = "0" + month;
-                }
-                if (day.length() == 1) {
-                    day = "0" + day;
-                }
-                currentTime.setText(MessageFormat.format("{0}:{1}", hour, minute));
-                currentDate.setText(MessageFormat.format("{0}-{1}-{2}", year, month, day));
+                setCurrentTime();
             }
         }
     };
+
+    private void setCurrentTime() {
+        String hour = String.valueOf(CalendarUtil.getHour());
+        String minute = String.valueOf(CalendarUtil.getMinute());
+        String year = String.valueOf(CalendarUtil.getYear());
+        String month = String.valueOf(CalendarUtil.getMonth());
+        String day = String.valueOf(CalendarUtil.getDay());
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
+        if (year.length() == 1) {
+            year = "0" + year;
+        }
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        currentTime.setText(MessageFormat.format("{0}:{1}", hour, minute));
+        currentDate.setText(MessageFormat.format("{0}-{1}-{2}", year, month, day));
+    }
 }
