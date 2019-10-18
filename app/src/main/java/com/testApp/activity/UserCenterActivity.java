@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 import com.testApp.R;
-
+@Route(path = ARouterConstant.USER_CENTER_ACTIVITY)
 public class UserCenterActivity extends BaseActivity {
 
     @Override
@@ -26,6 +28,7 @@ public class UserCenterActivity extends BaseActivity {
         if (toolBar == null) {
             return;
         }
+
         TextView toolbarTitle = bindViewWithClick(R.id.toolbar_title, false);
         String title = getString(R.string.user_center);
         toolbarTitle.setText(title);

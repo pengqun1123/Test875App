@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.mbms.StreamingServiceInfo;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ public class SDKInitActivity extends AppCompatActivity implements FaceSDK.InitCa
     private static final int REQUEST_PERMISSION_CODE = 1;
     private static final String TAG = SDKInitActivity.class.getSimpleName();
 
+    String se="3J7D-BB84-JD8E-UA96";
     private Button btnActivate;
     private EditText etSerialNumber;
     private TextView tvErrorInfo;

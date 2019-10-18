@@ -2,7 +2,9 @@ package com.face.activity;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.AnimatorUtils;
+import com.baselibrary.util.FingerManager;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.face.R;
@@ -22,6 +25,7 @@ import com.face.service.FaceService;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wangyu on 2019/10/15.
@@ -44,13 +48,14 @@ public abstract  class FaceBaseActivity extends BaseActivity{
         gear4 = bindViewWithClick(R.id.gear4, true);
         face_jump = bindViewWithClick(R.id.fl,true);
 
-        gear1Anim = AnimatorUtils.rotateAnim(gear1, 3900L, 359F);
-        gear2Anim = AnimatorUtils.rotateAnim(gear2, 3100L, -359F);
-        gear3Anim = AnimatorUtils.rotateAnim(gear3, 3400L, 359F);
-        gear4Anim = AnimatorUtils.rotateAnim(gear4, 2800L, -359F);
+        gear1Anim = AnimatorUtils.rotateAnim(gear1, 3000L, 359F);
+        gear2Anim = AnimatorUtils.rotateAnim(gear2, 2600L, -359F);
+        gear3Anim = AnimatorUtils.rotateAnim(gear3, 2800, 359F);
+        gear4Anim = AnimatorUtils.rotateAnim(gear4, 2500, -359F);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,6 +90,7 @@ public abstract  class FaceBaseActivity extends BaseActivity{
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPause() {
         super.onPause();
@@ -104,7 +110,7 @@ public abstract  class FaceBaseActivity extends BaseActivity{
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
+    /*    Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
@@ -112,7 +118,11 @@ public abstract  class FaceBaseActivity extends BaseActivity{
                 Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerList.size());
                 FingerFactory.getInstance().setFingerData(fingerList);
             }
-        }
+        }*/
+        ArrayList<Finger6> fingerData = FingerManager.getInstance(this).getFingerData();
+        Logger.d("DefaultActivity 1 指静脉模板数量：" + fingerData.size());
+        FingerFactory.getInstance().setFingerData(fingerData);
+
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.AnimatorUtils;
+import com.baselibrary.util.FingerManager;
 import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
@@ -84,8 +85,10 @@ public class SplashActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void initData() {
-
-//        clearData();
+     SPUtil.putCardVerifyFlag(true);
+     SPUtil.putFingerVerifyFlag(true);
+     SPUtil.putPwVerifyFlag(true);
+        //clearData();
 
         checkMyPermissions(per);
 
@@ -154,6 +157,7 @@ public class SplashActivity extends BaseActivity {
 
                 @Override
                 public void activationCodeCallBack(String code) {
+                    SPUtil.putFaceVerifyFlag(true);
                     loadData(code);
                 }
             });
@@ -233,7 +237,8 @@ public class SplashActivity extends BaseActivity {
         FingerApi.getInstance().getAllFingerData(new AllFingerData() {
             @Override
             public void allFingerData(List<Finger6> fingerList) {
-                SplashActivity.this.allFingerDataList = (ArrayList<Finger6>) fingerList;
+              // SplashActivity.this.allFingerDataList = (ArrayList<Finger6>) fingerList;
+                FingerManager.getInstance(SplashActivity.this).putFingerData((ArrayList<Finger6>) fingerList);
                 SplashActivity.this.fingerLoadOver = true;
                 Logger.d("===初始化    指静脉初始化成功:fingerLoadOver ：" + fingerLoadOver);
                 if (SPUtil.getOpenFace()) {
@@ -300,7 +305,7 @@ public class SplashActivity extends BaseActivity {
             //跳转不带人脸识别的页面
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(AppConstant.FINGER_DATA_LIST, finger6List);
-            Logger.d("SplashActivity 2 指静脉模板数量：" + finger6List.size());
+           // Logger.d("SplashActivity 2 指静脉模板数量：" + finger6List.size());
             //跳转人脸识别页面
             ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY, bundle);
         } else {

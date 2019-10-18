@@ -29,7 +29,12 @@ public class ARouterConstant {
 
     public static final String FACE_RIGSTER_ACTIVITY="/face/face_register_act";
 
+    public static final String FACE_VERIFY_ACTIVITY="/face/face_verify_act";
+
+    //app
     public static final String MENU_ACTIVITY="/app/menu_act";
+
+    public static final String USER_CENTER_ACTIVITY="/app/user_center_act";
 
     //idcard 模块相关的方法
     public static final String SERVICE_IdCARD = "/idcard/service";

@@ -20,9 +20,9 @@ import com.baselibrary.util.ToastUtils;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-//    static {
-//        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-//    }
+    static {
+       AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     protected abstract Integer contentView();
 
