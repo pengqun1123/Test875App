@@ -34,6 +34,7 @@ import com.testApp.R;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
+import java.util.Objects;
 import java.util.function.LongFunction;
 
 @Route(path = ARouterConstant.MENU_ACTIVITY)
@@ -60,7 +61,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     @Override
     protected void initData() {
-        fingerVerifyResult();
+      //  fingerVerifyResult();
     }
 
     @Override
@@ -98,9 +99,9 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                             BaseApplication.AP.play_inputDownGently();
                             FingerFactory.getInstance().fingerDevConnectStatus(MenuActivity.this);
                         } else if (flag == AppConstant.FACE_MODEL) {
-                            BaseApplication.AP.playFaceScreen();
-                            ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
-                        } else if (flag == AppConstant.ID_CARD_MODEL) {
+                                BaseApplication.AP.playFaceScreen();
+                                ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
+                        }  else if (flag == AppConstant.ID_CARD_MODEL) {
                             BaseApplication.AP.play_rfid_card();
                             idCardService = ARouter.getInstance().navigation(IdCardService.class);
                             new Thread(new Runnable() {
@@ -114,20 +115,17 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                             AskDialog.VerifyUserPwd(MenuActivity.this, new AskDialog.UserPwdVerifyCallBack() {
                                 @Override
                                 public void userPwdVerifyCallBack(Long id) {
-                                    if (id != null) {
-                                        ToastUtils.showSquareImgToast(MenuActivity.this
-                                                , "密码验证成功"
-                                                , null);
+                                    if (id!=null){
+                                        VerifyResultUi.showVerifyFail(MenuActivity.this,
+                                                getString(R.string.pw_register_success),false);
                                         Bundle bundle = new Bundle();
-                                        bundle.putInt("type", 4);
-                                        bundle.putLong("id", id);
-                                        SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
+                                        bundle.putInt("type",4);
+                                        bundle.putLong("id",id);
+                                        SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
                                         finish();
-                                    } else {
-                                        ToastUtils.showSquareImgToast(MenuActivity.this
-                                                , "密码验证失败"
-                                                , ActivityCompat.getDrawable(MenuActivity.this
-                                                        , com.face.R.drawable.cry_icon));
+                                    }else {
+                                        VerifyResultUi.showVerifyFail(MenuActivity.this,
+                                                getString(R.string.pw_register_fail),false);
                                     }
                                 }
                             });
@@ -143,9 +141,9 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (receiver != null) {
+       /* if (receiver!=null) {
             unregisterReceiver(receiver);
-        }
+        }*/
         if (isStartService) {
             FingerFactory.getInstance().unbindDevService(this);
             isStartService = false;
@@ -160,26 +158,26 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
      */
     private void fingerVerifyResult() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(AppConstant.USER_MENU_RECEIVER);
+        filter.addAction(Intent.ACTION_TIME_TICK);
         registerReceiver(receiver, filter);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null && action.equals(AppConstant.USER_MENU_RECEIVER)) {
-                int verifyType = intent.getIntExtra(AppConstant.VERIFY_RESULT_TYPE, 0);
-                if (verifyType == AppConstant.FINGER_MODEL) {
-                    int fingerVerifyResult = intent.getIntExtra(AppConstant.FINGER_VERIFY_RESULT, 0);
-                    if (fingerVerifyResult == 1) {
-                        VerifyResultUi.showVerifySuccess(MenuActivity.this
-                                , getString(R.string.verify_success), false);
-                        SkipActivityUtil.skipActivity(MenuActivity.this, UserCenterActivity.class);
-                    } else {
-                        VerifyResultUi.showVerifySuccess(MenuActivity.this
-                                , getString(R.string.verify_fail), false);
-                    }
+            int verifyType = intent.getIntExtra(AppConstant.VERIFY_RESULT_TYPE, 0);
+            if (verifyType == AppConstant.FINGER_MODEL) {
+                int fingerVerifyResult = intent.getIntExtra(AppConstant.FINGER_VERIFY_RESULT, 0);
+                if (fingerVerifyResult == 1) {
+                    ToastUtils.showSquareImgToast(MenuActivity.this
+                            , "指静脉验证成功"
+                            , null);
+                    SkipActivityUtil.skipActivity(MenuActivity.this,UserCenterActivity.class);
+                }else {
+                    ToastUtils.showSquareImgToast(MenuActivity.this
+                            , "指静脉验证失败"
+                            , ActivityCompat.getDrawable(MenuActivity.this
+                                    , com.face.R.drawable.cry_icon));
                 }
             }
         }
@@ -197,6 +195,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
         FingerFactory.getInstance().pauseFingerVerify();
     }
 
+
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
@@ -208,9 +207,9 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
         } else {
             ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
             Bundle bundle = new Bundle();
-            bundle.putInt("type", 3);
-            bundle.putLong("id", idCard.getUId());
-            SkipActivityUtil.skipActivity(MenuActivity.this, UserCenterActivity.class);
+            bundle.putInt("type",3);
+            bundle.putLong("id",idCard.getUId());
+            SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
             finish();
         }
     }
@@ -219,9 +218,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     public void onRegisterResult(boolean result, IdCard idCard) {
 
     }
-
     private Boolean isStartService = false;
-
     @Override
     public void fingerDevStatusConnect(int res, String msg) {
         if (res == 1 && !isStartService) {
@@ -233,12 +230,12 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                         ToastUtils.showSquareImgToast(MenuActivity.this
                                 , "指静脉验证成功"
                                 , null);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 1);
-                        bundle.putLong("id", fingerId);
-                        SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("type",1);
+                        bundle.putLong("id",fingerId);
+                        SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
                         finish();
-                    } else {
+                    }else {
                         ToastUtils.showSquareImgToast(MenuActivity.this
                                 , "指静脉验证失败"
                                 , ActivityCompat.getDrawable(MenuActivity.this

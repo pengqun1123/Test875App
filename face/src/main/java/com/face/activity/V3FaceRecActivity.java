@@ -110,9 +110,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
         ArrayList<Finger6> fingerData = FingerListManager.getInstance().getFingerData();
         Logger.d(" 指静脉数据：" + fingerData.size());
-       /* iv_in = ((AppCompatImageView) findViewById(R.id.iv_in));
-        iv_sight = ((AppCompatImageView) findViewById(R.id.iv_sight));
-        tv_result = ((TextView) findViewById(R.id.tv_result));*/
+
         nirCamera = FaceConfig.getInstance().getNirCamera();
     }
 
@@ -145,38 +143,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 }
             }).start();
         }
-         /*  sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
-            sight_rotate.setDuration(4000);
-            sight_rotate.setInterpolator(new LinearInterpolator());
-            sight_rotate.setRepeatMode(ObjectAnimator.RESTART);
-            sight_rotate.setRepeatCount(Animation.INFINITE);
 
-           in_rotate = ObjectAnimator.ofFloat(iv_in, "rotation", 0.0f, -360.0f);
-            //in_rotate = new RotateAnimation(0, -360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            in_rotate.setDuration(4000);
-            in_rotate.setInterpolator(new LinearInterpolator());
-            in_rotate.setRepeatMode(ObjectAnimator.RESTART);
-            in_rotate.setRepeatCount(Animation.INFINITE);
-
-              sight_rotate.start();
-              in_rotate.start();*/
-
-//        sight_rotate.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//                anim_status=true;
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                anim_status=false;
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -423,15 +390,9 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 public void fingerVerifyResult(int res, String msg, int score,
                                                int index, Long fingerId, byte[] updateFinger) {
                     if (res == 1) {
-                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this
-                                , "指静脉验证成功"
-                                , null);
 
                     } else {
-                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this
-                                , "指静脉验证失败"
-                                , ActivityCompat.getDrawable(V3FaceRecActivity.this
-                                        , R.drawable.cry_icon));
+
                     }
                 }
             }, new OnStartServiceListener() {

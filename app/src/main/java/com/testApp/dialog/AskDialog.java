@@ -575,17 +575,17 @@ public class AskDialog {
     //验证管理员密码
     private static void verifyUserPw(Dialog dialog, String pw, UserPwdVerifyCallBack callBack) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
-        WhereCondition whereCondition = PwDao.Properties.UId.eq(pw);
-        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
+        WhereCondition whereCondition = PwDao.Properties.Password.eq(pw);
+        dbUtil.setDbCallBack(new DbCallBack<Pw>() {
             @Override
-            public void onSuccess(Manager result) {
+            public void onSuccess(Pw result) {
 
             }
 
             @Override
-            public void onSuccess(List<Manager> result) {
+            public void onSuccess(List<Pw> result) {
                 if (result.size() > 0) {
-                    callBack.userPwdVerifyCallBack(result.get(0).getMId());
+                    callBack.userPwdVerifyCallBack(result.get(0).getUId());
 
                 } else {
                     callBack.userPwdVerifyCallBack(null);
