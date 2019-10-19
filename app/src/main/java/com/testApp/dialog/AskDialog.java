@@ -267,6 +267,7 @@ public class AskDialog {
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
         CEditText inputPw = dialogView.findViewById(R.id.inputPw);
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
+        dismissBtn.setVisibility(View.VISIBLE);
         managerSetTitle.setText(activity.getString(R.string.verify_manager_pwd));
         nextBtn.setText(activity.getString(R.string.positive));
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);

@@ -85,6 +85,7 @@ public class FingerService extends Service {
             } else if (msg.what == FingerConstant.SEND_MSG_2) {
                 fingerVerifyResultListener = (FingerVerifyResultListener) msg.obj;
             } else if (msg.what == FingerConstant.UP_DATE_FINGER) {
+                Logger.d("更新指静脉数据  11：");
                 updateFingerArrayToByte();
             }
         }
@@ -115,6 +116,7 @@ public class FingerService extends Service {
                 System.arraycopy(finger6Feature, 0, fingerData,
                         AppConstant.FINGER6_DATA_SIZE * i, AppConstant.FINGER6_DATA_SIZE);
             }
+            Logger.d("更新指静脉数据  22：");
             FingerService.this.fingerData = fingerData;
             FingerService.this.fingerDataSize = fingerSize;
         } else {
@@ -160,7 +162,7 @@ public class FingerService extends Service {
         FingerService.this.isCancelVerify = false;
         if (!isLoop) {
             Logger.d("启动FingerService  111");
-            timer.schedule(myTask, 1500, 800);
+            timer.schedule(myTask, 1200, 700);
         }
     }
 

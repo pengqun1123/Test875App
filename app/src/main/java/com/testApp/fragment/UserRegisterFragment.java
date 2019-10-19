@@ -80,17 +80,16 @@ public class UserRegisterFragment extends BaseFragment {
     private String sex;
     private byte[] allFingerData;
     private int allFingerSize;
-    private RegisterUserCallBack registerUserCallBack;
+
     private ManagerActivity manageActivity;
 
     public UserRegisterFragment() {
         // Required empty public constructor
     }
 
-    public static UserRegisterFragment instance(RegisterUserCallBack callBack) {
+    public static UserRegisterFragment instance() {
         UserRegisterFragment userRegisterFragment = new UserRegisterFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("userListener", callBack);
         userRegisterFragment.setArguments(bundle);
         return userRegisterFragment;
     }
@@ -118,21 +117,14 @@ public class UserRegisterFragment extends BaseFragment {
         //隐藏注册的按钮，当用户至少选择了一种验证模式注册完成后才显示注册按钮
         registerBtn.setVisibility(View.GONE);
 
-        //设置音量
-        float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
-        Logger.d("设备的最大音量:" + streamVolumeMax);
-        BaseApplication.AP.setVolume((int) streamVolumeMax);
+
     }
 
     @Override
     protected void initData() {
         manageActivity = (ManagerActivity) getActivity();
         EventBus.getDefault().register(this);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            registerUserCallBack = bundle.getParcelable("userListener");
-            fingerListToFingerByte();
-        }
+        fingerListToFingerByte();
         //查询所有用户的工号
     }
 
@@ -225,7 +217,6 @@ public class UserRegisterFragment extends BaseFragment {
         String staffNo = staffNoEt.getText().toString().trim();
         if (TextUtils.isEmpty(staffNo)) {
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_input_staff_no));
-            return;
         } else {
             //查询是否有相同的工号
             queryAllUserNo(staffNo, eq -> {
@@ -308,20 +299,19 @@ public class UserRegisterFragment extends BaseFragment {
     private void pwRegister() {
         PwFactory.createPw(getActivity(), pw -> {
             DBUtil dbUtil = BaseApplication.getDbUtil();
-
             PwDao pwDao = dbUtil.getDaoSession().getPwDao();
             QueryBuilder<Pw> pwQueryBuilder = pwDao.queryBuilder();
             List<Pw> list = pwQueryBuilder.where(PwDao.Properties.Password.eq(pw.getPassword())).list();
             if (list != null && list.size() > 0) {
                 VerifyResultUi.showRegisterFail(Objects.requireNonNull(getActivity()),
-                        getString(R.string.pw_register_fail),false);
+                        getString(R.string.pw_register_repeat), false);
             } else {
                 dbUtil.insertOrReplace(pw);
                 //可添加到User表的pwd
                 UserRegisterFragment.this.pwd = pw;
                 registerBtn.setVisibility(View.VISIBLE);
                 VerifyResultUi.showRegisterSuccess(Objects.requireNonNull(getActivity()),
-                        getString(R.string.pw_register_success),false);
+                        getString(R.string.pw_register_success), false);
             }
         });
     }
@@ -344,19 +334,16 @@ public class UserRegisterFragment extends BaseFragment {
 
             @Override
             public void onRegisterResult(boolean result, IdCard idCard) {
-
+                idCardService.destroyIdCard();
                 if (result) {
                     Logger.d("身份证注册成功");
                     //可插入User表的数据
-                    VerifyResultUi.showRegisterSuccess(getActivity(),getString(com.id_card.R.string.id_card_register_success),false);
                     UserRegisterFragment.this.idCard = idCard;
                     registerBtn.setVisibility(View.VISIBLE);
 
                 } else {
                     Logger.d("身份证注册失败");
-                    VerifyResultUi.showRegisterFail(getActivity(),getString(com.id_card.R.string.id_card_register_success),false);
                 }
-                idCardService.destroyIdCard();
             }
         }, finalIdCardId)).start();
     }
@@ -581,10 +568,8 @@ public class UserRegisterFragment extends BaseFragment {
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-//            if (manageActivity != null) {
-//                manageActivity.skipFaceActivity();
-//            }
-            SkipActivityUtil.skipActivity(getActivity(), V3FaceRecActivity.class);
+            if (manageActivity != null)
+                manageActivity.skipFaceActivity();
         } else {
             //跳转默认的识别页面(没有开启人脸)
             SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);

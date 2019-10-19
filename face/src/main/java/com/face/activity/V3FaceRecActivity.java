@@ -108,9 +108,6 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         faceRecBoxView.bringToFront();
         tv_result = bindViewWithClick(R.id.homeMenu, true);
 
-        ArrayList<Finger6> fingerData = FingerListManager.getInstance().getFingerData();
-        Logger.d(" 指静脉数据：" + fingerData.size());
-
         nirCamera = FaceConfig.getInstance().getNirCamera();
     }
 
@@ -134,7 +131,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             FingerFactory.getInstance().fingerDevConnectStatus(this);
         }
 
-        if (SPUtil.getCardVerifyFlag()){
+        if (SPUtil.getCardVerifyFlag()) {
             idCardService = ARouter.getInstance().navigation(IdCardService.class);
             new Thread(new Runnable() {
                 @Override
@@ -279,7 +276,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     }
 
     @Override
-    public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData, BaseFaceRecProcessor.FaceTrackData faceTrackData) {
+    public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData,
+                                   BaseFaceRecProcessor.FaceTrackData faceTrackData) {
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
         // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
