@@ -41,6 +41,7 @@ import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.GetUIDimens;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
+import com.baselibrary.util.VerifyResultUi;
 import com.face.R;
 import com.face.service.FaceService;
 import com.face.ui.FaceRecBoxView;
@@ -459,6 +460,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     public void fingerVerifyResult(int res, String msg, int score, int index, Long fingerId, byte[] updateFinger) {
-
+        if (res == 1) {
+            VerifyResultUi.showVerifySuccess(this, getString(R.string.face_verify_success), true);
+        }
     }
 }

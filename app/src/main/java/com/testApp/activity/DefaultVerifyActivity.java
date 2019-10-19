@@ -226,14 +226,15 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     public void fingerVerifyResult(int res, String msg, int score,
                                    int index, Long fingerId, byte[] updateFinger) {
-//        if (res == 1) {
-//            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
+        if (res == 1) {
+            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
 //            Intent intent = new Intent();
 //            intent.setAction(AppConstant.USER_MENU_RECEIVER);
 //            intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
 //            intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
 //            sendBroadcast(intent);
-//        } else {
+        }
+// else {
 //            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_fail), true);
 //        }
     }
