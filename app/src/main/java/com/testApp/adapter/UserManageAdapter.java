@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.pojo.Face;
+import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.glidUtils.GlideUtil;
 
@@ -25,9 +26,14 @@ import java.util.List;
 public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Holder> {
 
     private List<User> users;
+    private UserItemCallBack callBack;
 
     public UserManageAdapter() {
         users = new ArrayList<>();
+    }
+
+    public void setCallBack(UserItemCallBack callBack) {
+        this.callBack = callBack;
     }
 
     public void addData(User user) {
@@ -85,6 +91,14 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         holder.userPhone.setText(MessageFormat.format("手机号:{0}", user.getPhone()));
         holder.userSection.setText(MessageFormat.format("部门:{0}", user.getSection()));
         holder.userCompany.setText(MessageFormat.format("公司:{0}", user.getOrganizName()));
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (callBack != null)
+                    callBack.itemLongClickListener(user, null, holder.getAdapterPosition());
+                return false;
+            }
+        });
 
     }
 
@@ -113,5 +127,11 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
             userCompany = itemView.findViewById(R.id.userCompany);
 
         }
+    }
+
+    public interface UserItemCallBack {
+        void userItemCallBack(int position);
+
+        void itemLongClickListener(User user, String managerName, int position);
     }
 }

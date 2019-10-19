@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_gray">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingTop="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_10"
+        android:text="@string/delete_manager"
+        android:textColor="@color/black_0"
+        android:textSize="@dimen/sp_18" />
+
+    <RelativeLayout
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="@dimen/dp_0_8"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dp_20">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/userAvatar"
+            android:layout_width="@dimen/dp_45"
+            android:layout_height="@dimen/dp_45"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_10"
+            app:srcCompat="@drawable/ic_default_user_avatar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userAvatar"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@string/user_name"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_17" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userSex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userAvatar"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_toEndOf="@+id/userName"
+            android:text="@string/user_sex"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_14" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userAvatar"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_toEndOf="@+id/userSex"
+            android:text="@string/user_age"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_14" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@string/user_section"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_14" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/userCompany"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userSection"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@string/user_company"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_14" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topView"
+        android:layout_marginTop="@dimen/dp_0_8"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="0.99"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/no"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_18" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/positionBtn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="@dimen/dp_0_8"
+            android:layout_weight="0.99"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/yes"
+            android:textColor="@color/blue_6"
+            android:textSize="@dimen/sp_18" />
+    </LinearLayout>
+
+</RelativeLayout>

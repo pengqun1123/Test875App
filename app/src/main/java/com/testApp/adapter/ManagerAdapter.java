@@ -75,13 +75,20 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> 
                 holder.itemView.getContext().getString(R.string.manager), i));
         Manager manager = managers.get(i);
         String manage_pw = manager.getManage_pw();
-        holder.managerPw.setText(manage_pw);
+        holder.managerPw.setText(MessageFormat.format("密码:{0}", manage_pw));
         holder.managerItem.setOnClickListener(new OnceClickListener() {
             @Override
             public void onNoDoubleClick(View v) {
                 if (callBack != null)
                     callBack.managerItemCallBack(holder.getAdapterPosition());
             }
+        });
+        holder.managerItem.setOnLongClickListener(view -> {
+            if (callBack != null)
+                callBack.itemLongClickListener(manager,
+                        holder.itemView.getContext().getString(R.string.manager) + i
+                        , holder.getAdapterPosition());
+            return false;
         });
     }
 
@@ -106,5 +113,7 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> 
 
     public interface ManagerItemCallBack {
         void managerItemCallBack(int position);
+
+        void itemLongClickListener(Manager manager, String managerName, int position);
     }
 }

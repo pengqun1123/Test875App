@@ -83,7 +83,7 @@ public class MenuActivity extends BaseActivity {
                             BaseApplication.AP.playFaceScreen();
                             ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
                             finish();
-                        } else if (flag == AppConstant.IDCARD_MODEL) {
+                        } else if (flag == AppConstant.ID_CARD_MODEL) {
                             BaseApplication.AP.play_rfid_card();
                         } else if (flag == AppConstant.PW_MODEL) {
                             BaseApplication.AP.playInputPw();

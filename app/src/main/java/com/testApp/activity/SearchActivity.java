@@ -1,5 +1,6 @@
 package com.testApp.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.dao.db.UserDao;
@@ -24,12 +26,8 @@ import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
 import com.testApp.adapter.UserManageAdapter;
-
-import org.greenrobot.greendao.async.AsyncOperation;
-import org.greenrobot.greendao.async.AsyncOperationListener;
-import org.greenrobot.greendao.async.AsyncSession;
-import org.greenrobot.greendao.query.Query;
-import org.greenrobot.greendao.query.WhereCondition;
+import com.testApp.callBack.SearchDeleteUser;
+import com.testApp.dialog.AskDialog;
 
 import java.util.List;
 
@@ -37,10 +35,27 @@ public class SearchActivity extends BaseActivity {
 
     private UserManageAdapter userManageAdapter;
     private AppCompatEditText search_edit;
+    private SearchDeleteUser searchDeleteUser;
 
     @Override
     protected Integer contentView() {
         return R.layout.activity_search;
+    }
+
+    @Override
+    protected void initData() {
+        Intent intent = getIntent();
+        searchDeleteUser = intent.getParcelableExtra(AppConstant.SEARCH_DELETE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        Toolbar toolBar = bindViewWithClick(R.id.toolbar, false);
+        if (toolBar == null) {
+            return;
+        }
+        TextView toolbarTitle = bindViewWithClick(R.id.toolbar_title, false);
+        AppCompatImageView backBtn = bindViewWithClick(R.id.backBtn, true);
+        toolbarTitle.setVisibility(View.VISIBLE);
+        backBtn.setVisibility(View.VISIBLE);
+        toolbarTitle.setText(getString(R.string.user_search));
     }
 
     @Override
@@ -56,6 +71,7 @@ public class SearchActivity extends BaseActivity {
         userRv.setLayoutManager(mLayoutManager);
         userRv.setItemAnimator(new DefaultItemAnimator());
         userManageAdapter = new UserManageAdapter();
+        userManageAdapter.setCallBack(callBack);
         userRv.setAdapter(userManageAdapter);
 
         search_edit.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -70,20 +86,6 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void initToolBar() {
 
-    }
-
-    @Override
-    protected void initData() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        Toolbar toolBar = bindViewWithClick(R.id.toolbar, false);
-        if (toolBar == null) {
-            return;
-        }
-        TextView toolbarTitle = bindViewWithClick(R.id.toolbar_title, false);
-        AppCompatImageView backBtn = bindViewWithClick(R.id.backBtn, true);
-        toolbarTitle.setVisibility(View.VISIBLE);
-        backBtn.setVisibility(View.VISIBLE);
-        toolbarTitle.setText(getString(R.string.user_search));
     }
 
     @Override
@@ -125,5 +127,23 @@ public class SearchActivity extends BaseActivity {
 
         dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition), UserDao.Properties.Name.eq(condition));
     }
+
+    private UserManageAdapter.UserItemCallBack callBack = new UserManageAdapter.UserItemCallBack() {
+        @Override
+        public void userItemCallBack(int position) {
+
+        }
+
+        @Override
+        public void itemLongClickListener(User user, String managerName, int position) {
+            AskDialog.deleteItemDataDialog(SearchActivity.this,
+                    user, null, managerName, flag -> {
+                        if (flag == 1) {
+                            if (searchDeleteUser != null)
+                                searchDeleteUser.searchDeleteUser(user);
+                        }
+                    });
+        }
+    };
 
 }

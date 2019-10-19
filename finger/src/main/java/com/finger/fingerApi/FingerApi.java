@@ -164,22 +164,24 @@ public class FingerApi {
             public void verify1_NCallBack(Msg msg) {
                 Integer result = msg.getResult();
                 Logger.d("验证的结果:" + result);
-                if (result == 1) {
-                    //比对的分数
-                    Integer score = msg.getScore();
-                    //比对模板对应的位置
-                    Integer index = msg.getIndex();
-                    //可更新的模板数据
-                    byte[] updateFingerData = msg.getFingerData();
-                    //当比对分数大于某个设定的值，可更新指静脉模板
-                    //eg：
-                    if (score >= 80) {
-                        //更新指静脉模板数据
-//                        updateFingerData(index, updateFingerData);
-                    }
-                } else {
-
-                }
+                callBack.verify1_NCallBack(msg);
+//                if (result == 1) {
+//                    //比对的分数
+//                    Integer score = msg.getScore();
+//                    //比对模板对应的位置
+//                    Integer index = msg.getIndex();
+//                    //可更新的模板数据
+//                    byte[] updateFingerData = msg.getFingerData();
+//                    //当比对分数大于某个设定的值，可更新指静脉模板
+//                    //eg：
+//                    if (score >= 80) {
+//                        //更新指静脉模板数据
+////                        updateFingerData(index, updateFingerData);
+//
+//                    }
+//                } else {
+//
+//                }
             }
         });
     }

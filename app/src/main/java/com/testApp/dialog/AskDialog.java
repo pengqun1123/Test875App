@@ -25,11 +25,14 @@ import com.baselibrary.custom.CEditText;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.listener.OnceClickListener;
+import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Manager;
+import com.baselibrary.pojo.User;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.dialogUtil.AppDialog;
+import com.baselibrary.util.glidUtils.GlideUtil;
 import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.callBack.CancelBtnClickListener;
@@ -37,6 +40,7 @@ import com.testApp.callBack.PositionBtnClickListener;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -49,13 +53,75 @@ import static com.baselibrary.util.SPUtil.putHasManagerPwd;
  */
 public class AskDialog {
 
-    //修改可注册的最大管理员数量
+    /**
+     * 删除manager的item dialog
+     *
+     * @param activity activity
+     */
+    public static void deleteItemDataDialog(@NonNull Activity activity, User user, Manager manager,
+                                            String managerName,
+                                            PositionBtnClickListener positionBtnClickListener) {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.delete_item_dialog, null);
+        AppCompatImageView userAvatar = dialogView.findViewById(R.id.userAvatar);
+        AppCompatTextView title = dialogView.findViewById(R.id.title);
+        AppCompatTextView userName = dialogView.findViewById(R.id.userName);
+        AppCompatTextView userSex = dialogView.findViewById(R.id.userSex);
+        AppCompatTextView userAge = dialogView.findViewById(R.id.userAge);
+        AppCompatTextView userSection = dialogView.findViewById(R.id.userSection);
+        AppCompatTextView userCompany = dialogView.findViewById(R.id.userCompany);
+        AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatButton positionBtn = dialogView.findViewById(R.id.positionBtn);
+        if (user != null) {
+            Face face = user.getFace();
+            String imagePath = null;
+            if (face != null) {
+                imagePath = face.getImagePath();
+            }
+            title.setText(activity.getString(R.string.delete_user));
+            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
+                    imagePath, userAvatar);
+            userName.setText(user.getName());
+            userSection.setText(user.getSection());
+            userSex.setText(user.getSex());
+            userAge.setText(user.getAge());
+            userCompany.setText(user.getOrganizName());
+        }
+        if (manager != null) {
+            userSex.setVisibility(View.GONE);
+            userAge.setVisibility(View.GONE);
+            userCompany.setVisibility(View.GONE);
+            userSection.setText(MessageFormat.format("密码:{0}", manager.getManage_pw()));
+            userName.setText(managerName);
+            title.setText(activity.getString(R.string.delete_manager));
+            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
+                    ActivityCompat.getDrawable(activity, R.drawable.ic_default_user_avatar), userAvatar);
+        }
+        Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
+        cancelBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        positionBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (positionBtnClickListener != null)
+                    positionBtnClickListener.positionClickListener(1);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 修改可注册的最大管理员数量
+     *
+     * @param activity activity
+     */
     @SuppressLint("ResourceAsColor")
     public static void reviseMaxManagerNum(@NonNull Activity activity) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.revise_max_manager_num_view, null);
-        //AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
         AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
-        //AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
         AppCompatEditText maxManagerEt = dialogView.findViewById(R.id.maxManagerEt);
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
         nextBtn.setText(activity.getString(R.string.positive));
@@ -105,7 +171,6 @@ public class AskDialog {
     public static void showAskUserCenterDialog(@NonNull Activity activity, PositionBtnClickListener listener) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_user_center_dialog_view,
                 null);
-        //AppCompatTextView tip = dialogView.findViewById(R.id.tip);
         RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
         AppCompatRadioButton fingerRadioButton = dialogView.findViewById(R.id.fingerRadioButton);
         AppCompatRadioButton faceRadioButton = dialogView.findViewById(R.id.faceRadioButton);
@@ -121,7 +186,7 @@ public class AskDialog {
             } else if (i == faceRadioButton.getId()) {
                 flag[0] = AppConstant.FACE_MODEL;
             } else if (i == cardRadioButton.getId()) {
-                flag[0] = AppConstant.IDCARD_MODEL;
+                flag[0] = AppConstant.ID_CARD_MODEL;
             } else if (i == pwRadioButton.getId()) {
                 flag[0] = AppConstant.PW_MODEL;
             }
@@ -288,7 +353,7 @@ public class AskDialog {
      * @param activity activity
      * @param callBack 回调接口
      */
-    public static void showManagerDialog(@NonNull Activity activity, PositiveCallBack callBack) {
+    public static void showManagerDialog(@NonNull Activity activity, int flag, PositiveCallBack callBack) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_manager_dialog_view, null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
         AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
@@ -324,6 +389,9 @@ public class AskDialog {
                             return;
                         }
                         pw1[0] = pw;
+                        if (flag == AppConstant.ADD_NEW_MANAGER) {
+                            nextBtn.setText(activity.getString(R.string.save));
+                        }
                         managerTip.setText(activity.getString(R.string.please_input_pw_agin));
                         inputPw.getText().clear();
                     } else {
@@ -335,11 +403,19 @@ public class AskDialog {
                         }
                         pw1[1] = pw2;
                         if (pw1[0].equals(pw1[1])) {
-                            nextBtn.setVisibility(View.GONE);
-                            inputPw.setVisibility(View.GONE);
-                            openFaceAsk.setVisibility(View.VISIBLE);
-                            btnParent.setVisibility(View.VISIBLE);
-                            managerTip.setText(activity.getString(R.string.please_select_open_face));
+                            if (flag == AppConstant.ADD_NEW_MANAGER) {
+                                if (pw1[0].equals(pw1[1])) {
+                                    checkManagerPw(activity, pw1[0], callBack);
+                                }
+                                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                                dialog.dismiss();
+                            } else if (flag == AppConstant.INIT_ADD_MANAGER) {
+                                nextBtn.setVisibility(View.GONE);
+                                inputPw.setVisibility(View.GONE);
+                                openFaceAsk.setVisibility(View.VISIBLE);
+                                btnParent.setVisibility(View.VISIBLE);
+                                managerTip.setText(activity.getString(R.string.please_select_open_face));
+                            }
                         } else {
                             ToastUtils.showSquareTvToast(
                                     activity, activity.getString(R.string.pw_no_eq));

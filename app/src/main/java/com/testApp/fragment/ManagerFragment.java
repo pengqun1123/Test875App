@@ -1,6 +1,7 @@
 package com.testApp.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +11,14 @@ import android.view.View;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
 import com.testApp.adapter.ManagerAdapter;
+import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
 import java.text.MessageFormat;
@@ -76,7 +79,7 @@ public class ManagerFragment extends BaseFragment {
             case R.id.addNewManager:
                 //新增管理员
                 AskDialog.showManagerDialog(Objects.requireNonNull(getActivity()),
-                        new AskDialog.PositiveCallBack() {
+                        AppConstant.ADD_NEW_MANAGER, new AskDialog.PositiveCallBack() {
 
                             @Override
                             public void positiveCallBack(int flag, Manager manager) {
@@ -112,8 +115,29 @@ public class ManagerFragment extends BaseFragment {
         }
     }
 
-    private ManagerAdapter.ManagerItemCallBack callBack = position ->
-            ToastUtils.showSingleToast(getActivity(), "点击了managerItem");
+    private ManagerAdapter.ManagerItemCallBack callBack = new ManagerAdapter.ManagerItemCallBack() {
+        @Override
+        public void managerItemCallBack(int position) {
+
+        }
+
+        @Override
+        public void itemLongClickListener(Manager manager, String managerName, int position) {
+            AskDialog.deleteItemDataDialog(Objects.requireNonNull(getActivity()),
+                    null, manager, managerName, flag -> {
+                        if (flag == 1) {
+                            if (managerAdapter != null) {
+                                managerAdapter.removeData(manager);
+                                DBUtil dbUtil = BaseApplication.getDbUtil();
+                                dbUtil.delete(manager);
+                                ToastUtils.showSquareImgToast(getActivity(),
+                                        getString(R.string.delete_success),
+                                        ActivityCompat.getDrawable(getActivity(), R.drawable.ic_tick));
+                            }
+                        }
+                    });
+        }
+    };
 
 
 }

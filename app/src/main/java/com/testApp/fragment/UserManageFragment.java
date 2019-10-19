@@ -2,8 +2,11 @@ package com.testApp.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -16,12 +19,17 @@ import android.view.View;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.SkipActivityUtil;
+import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.UserManageAdapter;
+import com.testApp.callBack.SearchDeleteUser;
+import com.testApp.dialog.AskDialog;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -64,6 +72,8 @@ public class UserManageFragment extends BaseFragment
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         showAllData = bindViewWithClick(R.id.showAllData, false);
         noData.setVisibility(View.VISIBLE);
+        //设置reFresh禁止刷新
+        userRefresh.setRefreshing(false);
 
         //设置加载时候的颜色,最多设置4中颜色
         userRefresh.setColorSchemeColors(R.color.blue_5, R.color.blue_7,
@@ -80,6 +90,7 @@ public class UserManageFragment extends BaseFragment
         userRv.setLayoutManager(mLayoutManager);
         userRv.setItemAnimator(new DefaultItemAnimator());
         userManageAdapter = new UserManageAdapter();
+        userManageAdapter.setCallBack(callBack);
         userRv.setAdapter(userManageAdapter);
 
         userRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -114,7 +125,9 @@ public class UserManageFragment extends BaseFragment
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.searchUserBtn:
-                SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra(AppConstant.SEARCH_DELETE, searchDeleteUser);
+                SkipActivityUtil.skipIntentDataActivity(getActivity(), intent);
                 break;
             case R.id.registerManagerMaxNum:
                 //修改可注册的管理员的最大数量
@@ -152,6 +165,57 @@ public class UserManageFragment extends BaseFragment
             if (userManageAdapter.getItemCount() == userCount) {
                 showAllData.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    private UserManageAdapter.UserItemCallBack callBack = new UserManageAdapter.UserItemCallBack() {
+        @Override
+        public void userItemCallBack(int position) {
+
+        }
+
+        @Override
+        public void itemLongClickListener(User user, String managerName, int position) {
+            AskDialog.deleteItemDataDialog(Objects.requireNonNull(getActivity()),
+                    user, null, managerName, flag -> {
+                        if (flag == 1) {
+                            deleteUser(user);
+                        }
+                    });
+        }
+    };
+
+    private SearchDeleteUser searchDeleteUser = new SearchDeleteUser() {
+        @Override
+        public void searchDeleteUser(User user) {
+
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+
+        }
+    };
+
+    /**
+     * 删除用户
+     *
+     * @param user user
+     */
+    public void deleteUser(User user) {
+        if (userManageAdapter != null) {
+            userManageAdapter.removeData(user);
+            DBUtil dbUtil = BaseApplication.getDbUtil();
+            dbUtil.delete(user);
+            ToastUtils.showSquareImgToast(getActivity(),
+                    getString(R.string.delete_success),
+                    ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
+                            , R.drawable.ic_tick));
         }
     }
 

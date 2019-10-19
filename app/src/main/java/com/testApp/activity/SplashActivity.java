@@ -81,10 +81,10 @@ public class SplashActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void initData() {
-     SPUtil.putCardVerifyFlag(true);
-     SPUtil.putFingerVerifyFlag(true);
-     SPUtil.putPwVerifyFlag(true);
-        //clearData();
+        SPUtil.putCardVerifyFlag(true);
+        SPUtil.putFingerVerifyFlag(true);
+        SPUtil.putPwVerifyFlag(true);
+//        clearData();
 
         checkMyPermissions(per);
 
@@ -145,19 +145,20 @@ public class SplashActivity extends BaseActivity {
         Logger.d("是否已经添加管理员：" + hasManagerPwd);
         if (!hasManagerPwd) {
             //询问设置添加管理员
-            AskDialog.showManagerDialog(this, new AskDialog.PositiveCallBack() {
+            AskDialog.showManagerDialog(this, AppConstant.INIT_ADD_MANAGER,
+                    new AskDialog.PositiveCallBack() {
 
-                @Override
-                public void positiveCallBack(int flag, Manager manager) {
-                    loadData(null);
-                }
+                        @Override
+                        public void positiveCallBack(int flag, Manager manager) {
+                            loadData(null);
+                        }
 
-                @Override
-                public void activationCodeCallBack(String code) {
-                    SPUtil.putFaceVerifyFlag(true);
-                    loadData(code);
-                }
-            });
+                        @Override
+                        public void activationCodeCallBack(String code) {
+                            SPUtil.putFaceVerifyFlag(true);
+                            loadData(code);
+                        }
+                    });
         } else {
             loadingData();
             Boolean devOpenStatus = FingerApi.getDevOpenSatus();

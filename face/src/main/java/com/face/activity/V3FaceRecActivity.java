@@ -420,6 +420,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 public void fingerVerifyResult(int res, String msg, int score,
                                                int index, Long fingerId, byte[] updateFinger) {
                     if (res == 1) {
+                        Logger.d("指静脉验证成功");
                         ToastUtils.showSquareImgToast(V3FaceRecActivity.this, "身份证验证成功", null);
 
                     } else {

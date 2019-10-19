@@ -124,6 +124,9 @@
     <string name="wellcom_tip">欢迎光临!</string>
     <string name="user_company">用户所在公司</string>
     <string name="user_search">用户搜索</string>
+    <string name="delete_success">删除成功!</string>
+    <string name="delete_manager">删除管理员</string>
+    <string name="delete_user">删除用户</string>
 
 
 </resources>

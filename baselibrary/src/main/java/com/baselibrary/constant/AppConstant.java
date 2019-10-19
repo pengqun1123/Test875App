@@ -8,8 +8,11 @@ public final class AppConstant {
 
     public static final Integer FINGER_MODEL = 0x10;
     public static final Integer FACE_MODEL = 0x11;
-    public static final Integer IDCARD_MODEL = 0x12;
+    public static final Integer ID_CARD_MODEL = 0x12;
     public static final Integer PW_MODEL = 0x13;
+
+    public static final Integer ADD_NEW_MANAGER = 0x14;
+    public static final Integer INIT_ADD_MANAGER = 0x15;
 
 
     public static final Integer FINGER6_DATA_SIZE = 6464;
@@ -29,6 +32,7 @@ public final class AppConstant {
     public static final String DELETE_FINGER = "delete_finger";
     public static final String FINGER_VERIFY_RESULT = "finger_verify_result";
     public static final String VERIFY_RESULT_TYPE = "verify_type";
+    public static final String SEARCH_DELETE = "search_delete";
 
     //视频激活码
     public static final String FACE_ACTIVITY_CODE =
