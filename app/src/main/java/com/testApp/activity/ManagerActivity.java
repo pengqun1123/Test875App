@@ -1,9 +1,6 @@
 package com.testApp.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcel;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,17 +13,12 @@ import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 
-import com.baselibrary.constant.AppConstant;
-import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.face.activity.V3FaceRecActivity;
-import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.adapter.MyFragmentStatePagerAdapter;
-import com.testApp.callBack.RegisterUserCallBack;
-import com.testApp.callBack.SaveUserInfo;
 import com.testApp.fragment.ManagerFragment;
 import com.testApp.fragment.UserManageFragment;
 import com.testApp.fragment.UserRegisterFragment;
@@ -119,6 +111,7 @@ public class ManagerActivity extends BaseActivity {
         if (fragments.size() > 0) {
             fragments.clear();
         }
+
         manageFragment = UserManageFragment.instance();
         userRegisterFragment = UserRegisterFragment.instance();
         fragments.add(manageFragment);

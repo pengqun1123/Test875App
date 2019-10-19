@@ -24,6 +24,7 @@ import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnStartServiceListener;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.FingerFactory;
@@ -195,8 +196,8 @@ public class FaceVerifyActivity extends BaseActivity implements BaseFaceRecProce
                         public void run() {
                             long faceId = faceTrackData.searchedPerson.getFaceId();
                             Bundle bundle=new Bundle();
-                            bundle.putInt("type",2);
-                            bundle.putLong("id",faceId);
+                            bundle.putInt(AppConstant.VERIFY_RESULT_TYPE,2);
+                            bundle.putLong(AppConstant.VERIFY_TYPE_ID,faceId);
                             ToastUtils.showSquareImgToast(FaceVerifyActivity.this
                                     , getString(R.string.face_verify_success),null);
                             ARouterUtil.navigation(ARouterConstant.USER_CENTER_ACTIVITY,bundle);

@@ -84,7 +84,7 @@ public class UserRegisterFragment extends BaseFragment {
     private ManagerActivity manageActivity;
 
     public UserRegisterFragment() {
-        // Required empty public constructor
+
     }
 
     public static UserRegisterFragment instance() {
@@ -340,9 +340,11 @@ public class UserRegisterFragment extends BaseFragment {
                     //可插入User表的数据
                     UserRegisterFragment.this.idCard = idCard;
                     registerBtn.setVisibility(View.VISIBLE);
+                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_success),false);
 
                 } else {
                     Logger.d("身份证注册失败");
+                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_fail),false);
                 }
             }
         }, finalIdCardId)).start();
@@ -568,8 +570,7 @@ public class UserRegisterFragment extends BaseFragment {
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-            if (manageActivity != null)
-                manageActivity.skipFaceActivity();
+          SkipActivityUtil.skipActivity(getActivity(),V3FaceRecActivity.class);
         } else {
             //跳转默认的识别页面(没有开启人脸)
             SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);

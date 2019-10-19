@@ -114,6 +114,7 @@
                     android:text="@string/worker_no" />
 
                 <android.support.v7.widget.AppCompatEditText
+                    android:clickable="false"
                     android:id="@+id/staffNoEt"
                     style="@style/manage_et_style"
                     android:hint="@string/please_input_staff_no"

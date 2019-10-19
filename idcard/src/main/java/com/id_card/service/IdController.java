@@ -218,6 +218,9 @@ public class IdController {
                        });
                        if (type==1) {
                            //注册
+                           if (IdController.this.cardId!=-1) {
+                               idCard.setUId(IdController.this.cardId);
+                           }
                            dbUtil.insertAsyncSingle(idCard);
                        }else {
                            String id = idCard.getId();

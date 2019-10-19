@@ -106,6 +106,7 @@
     <string name="init_finger_data_fail">指静脉数据初始化失败!</string>
     <string name="dont_equls_user_no">用户编号重复，请重填!</string>
     <string name="ask_user_register_msg_save">注册的信息尚未保存，是否立即保存?</string>
+    <string name="ask_user_register_msg_update">当前模块已注册，是否修改?</string>
     <string name="msg_tip">信息提示</string>
     <string name="menu_set">菜单设置</string>
     <string name="finer">指静脉</string>

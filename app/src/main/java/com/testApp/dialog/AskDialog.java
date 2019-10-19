@@ -336,6 +336,43 @@ public class AskDialog {
     }
 
     /**
+     * 询问用户是否修改当前用户信息
+     *
+     * @param activity activity
+     */
+    public static void showAskUpdateDialog(@NonNull Activity activity, String content,
+                                         PositionBtnClickListener positionClickListener,
+                                         CancelBtnClickListener cancelClickListener) {
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_user_save_register_msg, null);
+        AppCompatTextView msgContent = dialogView.findViewById(R.id.msgContent);
+        AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
+        AppCompatButton positiveBtn = dialogView.findViewById(R.id.positiveBtn);
+        if (!TextUtils.isEmpty(content)) {
+            msgContent.setText(content);
+        }
+        Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
+        positiveBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (positionClickListener != null) {
+                    positionClickListener.positionClickListener(1);
+                    dialog.dismiss();
+                }
+            }
+        });
+        cancelBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                if (cancelClickListener != null) {
+                    cancelClickListener.cancelClickListener();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+    }
+
+    /**
      * 设置验证方式的Dialog
      *
      * @param activity activity

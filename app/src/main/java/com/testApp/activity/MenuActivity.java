@@ -103,6 +103,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                         } else if (flag == AppConstant.FACE_MODEL) {
                             BaseApplication.AP.playFaceScreen();
                             ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
+                            finish();
                         } else if (flag == AppConstant.ID_CARD_MODEL) {
                             BaseApplication.AP.play_rfid_card();
                             idCardService = ARouter.getInstance().navigation(IdCardService.class);
