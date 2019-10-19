@@ -83,7 +83,7 @@ public class FingerRouter implements FingerRouterService {
 
     @Override
     public void unbindDevService(Context context) {
-        FingerServiceUtil.getInstance().unbindDevService(context);
+        FingerServiceUtil.getInstance().unbindFingerService(context);
     }
 
     @Override

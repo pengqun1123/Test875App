@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 
 import com.baselibrary.constant.AppConstant;
@@ -86,7 +88,6 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.backPreviousBtn:
-                // TODO: 2019/10/18 删除不保存的信息
                 if (userRegisterFragment != null) {
                     userRegisterFragment.checkRegisterContent(isSave -> skipVerify());
                 }
@@ -124,6 +125,11 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
         fragments.add(userRegisterFragment);
         fragments.add(ManagerFragment.instance());
         return fragments;
+    }
+
+    public void skipFaceActivity() {
+        //跳转人脸识别页面
+        ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
     }
 
     @Override

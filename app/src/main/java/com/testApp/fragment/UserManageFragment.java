@@ -67,12 +67,11 @@ public class UserManageFragment extends BaseFragment
     @Override
     protected void initView() {
         bindViewWithClick(R.id.searchUserBtn, true);
-        SwipeRefreshLayout userRefresh = bindViewWithClick(R.id.userRefresh, false);
         RecyclerView userRv = bindViewWithClick(R.id.userRv, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         showAllData = bindViewWithClick(R.id.showAllData, false);
         noData.setVisibility(View.VISIBLE);
-        //设置reFresh禁止刷新
+        /*//设置reFresh禁止刷新
         userRefresh.setRefreshing(false);
 
         //设置加载时候的颜色,最多设置4中颜色
@@ -82,7 +81,7 @@ public class UserManageFragment extends BaseFragment
         //设置第一次进入页面时显示加载进度条
         userRefresh.setProgressViewOffset(true, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
+                        .getDisplayMetrics()));*/
 
         userRv.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity(),

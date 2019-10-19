@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.base.BaseApplication;
 import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
@@ -22,15 +24,18 @@ import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.CalendarUtil;
+import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 
+import com.baselibrary.util.VerifyResultUi;
 import com.finger.callBack.FingerDevStatusCallBack;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
 
 import com.testApp.R;
+
 import java.text.MessageFormat;
 
 
@@ -82,12 +87,14 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         //接收指静脉设备的连接状态
         FingerApi.getInstance().receiveFingerDevConnectStatus(this);
         idCardService = ARouter.getInstance().navigation(IdCardService.class);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                idCardService.verify_IdCard(DefaultVerifyActivity.this);
-            }
-        }).start();
+        if (SPUtil.getCardVerifyFlag()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    idCardService.verify_IdCard(DefaultVerifyActivity.this);
+                }
+            }).start();
+        }
         getSystemTime();
     }
 
@@ -141,14 +148,13 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void onStop() {
         super.onStop();
-        Logger.d(" DefaultActivity  的onStop方法");
         FingerServiceUtil.getInstance().pauseFingerVerify();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FingerServiceUtil.getInstance().unbindDevService(this);
+        FingerServiceUtil.getInstance().unbindFingerService(this);
         isStartService = false;
         if (idCardService != null)
             idCardService.destroyIdCard();
@@ -192,10 +198,13 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            ToastUtils.showSquareTvToast(this, getString(R.string.id_card_verify_fail));
+            Logger.d("身份证验证失败");
+            VerifyResultUi.showVerifyFail(this,
+                    getString(R.string.verify_fail), true);
         } else {
-            Log.d("999", idCard.getName());
-            ToastUtils.showSquareTvToast(this, getString(R.string.id_card_verify_success));
+            Logger.d("身份证验证成功");
+            VerifyResultUi.showVerifySuccess(this,
+                    getString(R.string.verify_success), true);
         }
     }
 
@@ -208,12 +217,14 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     public void fingerVerifyResult(int res, String msg, int score,
                                    int index, Long fingerId, byte[] updateFinger) {
-        Logger.d("指静脉验证结果：" + msg);
         if (res == 1) {
+            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
             Intent intent = new Intent();
             intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
             intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
             sendBroadcast(intent);
+        } else {
+            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_fail), true);
         }
     }
 

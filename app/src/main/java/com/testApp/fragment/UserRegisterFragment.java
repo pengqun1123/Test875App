@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
@@ -23,6 +24,7 @@ import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger6;
@@ -36,6 +38,7 @@ import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
+import com.baselibrary.util.VerifyResultUi;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
@@ -43,6 +46,7 @@ import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
+import com.testApp.activity.ManagerActivity;
 import com.testApp.callBack.CancelBtnClickListener;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.callBack.QueryUserNo;
@@ -73,6 +77,7 @@ public class UserRegisterFragment extends BaseFragment {
     private byte[] allFingerData;
     private int allFingerSize;
     private RegisterUserCallBack registerUserCallBack;
+    private ManagerActivity manageActivity;
 
     public UserRegisterFragment() {
         // Required empty public constructor
@@ -117,6 +122,7 @@ public class UserRegisterFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        manageActivity = (ManagerActivity) getActivity();
         EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -295,11 +301,21 @@ public class UserRegisterFragment extends BaseFragment {
     private void pwRegister() {
         PwFactory.createPw(getActivity(), pw -> {
             DBUtil dbUtil = BaseApplication.getDbUtil();
-            dbUtil.insertOrReplace(pw);
-            Logger.d("Pw成功插入：");
-            //可添加到User表的pwd
-            UserRegisterFragment.this.pwd = pw;
-            registerBtn.setVisibility(View.VISIBLE);
+
+            PwDao pwDao = dbUtil.getDaoSession().getPwDao();
+            QueryBuilder<Pw> pwQueryBuilder = pwDao.queryBuilder();
+            List<Pw> list = pwQueryBuilder.where(PwDao.Properties.Password.eq(pw.getPassword())).list();
+            if (list != null && list.size() > 0) {
+                VerifyResultUi.showRegisterFail(Objects.requireNonNull(getActivity()),
+                        getString(R.string.pw_register_fail));
+            } else {
+                dbUtil.insertOrReplace(pw);
+                //可添加到User表的pwd
+                UserRegisterFragment.this.pwd = pw;
+                registerBtn.setVisibility(View.VISIBLE);
+                VerifyResultUi.showRegisterSuccess(Objects.requireNonNull(getActivity()),
+                        getString(R.string.pw_register_success));
+            }
         });
     }
 
@@ -551,8 +567,8 @@ public class UserRegisterFragment extends BaseFragment {
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-            //跳转人脸识别页面
-            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+            if (manageActivity != null)
+                manageActivity.skipFaceActivity();
         } else {
             //跳转默认的识别页面(没有开启人脸)
             SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);
@@ -580,10 +596,24 @@ public class UserRegisterFragment extends BaseFragment {
                     }, new CancelBtnClickListener() {
                         @Override
                         public void cancelClickListener() {
-                            pwd = null;
-                            fg6 = null;
-                            idCard = null;
-                            face = null;
+                            //删除已经出入数据库的数据
+                            DBUtil dbUtil = BaseApplication.getDbUtil();
+                            if (pwd != null) {
+                                dbUtil.delete(pwd);
+                                pwd = null;
+                            }
+                            if (fg6 != null) {
+                                dbUtil.delete(fg6);
+                                fg6 = null;
+                            }
+                            if (idCard != null) {
+                                dbUtil.delete(idCard);
+                                idCard = null;
+                            }
+                            if (face != null) {
+                                dbUtil.delete(face);
+                                face = null;
+                            }
                             if (saveUserInfo != null)
                                 saveUserInfo.saveUserInfo(false);
                         }

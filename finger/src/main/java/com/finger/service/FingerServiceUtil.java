@@ -75,7 +75,7 @@ public class FingerServiceUtil {
         }
     }
 
-    public void unbindDevService(Context context) {
+    public void unbindFingerService(Context context) {
         this.startServiceListener.startServiceListener(false);
         context.unbindService(serviceConnection);
     }

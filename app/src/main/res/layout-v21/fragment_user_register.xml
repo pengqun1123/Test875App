@@ -153,6 +153,7 @@
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/companyNameEt"
                     style="@style/manage_et_style"
+                    android:layout_width="230dp"
                     android:hint="@string/please_input_company"
                     android:inputType="text"
                     android:maxLength="20" />
