@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
+import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.dao.db.UserDao;
@@ -80,8 +81,8 @@ public class UserCenterActivity extends BaseActivity {
     @Override
     protected void initData() {
         Bundle extras = getIntent().getExtras();
-        int type = extras.getInt("type");
-        long id = extras.getLong("id");
+        int type = extras.getInt(AppConstant.VERIFY_RESULT_TYPE);
+        long id = extras.getLong(AppConstant.VERIFY_TYPE_ID);
         Log.d("445",type+"");
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<User>() {

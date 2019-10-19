@@ -17,28 +17,26 @@ import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.callBack.CardInfoListener;
-import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
-import com.baselibrary.callBack.OnStartServiceListener;
 import com.baselibrary.constant.AppConstant;
-import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
-import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.VerifyResultUi;
 import com.face.activity.V3FaceRecActivity;
+import com.finger.callBack.FingerDevStatusCallBack;
+import com.finger.fingerApi.FingerApi;
+import com.finger.service.FingerServiceUtil;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
-import java.util.Objects;
-import java.util.function.LongFunction;
-
 @Route(path = ARouterConstant.MENU_ACTIVITY)
-public class MenuActivity extends BaseActivity implements CardInfoListener, FingerDevStatusConnectListener {
+public class MenuActivity extends BaseActivity implements CardInfoListener, FingerDevStatusCallBack
+        , FingerVerifyResultListener {
 
     private IdCardService idCardService;
 
@@ -61,7 +59,10 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     @Override
     protected void initData() {
-      //  fingerVerifyResult();
+        //接收指静脉设备的连接状态
+        FingerApi.getInstance().receiveFingerDevConnectStatus(this);
+        //  fingerVerifyResult();
+
     }
 
     @Override
@@ -71,6 +72,8 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                 if (SPUtil.getOpenFace()) {
                     //跳转人脸识别页面
                     SkipActivityUtil.skipActivity(MenuActivity.this, V3FaceRecActivity.class);
+                } else {
+                    SkipActivityUtil.skipActivity(MenuActivity.this, DefaultVerifyActivity.class);
                 }
                 finish();
                 break;
@@ -97,11 +100,10 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                     public void positionClickListener(int flag) {
                         if (flag == AppConstant.FINGER_MODEL) {
                             BaseApplication.AP.play_inputDownGently();
-                            FingerFactory.getInstance().fingerDevConnectStatus(MenuActivity.this);
                         } else if (flag == AppConstant.FACE_MODEL) {
-                                BaseApplication.AP.playFaceScreen();
-                                ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
-                        }  else if (flag == AppConstant.ID_CARD_MODEL) {
+                            BaseApplication.AP.playFaceScreen();
+                            ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
+                        } else if (flag == AppConstant.ID_CARD_MODEL) {
                             BaseApplication.AP.play_rfid_card();
                             idCardService = ARouter.getInstance().navigation(IdCardService.class);
                             new Thread(new Runnable() {
@@ -115,17 +117,17 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                             AskDialog.VerifyUserPwd(MenuActivity.this, new AskDialog.UserPwdVerifyCallBack() {
                                 @Override
                                 public void userPwdVerifyCallBack(Long id) {
-                                    if (id!=null){
+                                    if (id != null) {
                                         VerifyResultUi.showVerifyFail(MenuActivity.this,
-                                                getString(R.string.pw_register_success),false);
+                                                getString(R.string.pw_register_success), false);
                                         Bundle bundle = new Bundle();
-                                        bundle.putInt("type",4);
-                                        bundle.putLong("id",id);
-                                        SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
+                                        bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 4);
+                                        bundle.putLong(AppConstant.VERIFY_TYPE_ID, id);
+                                        SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
                                         finish();
-                                    }else {
+                                    } else {
                                         VerifyResultUi.showVerifyFail(MenuActivity.this,
-                                                getString(R.string.pw_register_fail),false);
+                                                getString(R.string.pw_register_fail), false);
                                     }
                                 }
                             });
@@ -139,19 +141,59 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FingerServiceUtil.getInstance().pauseFingerVerify();
+        if (isStartService) {
+            FingerServiceUtil.getInstance().unbindFingerService(this);
+            isStartService = false;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
        /* if (receiver!=null) {
             unregisterReceiver(receiver);
         }*/
-        if (isStartService) {
-            FingerFactory.getInstance().unbindDevService(this);
-            isStartService = false;
-        }
         if (idCardService != null) {
             idCardService.destroyIdCard();
         }
     }
+
+    @Override
+    public void onGetCardInfo(IdCard idCard) {
+        if (idCard == null) {
+            ToastUtils.showSquareImgToast(MenuActivity.this
+                    , "身份证验证失败"
+                    , ActivityCompat.getDrawable(MenuActivity.this
+                            , com.face.R.drawable.cry_icon));
+
+        } else {
+            ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 3);
+            bundle.putLong(AppConstant.VERIFY_TYPE_ID, idCard.getUId());
+            SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
+            finish();
+        }
+    }
+
+    @Override
+    public void onRegisterResult(boolean result, IdCard idCard) {
+
+    }
+
 
     /**
      * 指静脉验证的结果
@@ -172,8 +214,8 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                     ToastUtils.showSquareImgToast(MenuActivity.this
                             , "指静脉验证成功"
                             , null);
-                    SkipActivityUtil.skipActivity(MenuActivity.this,UserCenterActivity.class);
-                }else {
+                    SkipActivityUtil.skipActivity(MenuActivity.this, UserCenterActivity.class);
+                } else {
                     ToastUtils.showSquareImgToast(MenuActivity.this
                             , "指静脉验证失败"
                             , ActivityCompat.getDrawable(MenuActivity.this
@@ -183,71 +225,50 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
         }
     };
 
+    private Boolean isStartService = false;
+
+    /**
+     * 获取设备的连接状态
+     *
+     * @param res 指静脉设备的连接结果
+     * @param msg 连接状态的提示
+     */
     @Override
-    protected void onStart() {
-        super.onStart();
-        FingerFactory.getInstance().reStartFingerVerify();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        FingerFactory.getInstance().pauseFingerVerify();
-    }
-
-
-    @Override
-    public void onGetCardInfo(IdCard idCard) {
-        if (idCard == null) {
-            ToastUtils.showSquareImgToast(MenuActivity.this
-                    , "身份证验证失败"
-                    , ActivityCompat.getDrawable(MenuActivity.this
-                            , com.face.R.drawable.cry_icon));
-
-        } else {
-            ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
-            Bundle bundle = new Bundle();
-            bundle.putInt("type",3);
-            bundle.putLong("id",idCard.getUId());
-            SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
-            finish();
+    public void fingerDevStatus(int res, String msg) {
+        if (res == 1 && !isStartService){
+            Logger.d("测试  MenuActivity  启动FingerService ");
+            FingerServiceUtil.getInstance().startFingerService(this,
+                    isStart -> {
+                        isStartService = isStart;
+                        if (isStart){
+                            Logger.d("测试  MenuActivity  调用FingerService 1：N验证");
+                            FingerServiceUtil.getInstance().setFingerVerifyResult(this);
+                        }
+                    });
         }
     }
 
+    /**
+     * 接收指静脉的验证结果
+     *
+     * @param res          指静脉验证结果的状态码
+     * @param msg          提示信息
+     * @param score        验证分数
+     * @param index        模板可更新的下标
+     * @param fingerId     验证成功的指静脉ID
+     * @param updateFinger 可更新的指静脉的数据
+     */
     @Override
-    public void onRegisterResult(boolean result, IdCard idCard) {
-
-    }
-    private Boolean isStartService = false;
-    @Override
-    public void fingerDevStatusConnect(int res, String msg) {
-        if (res == 1 && !isStartService) {
-            FingerFactory.getInstance().startFingerService(this, new FingerVerifyResultListener() {
-                @Override
-                public void fingerVerifyResult(int res, String msg, int score,
-                                               int index, Long fingerId, byte[] updateFinger) {
-                    if (res == 1) {
-                        ToastUtils.showSquareImgToast(MenuActivity.this
-                                , "指静脉验证成功"
-                                , null);
-                        Bundle bundle=new Bundle();
-                        bundle.putInt("type",1);
-                        bundle.putLong("id",fingerId);
-                        SkipActivityUtil.skipDataActivity(MenuActivity.this,UserCenterActivity.class,bundle);
-                        finish();
-                    }else {
-                        ToastUtils.showSquareImgToast(MenuActivity.this
-                                , "指静脉验证失败"
-                                , ActivityCompat.getDrawable(MenuActivity.this
-                                        , com.face.R.drawable.cry_icon));
-                    }
-                }
-            }, new OnStartServiceListener() {
-                @Override
-                public void startServiceListener(Boolean isStart) {
-                    isStartService = isStart;
-                }
-            });
+    public void fingerVerifyResult(int res, String msg, int score,
+                                   int index, Long fingerId, byte[] updateFinger) {
+        if (res == 1) {
+            //指静脉验证成功
+            VerifyResultUi.showVerifySuccess(this,
+                    getString(R.string.verify_success), false);
+            Bundle bundle = new Bundle();
+            bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 1);
+            bundle.putLong(AppConstant.VERIFY_TYPE_ID, fingerId);
+            SkipActivityUtil.skipDataActivity(this, UserCenterActivity.class, bundle);
         }
     }
 }

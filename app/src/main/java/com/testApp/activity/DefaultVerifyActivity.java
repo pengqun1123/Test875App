@@ -131,6 +131,12 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void onPause() {
         super.onPause();
+        FingerServiceUtil.getInstance().pauseFingerVerify();
+        if (isStartService) {
+            Logger.d("测试  DefaultActivity  解绑FingerService ");
+            FingerServiceUtil.getInstance().unbindFingerService(this);
+            isStartService = false;
+        }
         if (gear1Anim != null) {
             AnimatorUtils.pauseAnim(gear1Anim);
         }
@@ -148,14 +154,11 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void onStop() {
         super.onStop();
-        FingerServiceUtil.getInstance().pauseFingerVerify();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FingerServiceUtil.getInstance().unbindFingerService(this);
-        isStartService = false;
         if (idCardService != null)
             idCardService.destroyIdCard();
         if (gear1Anim != null) {
@@ -178,21 +181,27 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         switch (view.getId()) {
             case R.id.homeMenu:
                 SkipActivityUtil.skipActivity(this, MenuActivity.class);
+                finish();
                 break;
 
         }
     }
 
-    private static Boolean isStartService = false;
+    private /*static*/ Boolean isStartService = false;
 
     @Override
     public void fingerDevStatus(int res, String msg) {
-        if (res == 1)
+        if (res == 1 && !isStartService) {
+            Logger.d("测试 DefaultActivity 执行启动FingerService  ");
             FingerServiceUtil.getInstance().startFingerService(this,
                     isStart -> {
                         isStartService = isStart;
-                        FingerServiceUtil.getInstance().setFingerVerifyResult(this);
+                        if (isStart) {
+                            Logger.d("测试  DefaultActivity  调用FingerService 1：N验证");
+                            FingerServiceUtil.getInstance().setFingerVerifyResult(this);
+                        }
                     });
+        }
     }
 
     @Override
@@ -217,16 +226,16 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     public void fingerVerifyResult(int res, String msg, int score,
                                    int index, Long fingerId, byte[] updateFinger) {
-        if (res == 1) {
-            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
-            Intent intent = new Intent();
-            intent.setAction(AppConstant.USER_MENU_RECEIVER);
-            intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
-            intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
-            sendBroadcast(intent);
-        } else {
-            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_fail), true);
-        }
+//        if (res == 1) {
+//            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
+//            Intent intent = new Intent();
+//            intent.setAction(AppConstant.USER_MENU_RECEIVER);
+//            intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
+//            intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
+//            sendBroadcast(intent);
+//        } else {
+//            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_fail), true);
+//        }
     }
 
     /**

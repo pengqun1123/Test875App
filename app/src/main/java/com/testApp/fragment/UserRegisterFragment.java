@@ -255,12 +255,12 @@ public class UserRegisterFragment extends BaseFragment {
                     DBUtil dbUtil = BaseApplication.getDbUtil();
                     dbUtil.insertOrReplace(newUser);
                     manageActivity.addNewUser(newUser);
+                    FingerListManager.getInstance().addFingerData(newUser.getFinger6());
+                    FingerServiceUtil.getInstance().updateFingerData();
                     ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
                             , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                                     R.drawable.ic_emoje));
                     if (saveUserInfo != null) {
-                        User user = dbUtil.queryById(User.class, newUser.getUId());
-                        Logger.d(" 存储完成的用户对象：" + user.toString());
                         saveUserInfo.saveUserInfo(true);
                     } else {
                         skipVerify();

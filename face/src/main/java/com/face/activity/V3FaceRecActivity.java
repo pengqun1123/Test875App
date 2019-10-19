@@ -4,8 +4,10 @@ import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -61,7 +63,7 @@ import java.util.List;
 
 @Route(path = ARouterConstant.FACE_1_N_ACTIVITY)
 public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecProcessor.FaceRecCallback,
-        FingerDevStatusConnectListener, CardInfoListener {
+        FingerDevStatusConnectListener, CardInfoListener, FingerVerifyResultListener {
 
     private static final String TAG = V3FaceRecActivity.class.getSimpleName();
 
@@ -119,6 +121,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     protected void initData() {
         super.initData();
+
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
         } else {
@@ -136,7 +139,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    idCardService.register_IdCard(V3FaceRecActivity.this, -1l);
+                    idCardService.register_IdCard(V3FaceRecActivity.this, -1L);
                 }
             }).start();
         }
@@ -174,7 +177,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
         boolean allGranted = true;
         for (String neededPermission : neededPermissions) {
-            allGranted &= ContextCompat.checkSelfPermission(this, neededPermission) == PackageManager.PERMISSION_GRANTED;
+            allGranted &= ContextCompat.checkSelfPermission(this, neededPermission)
+                    == PackageManager.PERMISSION_GRANTED;
         }
         return allGranted;
     }
@@ -201,23 +205,36 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     protected void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         FingerFactory.getInstance().reStartFingerVerify();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FingerFactory.getInstance().pauseFingerVerify();
+        if (isStartService) {
+            Logger.d("测试  V3FaceActivity  解绑FingerService ");
+            FingerFactory.getInstance().unbindDevService(this);
+            isStartService = false;
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FingerFactory.getInstance().pauseFingerVerify();
     }
 
     @Override
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (isStartService) {
-                FingerFactory.getInstance().unbindDevService(this);
-                isStartService = false;
-            }
             if (idCardService != null) {
                 idCardService.destroyIdCard();
             }
@@ -383,23 +400,37 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void fingerDevStatusConnect(int res, String msg) {
         if (res == 1 && !isStartService) {
-            FingerFactory.getInstance().startFingerService(this, new FingerVerifyResultListener() {
-                @Override
-                public void fingerVerifyResult(int res, String msg, int score,
-                                               int index, Long fingerId, byte[] updateFinger) {
-                    if (res == 1) {
-
-                    } else {
-
-                    }
-                }
-            }, new OnStartServiceListener() {
-                @Override
-                public void startServiceListener(Boolean isStart) {
-                    isStartService = isStart;
-                }
-            });
+            Logger.d("测试 V3FaceActivity 执行启动FingerService  ");
+            FingerFactory.getInstance().startFingerService(this,
+                    this, new OnStartServiceListener() {
+                        @Override
+                        public void startServiceListener(Boolean isStart) {
+                            isStartService = isStart;
+//                            if (isStart) {
+                            Logger.d("测试  V3FaceActivity  调用FingerService 1：N验证");
+//                                FingerFactory.getInstance().setFingerVerifyResult(this);
+//                            }
+                        }
+                    });
         }
+//        if (res == 1 && !isStartService) {
+//            FingerFactory.getInstance().startFingerService(this, new FingerVerifyResultListener() {
+//                @Override
+//                public void fingerVerifyResult(int res, String msg, int score,
+//                                               int index, Long fingerId, byte[] updateFinger) {
+//                    if (res == 1) {
+//
+//                    } else {
+//
+//                    }
+//                }
+//            }, new OnStartServiceListener() {
+//                @Override
+//                public void startServiceListener(Boolean isStart) {
+//                    isStartService = isStart;
+//                }
+//            });
+//        }
     }
 
 
@@ -426,4 +457,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
     }
 
+    @Override
+    public void fingerVerifyResult(int res, String msg, int score, int index, Long fingerId, byte[] updateFinger) {
+
+    }
 }

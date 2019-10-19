@@ -32,6 +32,7 @@ public final class AppConstant {
     public static final String DELETE_FINGER = "delete_finger";
     public static final String FINGER_VERIFY_RESULT = "finger_verify_result";
     public static final String VERIFY_RESULT_TYPE = "verify_type";
+    public static final String VERIFY_TYPE_ID = "verify_type_id";
     public static final String SEARCH_DELETE = "search_delete";
     public static final String USER = "user";
 
