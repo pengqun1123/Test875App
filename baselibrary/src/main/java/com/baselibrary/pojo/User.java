@@ -1,5 +1,8 @@
 package com.baselibrary.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -20,7 +23,7 @@ import com.baselibrary.dao.db.FaceDao;
  * on 2019/9/9
  */
 @Entity
-public class User {
+public class User implements Parcelable {
     @Id(autoincrement = true)
     Long uId;
     @Property(nameInDb = "name")
@@ -84,6 +87,60 @@ public class User {
     @Generated(hash = 586692638)
     public User() {
     }
+
+    protected User(Parcel in) {
+        if (in.readByte() == 0) {
+            uId = null;
+        } else {
+            uId = in.readLong();
+        }
+        name = in.readString();
+        age = in.readString();
+        sex = in.readString();
+        phone = in.readString();
+        organizName = in.readString();
+        section = in.readString();
+        workNum = in.readString();
+        if (in.readByte() == 0) {
+            pwId = null;
+        } else {
+            pwId = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            finger3Id = null;
+        } else {
+            finger3Id = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            finger6Id = null;
+        } else {
+            finger6Id = in.readLong();
+        }
+        finger6 = in.readParcelable(Finger6.class.getClassLoader());
+        if (in.readByte() == 0) {
+            faceId = null;
+        } else {
+            faceId = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            cardId = null;
+        } else {
+            cardId = in.readLong();
+        }
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public Long getUId() {
         return this.uId;
     }
@@ -346,5 +403,57 @@ public class User {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
-    
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (uId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(uId);
+        }
+        parcel.writeString(name);
+        parcel.writeString(age);
+        parcel.writeString(sex);
+        parcel.writeString(phone);
+        parcel.writeString(organizName);
+        parcel.writeString(section);
+        parcel.writeString(workNum);
+        if (pwId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(pwId);
+        }
+        if (finger3Id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(finger3Id);
+        }
+        if (finger6Id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(finger6Id);
+        }
+        parcel.writeParcelable(finger6, i);
+        if (faceId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(faceId);
+        }
+        if (cardId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(cardId);
+        }
+    }
 }

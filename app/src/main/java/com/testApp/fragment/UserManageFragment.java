@@ -2,9 +2,13 @@ package com.testApp.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -22,6 +26,7 @@ import com.baselibrary.base.BaseFragment;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.User;
+import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
@@ -96,7 +101,7 @@ public class UserManageFragment extends BaseFragment
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && (lastVisibleItemPosition + 1)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && (lastVisibleItemPosition/* + 1*/)
                         == userManageAdapter.getItemCount()) {
                     //加载更多
                     pageSize++;
@@ -117,6 +122,7 @@ public class UserManageFragment extends BaseFragment
 
     @Override
     protected void initData() {
+        startReceiver();
         userCount = BaseApplication.getDbUtil().count(User.class);
     }
 
@@ -124,9 +130,7 @@ public class UserManageFragment extends BaseFragment
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.searchUserBtn:
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra(AppConstant.SEARCH_DELETE, searchDeleteUser);
-                SkipActivityUtil.skipIntentDataActivity(getActivity(), intent);
+                SkipActivityUtil.skipActivity(getActivity(), SearchActivity.class);
                 break;
             case R.id.registerManagerMaxNum:
                 //修改可注册的管理员的最大数量
@@ -184,23 +188,6 @@ public class UserManageFragment extends BaseFragment
         }
     };
 
-    private SearchDeleteUser searchDeleteUser = new SearchDeleteUser() {
-        @Override
-        public void searchDeleteUser(User user) {
-
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-
-        }
-    };
-
     /**
      * 删除用户
      *
@@ -211,12 +198,34 @@ public class UserManageFragment extends BaseFragment
             userManageAdapter.removeData(user);
             DBUtil dbUtil = BaseApplication.getDbUtil();
             dbUtil.delete(user);
+            FingerListManager.getInstance().removeFingerById(user.getFinger6());
+            //更新指静脉的数据
+
             ToastUtils.showSquareImgToast(getActivity(),
                     getString(R.string.delete_success),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
                             , R.drawable.ic_tick));
         }
     }
+
+    private void startReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, intentFilter);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                String action = intent.getAction();
+                if (action != null && action.equals(AppConstant.USER_MANAGER_BROADCAST_RECEIVER)) {
+                    User user = intent.getParcelableExtra(AppConstant.USER);
+                    deleteUser(user);
+                }
+            }
+        }
+    };
 
 
 }

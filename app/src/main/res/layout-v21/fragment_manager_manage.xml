@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/dp_60"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_60"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:background="@color/white"
+        android:elevation="@dimen/dp_5"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/managerSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/tv_line"
+            android:drawablePadding="@dimen/dp_2"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/manager_set"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/sp_17"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/verifySet"
+                style="@style/manage_register_style"
+                android:drawableTop="@drawable/ic_verify"
+                android:text="@string/verify_set" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/addNewManager"
+                style="@style/manage_register_style"
+                android:drawableTop="@drawable/ic_add_manager"
+                android:text="@string/add_new_manager" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/registerManagerMaxNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_7"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableEnd="@drawable/ic_revise"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp_10"
+            android:text="@string/current_register_max_manager_mun"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/maxRegisterNumLine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_8"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@color/common_line" />
+
+        <View
+            android:id="@+id/addManagerLine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_8"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@color/common_line" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/managerListTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/tv_line"
+            android:drawablePadding="@dimen/dp_2"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/manager_list"
+            android:textColor="@color/blue_5"
+            android:textSize="@dimen/sp_17"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/managerRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:scrollbars="vertical" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/showAllData"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:background="@color/common_line"
+            android:gravity="center"
+            android:text="@string/show_all_data"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_15"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--android:id="@+id/managerRefresh"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/topView">-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/managerRv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/topView"-->
+    <!--android:background="@color/white"-->
+    <!--android:scrollbars="vertical" />-->
+
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+    <include layout="@layout/no_data_view" />
+</RelativeLayout>

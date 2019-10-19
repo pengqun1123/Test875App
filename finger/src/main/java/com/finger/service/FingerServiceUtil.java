@@ -61,8 +61,6 @@ public class FingerServiceUtil {
                 String packageName = serviceInfo.packageName;
                 //获取service的类名
                 String name = serviceInfo.name;
-                //构建一个ComponentName，将隐式intent变成一个显示intent，
-                // 因为Android5.0后不允许隐式启动service
                 ComponentName componentName = new ComponentName(packageName, name);
                 intent.setComponent(componentName);
                 activity.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -121,14 +119,11 @@ public class FingerServiceUtil {
         }
     }
 
-    public void deleteFinger(int position) {
+    public void updateFingerData(){
         if (fingerServiceMessenger != null) {
             try {
                 Message message = new Message();
-                Bundle bundle = new Bundle();
-                message.what = FingerConstant.DELETE_FINGER_CODE;
-                bundle.putInt(AppConstant.DELETE_FINGER, position);
-                message.setData(bundle);
+                message.what = FingerConstant.UP_DATE_FINGER;
                 fingerServiceMessenger.send(message);
             } catch (RemoteException e) {
                 e.printStackTrace();

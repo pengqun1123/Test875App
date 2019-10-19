@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sex">
-        <item>@string/sex</item>
+        <!--<item>@string/sex</item>-->
         <item>@string/man</item>
         <item>@string/woman</item>
     </string-array>

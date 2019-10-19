@@ -76,7 +76,6 @@ public class FingerService extends Service {
                         FingerService.this.fingerData = newSingleFingerData;
                         FingerService.this.fingerDataSize = 1;
                     }
-                    Logger.d("   新增一个指静脉:");
                 }
                 FingerService.this.isCancelVerify = false;
             } else if (msg.what == FingerConstant.DELETE_FINGER_CODE) {
@@ -85,6 +84,8 @@ public class FingerService extends Service {
                 deleteFinger(position);
             } else if (msg.what == FingerConstant.SEND_MSG_2) {
                 fingerVerifyResultListener = (FingerVerifyResultListener) msg.obj;
+            } else if (msg.what == FingerConstant.UP_DATE_FINGER) {
+                updateFingerArrayToByte();
             }
         }
     }
@@ -116,6 +117,9 @@ public class FingerService extends Service {
             }
             FingerService.this.fingerData = fingerData;
             FingerService.this.fingerDataSize = fingerSize;
+        } else {
+            FingerService.this.fingerData = new byte[AppConstant.FINGER6_DATA_SIZE];
+            FingerService.this.fingerDataSize = 1;
         }
     }
 
@@ -185,15 +189,21 @@ public class FingerService extends Service {
                 FingerApi.getInstance().verifyN(activity, fingerData, fingerDataSize, false,
                         msg -> {
                             if (fingerVerifyResultListener != null) {
-                                Integer index = msg.getIndex();
-                                Long fingerId = FingerListManager.getInstance()
-                                        .getFingerData().get(index).getUId();
-                                fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
-                                        msg.getTip(), msg.getScore(), index,
-                                        fingerId, msg.getFingerData());
+                                Logger.d("指静脉验证结果:" + msg.getResult());
+                                if (msg.getResult() == 1) {
+                                    Integer index = msg.getIndex();
+                                    Long fingerId = FingerListManager.getInstance()
+                                            .getFingerData().get(index).getUId();
+                                    fingerVerifyResultListener.fingerVerifyResult(1,
+                                            msg.getTip(), msg.getScore(), index,
+                                            fingerId, msg.getFingerData());
+                                }
+//                                else {
+//                                    fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
+//                                            msg.getTip(), 0, 0,
+//                                            0L, null);
+//                                }
                             }
-                            ToastUtils.showSingleToast(activity, msg.getTip());
-                            Logger.d("指静脉验证:" + msg.getTip());
                         });
             }
         }

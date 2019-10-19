@@ -214,11 +214,11 @@ public class AskDialog {
         });
     }
 
-    public static void VerifyUserPwd(@NonNull Activity mContext,UserPwdVerifyCallBack callBack){
+    public static void VerifyUserPwd(@NonNull Activity mContext, UserPwdVerifyCallBack callBack) {
         View dialogView = LayoutInflater.from(mContext).inflate(R.layout.ask_manager_dialog_view,
                 null);
         AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
-        AppCompatTextView managerTip= dialogView.findViewById(R.id.managerTip);
+        AppCompatTextView managerTip = dialogView.findViewById(R.id.managerTip);
         managerTip.setText(mContext.getString(R.string.please_verify_pw));
         AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
         CEditText inputPw = dialogView.findViewById(R.id.inputPw);
@@ -252,7 +252,6 @@ public class AskDialog {
             }
         });
     }
-
 
 
     /**
@@ -415,6 +414,9 @@ public class AskDialog {
         nextBtn.setVisibility(View.VISIBLE);
         dismissBtn.setVisibility(View.VISIBLE);
         btnParent.setVisibility(View.GONE);
+        if (flag == AppConstant.INIT_ADD_MANAGER) {
+            dismissBtn.setVisibility(View.GONE);
+        }
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         final String[] pw1 = new String[2];
         nextBtn.setOnClickListener(new OnceClickListener() {
@@ -569,6 +571,7 @@ public class AskDialog {
         }
         Logger.d("管理员密码存储成功:");
     }
+
     //验证管理员密码
     private static void verifyUserPw(Dialog dialog, String pw, UserPwdVerifyCallBack callBack) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -584,7 +587,7 @@ public class AskDialog {
                 if (result.size() > 0) {
                     callBack.userPwdVerifyCallBack(result.get(0).getMId());
 
-                }else {
+                } else {
                     callBack.userPwdVerifyCallBack(null);
                 }
                 dialog.dismiss();
@@ -599,9 +602,8 @@ public class AskDialog {
             public void onNotification(boolean result) {
 
             }
-        }).queryAsync(Pw.class,whereCondition);
+        }).queryAsync(Pw.class, whereCondition);
     }
-
 
 
     //验证管理员密码

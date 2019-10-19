@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SuppressLint("ParcelCreator")
-public class ManagerActivity extends BaseActivity implements RegisterUserCallBack {
+public class ManagerActivity extends BaseActivity {
 
     private UserRegisterFragment userRegisterFragment;
     private UserManageFragment manageFragment;
@@ -120,7 +120,7 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
             fragments.clear();
         }
         manageFragment = UserManageFragment.instance();
-        userRegisterFragment = UserRegisterFragment.instance(this);
+        userRegisterFragment = UserRegisterFragment.instance();
         fragments.add(manageFragment);
         fragments.add(userRegisterFragment);
         fragments.add(ManagerFragment.instance());
@@ -132,19 +132,9 @@ public class ManagerActivity extends BaseActivity implements RegisterUserCallBac
         ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
     }
 
-    @Override
-    public void registerUserCallBack(User user) {
-        if (manageFragment != null) {
+    public void addNewUser(User user) {
+        if (manageFragment != null && user != null) {
             manageFragment.addNewUser(user);
         }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
     }
 }

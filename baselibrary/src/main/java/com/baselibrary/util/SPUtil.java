@@ -49,11 +49,11 @@ public class SPUtil {
 
     //人脸的注册码
     public static void putFaceActiveCode(String code) {
-        instance().putString("faceCode", code);
+        instance().putString(AppConstant.FACE_CODE, code);
     }
 
     public static String getFaceActiveCode() {
-        return instance().getString("faceCode", null);
+        return instance().getString(AppConstant.FACE_CODE, null);
     }
 
     //存储密码注册的标记模式
@@ -68,7 +68,7 @@ public class SPUtil {
 
     //存储指静脉的注册的标记
     public static void putFingerVerifyFlag(Boolean flag) {
-        instance().getBoolean(AppConstant.FINGER_VERIFY_MODEL, flag);
+        instance().putBoolean(AppConstant.FINGER_VERIFY_MODEL, flag);
     }
 
     //获取指静脉的注册的标记

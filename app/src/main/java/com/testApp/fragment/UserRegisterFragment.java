@@ -66,6 +66,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,17 +80,16 @@ public class UserRegisterFragment extends BaseFragment {
     private String sex;
     private byte[] allFingerData;
     private int allFingerSize;
-    private RegisterUserCallBack registerUserCallBack;
+
     private ManagerActivity manageActivity;
 
     public UserRegisterFragment() {
         // Required empty public constructor
     }
 
-    public static UserRegisterFragment instance(RegisterUserCallBack callBack) {
+    public static UserRegisterFragment instance() {
         UserRegisterFragment userRegisterFragment = new UserRegisterFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("userListener", callBack);
         userRegisterFragment.setArguments(bundle);
         return userRegisterFragment;
     }
@@ -117,21 +117,14 @@ public class UserRegisterFragment extends BaseFragment {
         //隐藏注册的按钮，当用户至少选择了一种验证模式注册完成后才显示注册按钮
         registerBtn.setVisibility(View.GONE);
 
-        //设置音量
-        float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
-        Logger.d("设备的最大音量:" + streamVolumeMax);
-        BaseApplication.AP.setVolume((int) streamVolumeMax);
+
     }
 
     @Override
     protected void initData() {
         manageActivity = (ManagerActivity) getActivity();
         EventBus.getDefault().register(this);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            registerUserCallBack = bundle.getParcelable("userListener");
-            fingerListToFingerByte();
-        }
+        fingerListToFingerByte();
         //查询所有用户的工号
     }
 
@@ -224,7 +217,6 @@ public class UserRegisterFragment extends BaseFragment {
         String staffNo = staffNoEt.getText().toString().trim();
         if (TextUtils.isEmpty(staffNo)) {
             ToastUtils.showSingleToast(getActivity(), getString(R.string.please_input_staff_no));
-            return;
         } else {
             //查询是否有相同的工号
             queryAllUserNo(staffNo, eq -> {
@@ -234,44 +226,47 @@ public class UserRegisterFragment extends BaseFragment {
                             ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                                     R.drawable.cry_icon));
                     staffNoEt.getText().clear();
+                } else {
+                    if (sex.equals("")) {
+                        ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
+                        return;
+                    }
+                    //先插入各验证模式的数据
+                    User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
+                    if (pwd == null && fg6 == null && idCard == null && face == null) {
+                        ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
+                                ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
+                        return;
+                    }
+                    if (pwd != null) {
+                        newUser.setPwId(pwd.getUId());
+                        newUser.setPw(pwd);
+                    }
+                    if (fg6 != null) {
+                        newUser.setFinger6Id(fg6.getUId());
+                        newUser.setFinger6(fg6);
+                    }
+                    if (idCard != null) {
+                        newUser.setCardId(idCard.getUId());
+                    }
+                    if (face != null) {
+                        newUser.setFaceId(face.getUId());
+                    }
+                    DBUtil dbUtil = BaseApplication.getDbUtil();
+                    dbUtil.insertOrReplace(newUser);
+                    manageActivity.addNewUser(newUser);
+                    ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
+                            , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
+                                    R.drawable.ic_emoje));
+                    if (saveUserInfo != null) {
+                        User user = dbUtil.queryById(User.class, newUser.getUId());
+                        Logger.d(" 存储完成的用户对象：" + user.toString());
+                        saveUserInfo.saveUserInfo(true);
+                    } else {
+                        skipVerify();
+                    }
                 }
             });
-        }
-        if (sex.equals("")) {
-            ToastUtils.showSingleToast(getActivity(), getString(R.string.please_select_sex));
-            return;
-        }
-        //先插入各验证模式的数据
-        User newUser = getNewUser(userName, userAge, userPhone, companyName, department, staffNo);
-        if (pwd == null && fg6 == null && idCard == null && face == null) {
-            ToastUtils.showSquareImgToast(getActivity(), getString(R.string.lest_select_one_verify),
-                    ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.cry_icon));
-            return;
-        }
-        if (pwd != null) {
-            newUser.setPwId(pwd.getUId());
-            newUser.setPw(pwd);
-        }
-        if (fg6 != null) {
-            newUser.setFinger6Id(fg6.getUId());
-            newUser.setFinger6(fg6);
-        }
-        if (idCard != null) {
-            newUser.setCardId(idCard.getUId());
-        }
-        if (face != null) {
-            newUser.setFaceId(face.getUId());
-        }
-        DBUtil dbUtil = BaseApplication.getDbUtil();
-        dbUtil.insertOrReplace(newUser);
-        registerUserCallBack.registerUserCallBack(newUser);
-        ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
-                , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
-                        R.drawable.ic_emoje));
-        if (saveUserInfo != null) {
-            saveUserInfo.saveUserInfo(true);
-        } else {
-            skipVerify();
         }
     }
 
@@ -304,20 +299,19 @@ public class UserRegisterFragment extends BaseFragment {
     private void pwRegister() {
         PwFactory.createPw(getActivity(), pw -> {
             DBUtil dbUtil = BaseApplication.getDbUtil();
-
             PwDao pwDao = dbUtil.getDaoSession().getPwDao();
             QueryBuilder<Pw> pwQueryBuilder = pwDao.queryBuilder();
             List<Pw> list = pwQueryBuilder.where(PwDao.Properties.Password.eq(pw.getPassword())).list();
             if (list != null && list.size() > 0) {
                 VerifyResultUi.showRegisterFail(Objects.requireNonNull(getActivity()),
-                        getString(R.string.pw_register_fail));
+                        getString(R.string.pw_register_repeat), false);
             } else {
                 dbUtil.insertOrReplace(pw);
                 //可添加到User表的pwd
                 UserRegisterFragment.this.pwd = pw;
                 registerBtn.setVisibility(View.VISIBLE);
                 VerifyResultUi.showRegisterSuccess(Objects.requireNonNull(getActivity()),
-                        getString(R.string.pw_register_success));
+                        getString(R.string.pw_register_success), false);
             }
         });
     }

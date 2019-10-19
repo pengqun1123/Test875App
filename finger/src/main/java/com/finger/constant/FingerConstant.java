@@ -14,5 +14,6 @@ public final class FingerConstant {
     public static Integer DELETE_FINGER_CODE = 0x56;
     public static Integer SEND_MSG_1 = 0x57;
     public static Integer SEND_MSG_2 = 0x58;
+    public static Integer UP_DATE_FINGER = 0x59;
 
 }

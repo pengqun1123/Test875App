@@ -30,14 +30,16 @@ public class VerifyResultUi {
             BaseApplication.AP.play_verifySuccess();
     }
 
-    public static void showRegisterFail(@NonNull Activity activity, String tip) {
-        BaseApplication.AP.play_checkInFail();
+    public static void showRegisterFail(@NonNull Activity activity, String tip, boolean isSound) {
+        if (isSound)
+            BaseApplication.AP.play_checkInFail();
         ToastUtils.showSquareImgToast(activity, tip,
                 ActivityCompat.getDrawable(activity, R.drawable.ic_error));
     }
 
-    public static void showRegisterSuccess(@NonNull Activity activity,String tip){
-        BaseApplication.AP.play_checkInSuccess();
+    public static void showRegisterSuccess(@NonNull Activity activity, String tip, boolean isSound) {
+        if (isSound)
+            BaseApplication.AP.play_checkInSuccess();
         ToastUtils.showSquareImgToast(activity, tip,
                 ActivityCompat.getDrawable(activity, R.drawable.ic_tick));
     }

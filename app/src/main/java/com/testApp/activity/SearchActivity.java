@@ -10,6 +10,8 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -35,7 +37,7 @@ public class SearchActivity extends BaseActivity {
 
     private UserManageAdapter userManageAdapter;
     private AppCompatEditText search_edit;
-    private SearchDeleteUser searchDeleteUser;
+    private AppCompatTextView noData;
 
     @Override
     protected Integer contentView() {
@@ -44,8 +46,6 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
-        searchDeleteUser = intent.getParcelableExtra(AppConstant.SEARCH_DELETE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         Toolbar toolBar = bindViewWithClick(R.id.toolbar, false);
         if (toolBar == null) {
@@ -63,7 +63,9 @@ public class SearchActivity extends BaseActivity {
         bindViewWithClick(R.id.searchView, false);
         search_edit = bindViewWithClick(R.id.searchUserEt, false);
         RecyclerView userRv = bindViewWithClick(R.id.rv, false);
-        AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
+        noData = bindViewWithClick(R.id.noData, false);
+        AppCompatImageView clear = bindViewWithClick(R.id.clear, true);
+        clear.setVisibility(View.GONE);
         userRv.setHasFixedSize(true);
         noData.setVisibility(View.VISIBLE);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this,
@@ -81,6 +83,26 @@ public class SearchActivity extends BaseActivity {
             }
             return false;
         });
+        search_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int length = editable.length();
+                if (length > 0)
+                    clear.setVisibility(View.VISIBLE);
+                else
+                    clear.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -93,6 +115,9 @@ public class SearchActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.backBtn:
                 finish();
+                break;
+            case R.id.clear:
+                search_edit.getText().clear();
                 break;
         }
     }
@@ -107,11 +132,12 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void onSuccess(List<User> result) {
-                if (result.size() == 0) {
-                    ToastUtils.showSingleToast(SearchActivity.this, "没有数据");
-                    return;
+                if (result != null && result.size() == 0) {
+                    noData.setVisibility(View.VISIBLE);
+                } else {
+                    userManageAdapter.setData(result);
+                    noData.setVisibility(View.GONE);
                 }
-                userManageAdapter.setData(result);
             }
 
             @Override
@@ -125,7 +151,8 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition), UserDao.Properties.Name.eq(condition));
+        dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition),
+                UserDao.Properties.Name.eq(condition));
     }
 
     private UserManageAdapter.UserItemCallBack callBack = new UserManageAdapter.UserItemCallBack() {
@@ -139,8 +166,10 @@ public class SearchActivity extends BaseActivity {
             AskDialog.deleteItemDataDialog(SearchActivity.this,
                     user, null, managerName, flag -> {
                         if (flag == 1) {
-                            if (searchDeleteUser != null)
-                                searchDeleteUser.searchDeleteUser(user);
+                            Intent intent = new Intent();
+                            intent.setAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);
+                            intent.putExtra(AppConstant.USER, user);
+                            sendBroadcast(intent);
                         }
                     });
         }

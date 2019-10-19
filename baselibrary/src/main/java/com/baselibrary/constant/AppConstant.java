@@ -33,6 +33,7 @@ public final class AppConstant {
     public static final String FINGER_VERIFY_RESULT = "finger_verify_result";
     public static final String VERIFY_RESULT_TYPE = "verify_type";
     public static final String SEARCH_DELETE = "search_delete";
+    public static final String USER = "user";
 
     //视频激活码
     public static final String FACE_ACTIVITY_CODE =
@@ -46,6 +47,7 @@ public final class AppConstant {
     public static final String FINGER_VERIFY_MODEL = "finger_verify";
     public static final String FACE_VERIFY_MODEL = "face_verify";
     public static final String CARD_VERIFY_MODEL = "card_verify";
+    public static final String FACE_CODE = "faceCode";
     //注册时标记的验证逻辑
     public static final String VERIFY_AND = "verify_and";
 
@@ -54,6 +56,10 @@ public final class AppConstant {
 
     //注册验证的类型
     public static final Integer REGISTER_FINGER = 0xf1;
+
+    //广播
+    public static final String USER_MANAGER_BROADCAST_RECEIVER = "user_manager_receiver";
+    public static final String USER_MENU_RECEIVER = "user_menu_receiver";
 
 
 }

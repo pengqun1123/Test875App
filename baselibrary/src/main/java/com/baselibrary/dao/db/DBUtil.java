@@ -365,14 +365,13 @@ public class DBUtil {
         asyncSession.queryList(query);
     }
 
-    public <T> void queryAsync(Class<T> cls, WhereCondition cond1, WhereCondition cond2, WhereCondition... condMore) {
+    public <T> void queryAsync(Class<T> cls, WhereCondition cond1, WhereCondition cond2,
+                               WhereCondition... condMore) {
         AsyncSession asyncSession = daoSession.startAsyncSession();
         asyncSession.setListenerMainThread(new AsyncOperationListener() {
             @Override
             public void onAsyncOperationCompleted(AsyncOperation operation) {
                 if (operation.isCompletedSucessfully() && mCallBack != null) {
-                    //      List<T> list = new ArrayList<>();
-                    //     list.add(((T) operation.getResult()));
                     mCallBack.onSuccess((List) operation.getResult());
                 } else if (operation.isFailed()) {
                     mCallBack.onFailed();

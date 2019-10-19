@@ -10,7 +10,6 @@ import com.baselibrary.callBack.FingerDevStatusConnectListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.callBack.OnGetVerifyFingerImgListener;
 import com.baselibrary.callBack.OnStartServiceListener;
-import com.baselibrary.pojo.Finger6;
 import com.baselibrary.service.fingerService.FingerRouterService;
 import com.finger.callBack.FingerDevStatusCallBack;
 import com.finger.fingerApi.FingerApi;
@@ -20,7 +19,6 @@ import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.pojos.Msg;
 
-import java.util.ArrayList;
 
 /**
  * Created By pq
@@ -107,8 +105,8 @@ public class FingerRouter implements FingerRouterService {
     }
 
     @Override
-    public void deleteFinger(int position) {
-        FingerServiceUtil.getInstance().deleteFinger(position);
+    public void updateFinger() {
+        FingerServiceUtil.getInstance().updateFingerData();
     }
 
 

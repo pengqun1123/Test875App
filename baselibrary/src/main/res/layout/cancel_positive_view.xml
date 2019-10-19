@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/btnParent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_50"
     android:layout_below="@+id/inputPw"
+    android:gravity="center"
     android:layout_marginTop="@dimen/dp_15"
     android:orientation="horizontal"
     android:visibility="gone">
@@ -11,18 +12,20 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/cancelBtn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.9"
         android:background="@drawable/dialog_btn_bg"
         android:text="@string/cancel"
+        android:gravity="center"
         android:textColor="@color/blue_6"
         android:textSize="@dimen/sp_16" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/positiveBtn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.9"
+        android:gravity="center"
         android:background="@drawable/dialog_btn_bg"
         android:text="@string/positive"
         android:textColor="@color/blue_5"

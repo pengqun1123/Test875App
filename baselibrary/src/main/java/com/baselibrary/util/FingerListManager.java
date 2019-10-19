@@ -41,6 +41,12 @@ public class FingerListManager {
         fingerList.remove(position);
     }
 
+    public void removeFingerById(Finger6 finger6) {
+        if (fingerList.size() > 0) {
+            fingerList.remove(finger6);
+        }
+    }
+
     public void clearFingerData() {
         fingerList.clear();
     }

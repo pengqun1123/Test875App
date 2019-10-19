@@ -40,7 +40,7 @@ public interface FingerRouterService extends IProvider {
 
     void addFinger(byte[] newFinger);
 
-    void deleteFinger(int position);
+    void updateFinger();
 
 
 }

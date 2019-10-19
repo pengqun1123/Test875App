@@ -131,6 +131,8 @@
     <string name="delete_success">删除成功!</string>
     <string name="delete_manager">删除管理员</string>
     <string name="delete_user">删除用户</string>
+    <string name="pw_register_repeat">密码注册重复!</string>
+    <string name="user_no">用户编号</string>
 
 
 </resources>

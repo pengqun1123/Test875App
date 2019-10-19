@@ -84,7 +84,13 @@ public class SplashActivity extends BaseActivity {
         SPUtil.putCardVerifyFlag(true);
         SPUtil.putFingerVerifyFlag(true);
         SPUtil.putPwVerifyFlag(true);
-//        clearData();
+
+        //清除数据库缓存
+//        DBUtil dbUtil = BaseApplication.getDbUtil();
+//        dbUtil.getDaoSession().clear();
+        clearData();
+
+        setDevMaxVoice();
 
         checkMyPermissions(per);
 
@@ -93,6 +99,13 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onViewClick(View view) {
 
+    }
+
+    private void setDevMaxVoice() {
+        //设置音量
+        float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
+        Logger.d("设备的最大音量:" + streamVolumeMax);
+        BaseApplication.AP.setVolume((int) streamVolumeMax);
     }
 
     private void clearData() {

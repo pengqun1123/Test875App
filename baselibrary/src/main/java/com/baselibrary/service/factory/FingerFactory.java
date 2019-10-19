@@ -99,9 +99,9 @@ public class FingerFactory {
         }
     }
 
-    public void deleteFinger(int position) {
+    public void updateFinger(int position) {
         if (fingerRouterService != null) {
-            fingerRouterService.deleteFinger(position);
+            fingerRouterService.updateFinger();
         }
     }
 

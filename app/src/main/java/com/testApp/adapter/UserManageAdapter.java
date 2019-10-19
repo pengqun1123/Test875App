@@ -88,6 +88,7 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         holder.userName.setText(user.getName());
         holder.userSex.setText(user.getSex());
         holder.userAge.setText(user.getAge());
+        holder.userNo.setText(MessageFormat.format("编号:{0}", user.getWorkNum()));
         holder.userPhone.setText(MessageFormat.format("手机号:{0}", user.getPhone()));
         holder.userSection.setText(MessageFormat.format("部门:{0}", user.getSection()));
         holder.userCompany.setText(MessageFormat.format("公司:{0}", user.getOrganizName()));
@@ -114,7 +115,7 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         private final AppCompatTextView userSex;
         private final AppCompatTextView userAge;
         private final AppCompatTextView userPhone;
-        private final AppCompatTextView userSection, userCompany;
+        private final AppCompatTextView userSection, userCompany,userNo;
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -125,6 +126,7 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
             userPhone = itemView.findViewById(R.id.userPhone);
             userSection = itemView.findViewById(R.id.userSection);
             userCompany = itemView.findViewById(R.id.userCompany);
+            userNo = itemView.findViewById(R.id.userNo);
 
         }
     }
