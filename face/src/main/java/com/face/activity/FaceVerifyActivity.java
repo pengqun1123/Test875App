@@ -2,7 +2,9 @@ package com.face.activity;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -191,9 +193,13 @@ public class FaceVerifyActivity extends BaseActivity implements BaseFaceRecProce
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            long faceId = faceTrackData.searchedPerson.getFaceId();
+                            Bundle bundle=new Bundle();
+                            bundle.putInt("type",2);
+                            bundle.putLong("id",faceId);
                             ToastUtils.showSquareImgToast(FaceVerifyActivity.this
                                     , getString(R.string.face_verify_success),null);
-                            ARouterUtil.navigation(ARouterConstant.USER_CENTER_ACTIVITY);
+                            ARouterUtil.navigation(ARouterConstant.USER_CENTER_ACTIVITY,bundle);
                         }
                     });
 

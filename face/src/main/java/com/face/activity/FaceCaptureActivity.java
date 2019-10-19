@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -39,6 +41,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 人脸检测及采集示例
@@ -64,6 +68,9 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
     private File confirmedFaceImage;
     private Face face;
     private Long faceId;
+    private TextView warning;
+
+    private int time=5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +79,15 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
+        warning = ((TextView) findViewById(R.id.tv_warning));
+        warning.setText(time+"");
         initCamera();
         initData();
 
+
+
     }
+
 
     private void initData() {
         name = getIntent().getStringExtra("name");
@@ -91,6 +103,33 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         faceImageDir = new File(FaceConfig.getInstance().getAppRootDir(), "face_image");
         faceImageDir.mkdirs();
 
+        Timer timer = new Timer();
+
+
+        TimerTask task=new TimerTask() {
+            @Override
+            public void run() {
+                time--;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        warning.setText(time+"");
+                        if (time==0){
+                            warning.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                if (time==-1){
+                    timer.cancel();
+                    if (face==null) {
+                        EventBus.getDefault().post(face);
+                        finish();
+                    }
+                }
+
+            }
+        };
+        timer.schedule(task,1000,1000);
     }
 
     private void initCamera() {
@@ -120,45 +159,46 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
     public void onFaceDetected(FaceDetectData faceDetectData) {
         //人脸框绘制
         runOnUiThread(() -> faceRecBoxView.sendFaceData(faceDetectData));
-
-        if (isExtractFeature){
-            return;
-        }
-        FaceData[] faceList = faceDetectData.getFaceList();
-        if (faceList == null || faceList.length == 0) {
-            return;
-        }
-        //获取最大人脸
-        FaceData maxFace = FaceData.getMaxFace(faceList);
-        try {
-            //检测人脸质量
-            FaceQuality faceQuality = faceQualityDetector.qualityDetect(faceDetectData.getImage(), maxFace);
-            Logger.i(TAG, "onFaceDetected: 人脸质量检测结果：" + faceQualityToString(faceQuality));
-            //头部姿态
-            float roll = faceQuality.getRoll();
-            float yaw = faceQuality.getYaw();
-            float pitch = faceQuality.getPitch();
-            //模糊值
-            float blur = faceQuality.getBlur();
-            if (Math.abs(roll) <= 10 && Math.abs(yaw) <= 10 && Math.abs(pitch) <= 10) {
-                //质量符合要求
-                FaceRect faceRect = maxFace.getFaceRect();
-                //截取人脸图，最后一个参数rectScale的意思是基于检测出来的人脸大小，放大多少倍来截取原始图片中的人脸
-                Bitmap faceBitmap = faceDetectData.getImage().cropBitmap(faceRect.getLeft(), faceRect.getTop(),
-                        faceRect.getRight(), faceRect.getBottom(), 2.0f);
-
-                //存储图片
-                confirmedFaceImage = new File(faceImageDir, "" + System.currentTimeMillis() + ".jpg");
-                Tool.saveToJpeg(faceBitmap, confirmedFaceImage);
-
-                        saveUser(faceBitmap);
-
-
+        if (time == 0) {
+            if (isExtractFeature) {
+                return;
             }
-        } catch (FaceQualityException e) {
-            Logger.e(TAG, "onFaceDetected: 人脸质量检测不符合要求: " + faceQualityToString(e.getFaceQuality()));
-        } catch (FaceException e) {
-            Logger.e(TAG, "onFaceDetected: 人脸质量检测失败", e);
+            FaceData[] faceList = faceDetectData.getFaceList();
+            if (faceList == null || faceList.length == 0) {
+                return;
+            }
+            //获取最大人脸
+            FaceData maxFace = FaceData.getMaxFace(faceList);
+            try {
+                //检测人脸质量
+                FaceQuality faceQuality = faceQualityDetector.qualityDetect(faceDetectData.getImage(), maxFace);
+                Logger.i(TAG, "onFaceDetected: 人脸质量检测结果：" + faceQualityToString(faceQuality));
+                //头部姿态
+                float roll = faceQuality.getRoll();
+                float yaw = faceQuality.getYaw();
+                float pitch = faceQuality.getPitch();
+                //模糊值
+                float blur = faceQuality.getBlur();
+                if (Math.abs(roll) <= 10 && Math.abs(yaw) <= 10 && Math.abs(pitch) <= 10) {
+                    //质量符合要求
+                    FaceRect faceRect = maxFace.getFaceRect();
+                    //截取人脸图，最后一个参数rectScale的意思是基于检测出来的人脸大小，放大多少倍来截取原始图片中的人脸
+                    Bitmap faceBitmap = faceDetectData.getImage().cropBitmap(faceRect.getLeft(), faceRect.getTop(),
+                            faceRect.getRight(), faceRect.getBottom(), 2.0f);
+
+                    //存储图片
+                    confirmedFaceImage = new File(faceImageDir, "" + System.currentTimeMillis() + ".jpg");
+                    Tool.saveToJpeg(faceBitmap, confirmedFaceImage);
+
+                    saveUser(faceBitmap);
+
+
+                }
+            } catch (FaceQualityException e) {
+                Logger.e(TAG, "onFaceDetected: 人脸质量检测不符合要求: " + faceQualityToString(e.getFaceQuality()));
+            } catch (FaceException e) {
+                Logger.e(TAG, "onFaceDetected: 人脸质量检测失败", e);
+            }
         }
     }
 
@@ -204,7 +244,6 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
      * @param name
      * @param feature
      */
-    int count=0;
     private void persistentUser(String name, float[] feature) throws IOException {
         //  user.setImagePath(confirmedFaceImage.getAbsolutePath());
         //将用户信息写入数据库
@@ -218,9 +257,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         face.setName(name);
         face.setFeature(feature);
         face.setImagePath(confirmedFaceImage.getAbsolutePath());
-        count++;
-        Log.d("777","count="+count);
-        //  long personId = userManager.addOne(user);
+
         try {
             DBUtil dbUtil = BaseApplication.getDbUtil();
             dbUtil.insertOrReplace(face);
@@ -253,7 +290,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
             //将用户特征信息加载到离线1：N搜索库中
             FaceUtils.addToSearchLibrary(face);
             Logger.d(TAG, "加载用户到缓存成功：" + face.getUId() + "," + face.getName());
-            runOnUiThread(() -> ToastUtils.showSingleToast(this, "增加成功"));
+            //runOnUiThread(() -> ToastUtils.showSingleToast(this, "增加成功"));
             return true;
         } catch (FaceException e) {
             Logger.e(TAG, "加载用户到缓存失败：" +face.getUId() + "," + face.getName(), e);

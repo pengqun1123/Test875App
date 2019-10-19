@@ -1,5 +1,5 @@
 package com.testApp.activity;
-
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
@@ -8,11 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.base.BaseActivity;
 import com.testApp.R;
+
 @Route(path = ARouterConstant.USER_CENTER_ACTIVITY)
 public class UserCenterActivity extends BaseActivity {
 
@@ -56,7 +56,17 @@ public class UserCenterActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        Bundle extras = getIntent().getExtras();
+        int type = extras.getInt("type");
+        if (type==1){
 
+        }else if (type==2){
+
+        }else if(type==3){
+
+        }else if (type==4){
+
+        }
     }
 
     @Override

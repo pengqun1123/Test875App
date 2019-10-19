@@ -49,6 +49,7 @@
     <string name="card_verify">身份证验证</string>
     <string name="manager_set">管理员设置</string>
     <string name="please_manager_pw">请输入管理员密码:</string>
+    <string name="please_verify_pw">请输入验证密码:</string>
     <string name="ask_open_face">是否启用人脸识别?</string>
     <string name="please_select_open_face">请选择是否启用人脸验证:</string>
     <string name="pw_no_eq">前后两次密码不相等</string>
@@ -59,7 +60,10 @@
     <string name="user_manage">用户管理</string>
     <string name="user_register">用户注册</string>
     <string name="verify_manager_pwd">验证管理员</string>
+    <string name="verify_user_pwd">验证用户密码</string>
     <string name="manager_pwd_verify_fail">管理员密码验证失败!</string>
+    <string name="user_pwd_verify_fail">用户密码验证失败!</string>
+    <string name="user_pwd_verify_success">用户密码验证成功!</string>
     <string name="max_manager_mun">最多可注册10位管理员</string>
     <string name="manager_list">管理员列表</string>
     <string name="username_userno">用户姓名或用户工号</string>

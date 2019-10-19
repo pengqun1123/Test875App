@@ -1,6 +1,8 @@
 package com.testApp.fragment;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -44,6 +46,7 @@ import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.RegisterCallBack;
 import com.sd.tgfinger.pojos.Msg;
+import com.sd.tgfinger.pojos.VerifyResult;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.activity.ManagerActivity;
@@ -130,8 +133,6 @@ public class UserRegisterFragment extends BaseFragment {
             fingerListToFingerByte();
         }
         //查询所有用户的工号
-
-//        queryAllUserNo();
     }
 
     @Override
@@ -187,6 +188,7 @@ public class UserRegisterFragment extends BaseFragment {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @SuppressLint("ResourceAsColor")
     public void registerUser(SaveUserInfo saveUserInfo) {
         String userName = nameEt.getText().toString().trim();
@@ -298,6 +300,7 @@ public class UserRegisterFragment extends BaseFragment {
     /**
      * 密码注册
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void pwRegister() {
         PwFactory.createPw(getActivity(), pw -> {
             DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -343,6 +346,7 @@ public class UserRegisterFragment extends BaseFragment {
                     //可插入User表的数据
                     UserRegisterFragment.this.idCard = idCard;
                     registerBtn.setVisibility(View.VISIBLE);
+
                 } else {
                     Logger.d("身份证注册失败");
                 }
@@ -377,6 +381,7 @@ public class UserRegisterFragment extends BaseFragment {
     /**
      * 指静脉注册
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void fingerRegister() {
         FingerApi.getInstance().cancelFingerImg(Objects.requireNonNull(getActivity())
                 , res -> {
@@ -547,6 +552,7 @@ public class UserRegisterFragment extends BaseFragment {
      *
      * @param face 人脸的数据
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(Face face) {
         if (face != null) {
@@ -564,6 +570,7 @@ public class UserRegisterFragment extends BaseFragment {
     /**
      * 跳转验证页面
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
@@ -581,6 +588,7 @@ public class UserRegisterFragment extends BaseFragment {
      *
      * @param saveUserInfo 要保存的用户信息
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void checkRegisterContent(SaveUserInfo saveUserInfo) {
         if (pwd == null && fg6 == null && idCard == null && face == null) {
             saveUserInfo.saveUserInfo(false);

@@ -3,6 +3,7 @@ package com.testApp.dialog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
@@ -24,10 +25,13 @@ import com.baselibrary.constant.AppConstant;
 import com.baselibrary.custom.CEditText;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
+import com.baselibrary.dao.db.ManagerDao;
+import com.baselibrary.dao.db.PwDao;
 import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.User;
+import com.baselibrary.pojo.Pw;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
@@ -39,6 +43,7 @@ import com.testApp.callBack.CancelBtnClickListener;
 import com.testApp.callBack.PositionBtnClickListener;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -171,6 +176,7 @@ public class AskDialog {
     public static void showAskUserCenterDialog(@NonNull Activity activity, PositionBtnClickListener listener) {
         View dialogView = LayoutInflater.from(activity).inflate(R.layout.ask_user_center_dialog_view,
                 null);
+        //AppCompatTextView tip = dialogView.findViewById(R.id.tip);
         RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup);
         AppCompatRadioButton fingerRadioButton = dialogView.findViewById(R.id.fingerRadioButton);
         AppCompatRadioButton faceRadioButton = dialogView.findViewById(R.id.faceRadioButton);
@@ -207,6 +213,47 @@ public class AskDialog {
             }
         });
     }
+
+    public static void VerifyUserPwd(@NonNull Activity mContext,UserPwdVerifyCallBack callBack){
+        View dialogView = LayoutInflater.from(mContext).inflate(R.layout.ask_manager_dialog_view,
+                null);
+        AppCompatTextView managerSetTitle = dialogView.findViewById(R.id.managerSetTitle);
+        AppCompatTextView managerTip= dialogView.findViewById(R.id.managerTip);
+        managerTip.setText(mContext.getString(R.string.please_verify_pw));
+        AppCompatButton nextBtn = dialogView.findViewById(R.id.nextBtn);
+        CEditText inputPw = dialogView.findViewById(R.id.inputPw);
+        AppCompatImageView dismissBtn = dialogView.findViewById(R.id.dismissBtn);
+        managerSetTitle.setText(mContext.getString(R.string.verify_user_pwd));
+        nextBtn.setText(mContext.getString(R.string.positive));
+        Dialog dialog = AppDialog.gmDialog(mContext, dialogView, false);
+        nextBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                String pw = inputPw.getText().toString().trim();
+                if (pw.length() < 6) {
+                    ToastUtils.showSquareTvToast(
+                            mContext, mContext.getString(com.pw.R.string.please_input_6_pw));
+                    return;
+                }
+                verifyUserPw(dialog, pw, callBack);
+                try {
+                    Thread.sleep(300);
+                    SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        dismissBtn.setOnClickListener(new OnceClickListener() {
+            @Override
+            public void onNoDoubleClick(View v) {
+                dialog.dismiss();
+                SoftInputKeyboardUtils.hiddenKeyboard(inputPw);
+            }
+        });
+    }
+
+
 
     /**
      * 确认管理员密码
@@ -522,6 +569,40 @@ public class AskDialog {
         }
         Logger.d("管理员密码存储成功:");
     }
+    //验证管理员密码
+    private static void verifyUserPw(Dialog dialog, String pw, UserPwdVerifyCallBack callBack) {
+        DBUtil dbUtil = BaseApplication.getDbUtil();
+        WhereCondition whereCondition = PwDao.Properties.UId.eq(pw);
+        dbUtil.setDbCallBack(new DbCallBack<Manager>() {
+            @Override
+            public void onSuccess(Manager result) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Manager> result) {
+                if (result.size() > 0) {
+                    callBack.userPwdVerifyCallBack(result.get(0).getMId());
+
+                }else {
+                    callBack.userPwdVerifyCallBack(null);
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onNotification(boolean result) {
+
+            }
+        }).queryAsync(Pw.class,whereCondition);
+    }
+
+
 
     //验证管理员密码
     private static void verifyManagerPw(Dialog dialog, String pw, ManagerPwdVerifyCallBack callBack) {
@@ -568,6 +649,10 @@ public class AskDialog {
         void positiveCallBack(int flag, Manager manager);
 
         void activationCodeCallBack(String code);
+    }
+
+    public interface UserPwdVerifyCallBack {
+        void userPwdVerifyCallBack(Long id);
     }
 
     public interface ManagerPwdVerifyCallBack {

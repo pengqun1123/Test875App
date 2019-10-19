@@ -37,6 +37,7 @@ import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.GetUIDimens;
+import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.service.FaceService;
@@ -130,18 +131,20 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
         tv_result.setTextColor(getResources().getColor(R.color.blue_10));
         tv_result.setText("管理");
-        //    tv_result.setVisibility(View.VISIBLE);
 
-        FingerFactory.getInstance().fingerDevConnectStatus(this);
+        if (SPUtil.getFingerVerifyFlag()) {
+            FingerFactory.getInstance().fingerDevConnectStatus(this);
+        }
 
-        idCardService = ARouter.getInstance().navigation(IdCardService.class);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                idCardService.register_IdCard(V3FaceRecActivity.this, -1l);
-            }
-        }).start();
-
+        if (SPUtil.getCardVerifyFlag()){
+            idCardService = ARouter.getInstance().navigation(IdCardService.class);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    idCardService.register_IdCard(V3FaceRecActivity.this, -1l);
+                }
+            }).start();
+        }
          /*  sight_rotate = ObjectAnimator.ofFloat(iv_sight, "rotation", 0.0f, 360.0f);
             sight_rotate.setDuration(4000);
             sight_rotate.setInterpolator(new LinearInterpolator());
@@ -420,8 +423,9 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 public void fingerVerifyResult(int res, String msg, int score,
                                                int index, Long fingerId, byte[] updateFinger) {
                     if (res == 1) {
-                        Logger.d("指静脉验证成功");
-                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this, "身份证验证成功", null);
+                        ToastUtils.showSquareImgToast(V3FaceRecActivity.this
+                                , "指静脉验证成功"
+                                , null);
 
                     } else {
                         ToastUtils.showSquareImgToast(V3FaceRecActivity.this

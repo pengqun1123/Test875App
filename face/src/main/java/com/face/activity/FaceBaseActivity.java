@@ -10,14 +10,22 @@ import android.widget.FrameLayout;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
+import com.baselibrary.pojo.Finger6;
+import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.AnimatorUtils;
+import com.baselibrary.util.FingerListManager;
 import com.face.R;
+import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
 
 /**
  * Created by wangyu on 2019/10/15.
  */
 
 public abstract  class FaceBaseActivity extends BaseActivity{
+
+    protected ArrayList<Finger6> fingerList;
 
     protected AppCompatImageView gear1, gear2, gear3, gear4;
 
@@ -93,7 +101,10 @@ public abstract  class FaceBaseActivity extends BaseActivity{
     }
 
     @Override
-    protected void initData() { }
+    protected void initData() {
+
+
+    }
 
     @Override
     protected void onViewClick(View view) {
