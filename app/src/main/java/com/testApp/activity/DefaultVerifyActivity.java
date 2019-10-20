@@ -22,6 +22,7 @@ import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
+import com.baselibrary.util.ActManager;
 import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.CalendarUtil;
 import com.baselibrary.util.SPUtil;
@@ -55,8 +56,9 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void initView() {
         bindViewWithClick(R.id.homeMenu, true);
-        currentTime = bindViewWithClick(R.id.currentTime, true);
-        currentDate = bindViewWithClick(R.id.currentDate, true);
+        currentTime = bindViewWithClick(R.id.currentTime, false);
+        currentDate = bindViewWithClick(R.id.currentDate, false);
+        bindViewWithClick(R.id.defaultOut, true);
         gear1 = bindViewWithClick(R.id.gear1, true);
         gear2 = bindViewWithClick(R.id.gear2, true);
         gear3 = bindViewWithClick(R.id.gear3, true);
@@ -176,12 +178,23 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         unregisterReceiver(systemTimeReceiver);
     }
 
+    private long lastTime;
+    private int count;
+
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.homeMenu:
                 SkipActivityUtil.skipActivity(this, MenuActivity.class);
                 finish();
+                break;
+            case R.id.defaultOut:
+                count++;
+                long timeMillis = System.currentTimeMillis();
+
+
+                //退出应用
+                ActManager.getInstance().exitApp();
                 break;
 
         }

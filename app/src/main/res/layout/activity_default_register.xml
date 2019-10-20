@@ -12,6 +12,13 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/image2" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/defaultOut"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

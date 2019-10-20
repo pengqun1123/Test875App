@@ -41,10 +41,48 @@ public class FingerListManager {
         fingerList.remove(position);
     }
 
-    public void removeFingerById(Finger6 finger6) {
+    /**
+     * Finger完全相等的时候调用
+     *
+     * @param finger6 指静脉数据
+     */
+    public void removeFinger(Finger6 finger6) {
         if (fingerList.size() > 0) {
             fingerList.remove(finger6);
         }
+    }
+
+    /**
+     * 指静脉Id相等的时候调用
+     *
+     * @param finger 指静脉
+     */
+    public boolean removeFingerById(Finger6 finger) {
+        boolean isEq = false;
+        Finger6 removeFinger = null;
+        for (Finger6 finger6 : fingerList) {
+            Long uId = finger6.getUId();
+            if (uId.equals(finger.getUId())) {
+                isEq = true;
+                removeFinger = finger6;
+                break;
+            }
+        }
+        if (isEq)
+            fingerList.remove(removeFinger);
+        return isEq;
+    }
+
+    /**
+     * 覆盖指静脉ID相等的数据
+     *
+     * @param finger 指静脉数据
+     */
+    public boolean coverFinger(Finger6 finger) {
+        boolean b = removeFingerById(finger);
+        if (b)
+            addFingerData(finger);
+        return b;
     }
 
     public void clearFingerData() {
