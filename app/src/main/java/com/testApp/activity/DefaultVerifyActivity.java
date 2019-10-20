@@ -38,6 +38,7 @@ import com.orhanobut.logger.Logger;
 import com.testApp.R;
 
 import java.text.MessageFormat;
+import java.util.Calendar;
 
 
 public class DefaultVerifyActivity extends BaseActivity implements FingerDevStatusCallBack,
@@ -178,8 +179,10 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         unregisterReceiver(systemTimeReceiver);
     }
 
-    private long lastTime;
-    private int count;
+    private final long flagTime = 3000;
+    private long maxTime = 1000;
+    private long lastTime = 0;
+    private int count = 0;
 
     @Override
     protected void onViewClick(View view) {
@@ -189,12 +192,17 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                 finish();
                 break;
             case R.id.defaultOut:
-                count++;
-                long timeMillis = System.currentTimeMillis();
-
-
-                //退出应用
-                ActManager.getInstance().exitApp();
+                long timeInMillis = Calendar.getInstance().getTimeInMillis();
+                long l = timeInMillis - lastTime;
+                if (((l) < flagTime && count > 0) || count == 0) {
+                    count++;
+                    lastTime = timeInMillis;
+                }
+                if (count == 5) {
+                    count = 0;
+                    //退出应用
+                    ActManager.getInstance().exitApp();
+                }
                 break;
 
         }
