@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.baselibrary.base.BaseApplication;
@@ -18,6 +19,7 @@ import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
 import com.testApp.adapter.ManagerAdapter;
+import com.testApp.adapter.UserManageAdapter;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
@@ -50,7 +52,6 @@ public class ManagerFragment extends BaseFragment {
         AppCompatTextView registerManagerMaxNum = bindViewWithClick(R.id.registerManagerMaxNum, true);
         bindViewWithClick(R.id.addNewManager, true);
         RecyclerView managerRv = bindViewWithClick(R.id.managerRv, false);
-        AppCompatTextView showAllData = bindViewWithClick(R.id.showAllData, false);
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         bindViewWithClick(R.id.verifySet, true);
         bindViewWithClick(R.id.addNewManager, true);
@@ -65,7 +66,10 @@ public class ManagerFragment extends BaseFragment {
         managerRv.setItemAnimator(new DefaultItemAnimator());
         managerAdapter = new ManagerAdapter(callBack);
         managerRv.setAdapter(managerAdapter);
-        queryAllManagerData(managerAdapter, noData, showAllData);
+        queryAllManagerData(managerAdapter, noData);
+
+        //为RecyclerView设置FooterView
+        setFooterView(managerRv, managerAdapter);
     }
 
     @Override
@@ -101,17 +105,12 @@ public class ManagerFragment extends BaseFragment {
     }
 
     //查询manager的数据
-    private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData
-            , AppCompatTextView showAllData) {
+    private void queryAllManagerData(ManagerAdapter managerAdapter, AppCompatTextView noData) {
         DBUtil dbUtil = BaseApplication.getDbUtil();
         List<Manager> managers = dbUtil.queryAll(Manager.class);
-        Long count = dbUtil.count(Manager.class);
         if (managers.size() > 0) {
             managerAdapter.addData(managers);
             noData.setVisibility(View.GONE);
-        }
-        if (managerAdapter.getItemCount() == count) {
-            showAllData.setVisibility(View.VISIBLE);
         }
     }
 
@@ -139,5 +138,14 @@ public class ManagerFragment extends BaseFragment {
         }
     };
 
+    /**
+     * 给RecyclerView设置FooterView
+     * 博文链接：
+     * https://www.jianshu.com/p/9333e20456e2
+     */
+    private void setFooterView(RecyclerView rv, ManagerAdapter managerAdapter) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.manager_item_footer, rv, false);
+        managerAdapter.setFooterView(view);
+    }
 
 }

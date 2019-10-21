@@ -9,22 +9,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
 import com.baselibrary.constant.AppConstant;
@@ -38,13 +35,10 @@ import com.baselibrary.service.FaceService;
 import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
-import com.face.activity.FaceVerifyActivity;
-import com.face.common.FaceConfig;
 import com.finger.service.FingerServiceUtil;
 import com.testApp.R;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.UserManageAdapter;
-import com.testApp.callBack.SearchDeleteUser;
 import com.testApp.dialog.AskDialog;
 
 import java.util.List;
@@ -56,14 +50,14 @@ import static com.testApp.dialog.AskDialog.reviseMaxManagerNum;
  * A simple {@link Fragment} subclass.
  */
 public class UserManageFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener {
+        /*implements SwipeRefreshLayout.OnRefreshListener */ {
 
     private LinearLayoutManager mLayoutManager;
     private int lastVisibleItemPosition;
     private UserManageAdapter userManageAdapter;
     private Long userCount;
-    private AppCompatTextView showAllData;
     private AppCompatTextView noData;
+    private LocalBroadcastManager localBroadcastManager;
 
 
     public static UserManageFragment instance() {
@@ -87,7 +81,6 @@ public class UserManageFragment extends BaseFragment
         bindViewWithClick(R.id.searchUserBtn, true);
         RecyclerView userRv = bindViewWithClick(R.id.userRv, false);
         noData = bindViewWithClick(R.id.noData, false);
-        showAllData = bindViewWithClick(R.id.showAllData, false);
         noData.setVisibility(View.VISIBLE);
         /*//设置reFresh禁止刷新
         userRefresh.setRefreshing(false);
@@ -129,6 +122,8 @@ public class UserManageFragment extends BaseFragment
             }
         });
 
+        //给RecyclerView设置Footer
+        setFooterView(userRv, userManageAdapter);
         //获取用户的数据
         getUserData(userManageAdapter, noData);
     }
@@ -137,6 +132,12 @@ public class UserManageFragment extends BaseFragment
     protected void initData() {
         startReceiver();
         userCount = BaseApplication.getDbUtil().count(User.class);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        localBroadcastManager.unregisterReceiver(receiver);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -153,18 +154,14 @@ public class UserManageFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void onRefresh() {
-
-    }
-
     private void getUserData(UserManageAdapter userManageAdapter, AppCompatTextView noData) {
         List<User> users = getUsers(pageSize);
         if (users != null && users.size() > 0 && userManageAdapter != null) {
             noData.setVisibility(View.GONE);
             userManageAdapter.addData(users);
             if (userManageAdapter.getItemCount() == userCount) {
-                showAllData.setVisibility(View.VISIBLE);
+                //showAllData.setVisibility(View.VISIBLE);
+//                setFooterView(userRv, userManageAdapter);
             }
         }
     }
@@ -180,7 +177,8 @@ public class UserManageFragment extends BaseFragment
         if (userManageAdapter != null) {
             userManageAdapter.addData(user);
             if (userManageAdapter.getItemCount() == userCount) {
-                showAllData.setVisibility(View.VISIBLE);
+                //showAllData.setVisibility(View.VISIBLE);
+//                setFooterView(userRv, userManageAdapter);
             }
         }
     }
@@ -202,6 +200,20 @@ public class UserManageFragment extends BaseFragment
                     });
         }
     };
+
+    /**
+     * 给RecyclerView设置FooterView
+     * 博文链接：
+     * https://www.jianshu.com/p/9333e20456e2
+     */
+//    private void setHeaderView(RecyclerView view, UserManageAdapter userManageAdapter) {
+//        View header = LayoutInflater.from(getActivity()).inflate(R.layout.header, view, false);
+//        userManageAdapter.setHeaderView(header);
+//    }
+    private void setFooterView(RecyclerView rv, UserManageAdapter userManageAdapter) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.manager_item_footer, rv, false);
+        userManageAdapter.setFooterView(view);
+    }
 
     /**
      * 删除用户
@@ -247,16 +259,18 @@ public class UserManageFragment extends BaseFragment
                             , R.drawable.ic_tick));
             if (userManageAdapter.getUsers().size() == 0) {
                 noData.setVisibility(View.VISIBLE);
-                showAllData.setVisibility(View.GONE);
+                //showAllData.setVisibility(View.GONE);
+//                setFooterView(userRv, userManageAdapter);
             }
         }
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startReceiver() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(Objects.requireNonNull(getActivity()));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);
-        Objects.requireNonNull(getActivity()).registerReceiver(receiver, intentFilter);
+        localBroadcastManager.registerReceiver(receiver, intentFilter);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {

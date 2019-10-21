@@ -572,7 +572,7 @@ public class UserCenterActivity extends BaseActivity {
             UserCenterActivity.this.face = face;
             UserCenterActivity.this.faceId = face.getUId();
         } else {
-            VerifyResultUi.showRegisterSuccess(this, getString(com.face.R.string.face_register_fail),
+            VerifyResultUi.showRegisterFail(this, getString(com.face.R.string.face_register_fail),
                     false);
         }
     }

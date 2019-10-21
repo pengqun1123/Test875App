@@ -201,36 +201,6 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     }
 
-    /**
-     * 指静脉验证的结果
-     */
-    private void fingerVerifyResult() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_TIME_TICK);
-        registerReceiver(receiver, filter);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int verifyType = intent.getIntExtra(AppConstant.VERIFY_RESULT_TYPE, 0);
-            if (verifyType == AppConstant.FINGER_MODEL) {
-                int fingerVerifyResult = intent.getIntExtra(AppConstant.FINGER_VERIFY_RESULT, 0);
-                if (fingerVerifyResult == 1) {
-                    ToastUtils.showSquareImgToast(MenuActivity.this
-                            , "指静脉验证成功"
-                            , null);
-                    SkipActivityUtil.skipActivity(MenuActivity.this, UserCenterActivity.class);
-                } else {
-                    ToastUtils.showSquareImgToast(MenuActivity.this
-                            , "指静脉验证失败"
-                            , ActivityCompat.getDrawable(MenuActivity.this
-                                    , com.face.R.drawable.cry_icon));
-                }
-            }
-        }
-    };
-
     private Boolean isStartService = false;
 
     /**

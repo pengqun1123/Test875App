@@ -91,12 +91,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         FingerApi.getInstance().receiveFingerDevConnectStatus(this);
         idCardService = ARouter.getInstance().navigation(IdCardService.class);
         if (SPUtil.getCardVerifyFlag()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    idCardService.verify_IdCard(DefaultVerifyActivity.this);
-                }
-            }).start();
+            new Thread(() -> idCardService.verify_IdCard(DefaultVerifyActivity.this)).start();
         }
         getSystemTime();
     }
@@ -179,8 +174,6 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         unregisterReceiver(systemTimeReceiver);
     }
 
-    private final long flagTime = 3000;
-    private long maxTime = 1000;
     private long lastTime = 0;
     private int count = 0;
 
@@ -194,7 +187,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
             case R.id.defaultOut:
                 long timeInMillis = Calendar.getInstance().getTimeInMillis();
                 long l = timeInMillis - lastTime;
-                if (((l) < flagTime && count > 0) || count == 0) {
+                if (((l) < AppConstant.FLAG_TIME && count > 0) || count == 0) {
                     count++;
                     lastTime = timeInMillis;
                 }
@@ -208,7 +201,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         }
     }
 
-    private /*static*/ Boolean isStartService = false;
+    private Boolean isStartService = false;
 
     @Override
     public void fingerDevStatus(int res, String msg) {
@@ -249,15 +242,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                                    int index, Long fingerId, byte[] updateFinger) {
         if (res == 1) {
             VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
-//            Intent intent = new Intent();
-//            intent.setAction(AppConstant.USER_MENU_RECEIVER);
-//            intent.putExtra(AppConstant.VERIFY_RESULT_TYPE, AppConstant.FINGER_MODEL);
-//            intent.putExtra(AppConstant.FINGER_VERIFY_RESULT, res);
-//            sendBroadcast(intent);
         }
-// else {
-//            VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_fail), true);
-//        }
     }
 
     /**

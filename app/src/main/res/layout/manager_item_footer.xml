@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/showAllData"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_55"
+    android:background="@color/common_line"
+    android:gravity="center"
+    android:text="@string/show_all_data"
+    android:textColor="@color/black_5"
+    android:textSize="@dimen/sp_15"
+    android:visibility="visible" />

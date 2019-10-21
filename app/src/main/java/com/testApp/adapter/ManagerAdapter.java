@@ -16,14 +16,27 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.testApp.adapter.UserManageAdapter.TYPE_FOOTER;
+import static com.testApp.adapter.UserManageAdapter.TYPE_NORMAL;
+
 /**
  * Created By pq
  * on 2019/10/9
  */
-public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> {
+public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Manager> managers;
     private ManagerItemCallBack callBack;
+    private View footerView;
+
+    public View getFooterView() {
+        return footerView;
+    }
+
+    public void setFooterView(View footerView) {
+        this.footerView = footerView;
+        notifyItemInserted(getItemCount() - 1);
+    }
 
     public ManagerAdapter(ManagerItemCallBack callBack) {
         managers = new ArrayList<>();
@@ -63,38 +76,66 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> 
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new Holder(LayoutInflater.from(viewGroup.getContext()).inflate(
-                R.layout.manager_item, viewGroup, false
-        ));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        if (footerView != null && i == TYPE_FOOTER) {
+            return new RvHolder(footerView);
+        } else {
+            return new Holder(LayoutInflater.from(viewGroup.getContext()).inflate(
+                    R.layout.manager_item, viewGroup, false
+            ));
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int i) {
-        holder.managerNo.setText(MessageFormat.format("{0}{1}",
-                holder.itemView.getContext().getString(R.string.manager), i));
-        Manager manager = managers.get(i);
-        String manage_pw = manager.getManage_pw();
-        holder.managerPw.setText(MessageFormat.format("密码:{0}", manage_pw));
-        holder.managerItem.setOnClickListener(new OnceClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
+        if (getItemViewType(i) == TYPE_FOOTER && holder instanceof RvHolder) {
+            RvHolder footerHolder = (RvHolder) holder;
+            footerHolder.showAllData.setText(footerHolder.itemView.getContext()
+                    .getString(R.string.show_all_data));
+            return;
+        } else if (getItemViewType(i) == TYPE_NORMAL && holder instanceof Holder) {
+            Holder normalHolder = (Holder) holder;
+            normalHolder.managerNo.setText(MessageFormat.format("{0}{1}",
+                    holder.itemView.getContext().getString(R.string.manager), i));
+            Manager manager = managers.get(i);
+            String manage_pw = manager.getManage_pw();
+            normalHolder.managerPw.setText(MessageFormat.format("密码:{0}", manage_pw));
+            normalHolder.managerItem.setOnClickListener(new OnceClickListener() {
+                @Override
+                public void onNoDoubleClick(View v) {
+                    if (callBack != null)
+                        callBack.managerItemCallBack(holder.getAdapterPosition());
+                }
+            });
+            normalHolder.managerItem.setOnLongClickListener(view -> {
                 if (callBack != null)
-                    callBack.managerItemCallBack(holder.getAdapterPosition());
-            }
-        });
-        holder.managerItem.setOnLongClickListener(view -> {
-            if (callBack != null)
-                callBack.itemLongClickListener(manager,
-                        holder.itemView.getContext().getString(R.string.manager) + i
-                        , holder.getAdapterPosition());
-            return false;
-        });
+                    callBack.itemLongClickListener(manager,
+                            normalHolder.itemView.getContext().getString(R.string.manager) + i
+                            , normalHolder.getAdapterPosition());
+                return false;
+            });
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (footerView == null) {
+            return TYPE_NORMAL;
+        } else if (position == getItemCount() - 1) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_NORMAL;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return managers.size();
+        if (footerView == null) {
+            return managers.size() + 1;
+        } else {
+            return managers.size();
+        }
     }
 
     static class Holder extends RecyclerView.ViewHolder {
@@ -108,6 +149,16 @@ public class ManagerAdapter extends RecyclerView.Adapter<ManagerAdapter.Holder> 
             managerItem = itemView.findViewById(R.id.managerItem);
             managerPw = itemView.findViewById(R.id.managerPw);
 
+        }
+    }
+
+    static class RvHolder extends RecyclerView.ViewHolder {
+
+        private final AppCompatTextView showAllData;
+
+        RvHolder(@NonNull View itemView) {
+            super(itemView);
+            showAllData = itemView.findViewById(R.id.showAllData);
         }
     }
 

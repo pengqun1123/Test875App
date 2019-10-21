@@ -6,6 +6,8 @@ package com.baselibrary.constant;
  */
 public final class AppConstant {
 
+    public static final long FLAG_TIME = 3000L;
+
     public static final Integer FINGER_MODEL = 0x10;
     public static final Integer FACE_MODEL = 0x11;
     public static final Integer ID_CARD_MODEL = 0x12;

@@ -100,17 +100,6 @@
             android:background="@color/white"
             android:scrollbars="vertical" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/showAllData"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/common_line"
-            android:gravity="center"
-            android:text="@string/show_all_data"
-            android:textColor="@color/black_5"
-            android:textSize="@dimen/sp_15"
-            android:visibility="gone" />
-
     </LinearLayout>
 
     <!--<android.support.v4.widget.SwipeRefreshLayout-->
