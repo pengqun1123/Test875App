@@ -89,7 +89,7 @@ public class SplashActivity extends BaseActivity {
         //清除数据库缓存
 //        DBUtil dbUtil = BaseApplication.getDbUtil();
 //        dbUtil.getDaoSession().clear();
-      // clearData();
+        clearData();
 
         setDevMaxVoice();
 

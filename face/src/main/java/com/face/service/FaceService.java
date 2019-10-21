@@ -9,6 +9,7 @@ import com.baselibrary.base.BaseApplication;
 import com.baselibrary.callBack.FaceInitListener;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Face;
+import com.baselibrary.util.ToastUtils;
 import com.face.callback.FaceListener;
 import com.face.common.FaceConfig;
 import com.face.ui.FaceRecBoxView;
@@ -42,8 +43,9 @@ import static com.zqzn.android.face.processor.BaseFaceRecProcessor.qualityDetect
 public class FaceService {
 
     private static  volatile  FaceService instance;
+
     private FaceSearchLibrary faceSearchLibrary;
-    private String TAG="FaceService";
+    private  static  String TAG="FaceService";
     private final ExecutorService service;
     private FaceCamera visCamera;
     private FaceCamera nirCamera;
@@ -133,6 +135,24 @@ public class FaceService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public    boolean addUserToSearchLibrary(FaceSearchLibrary faceSearchLibrary,Face face) {
+        try {
+            //确保之前在搜索库中的用户信息已经被移除
+            faceSearchLibrary.removePersons(new long[]{face.getUId()});
+        } catch (FaceException ignore) {
+        }
+        try {
+            //将用户特征信息加载到离线1：N搜索库中
+            FaceUtils.addToSearchLibrary(face);
+            Logger.d(TAG, "加载用户到缓存成功：" + face.getUId() + "," + face.getName());
+            //runOnUiThread(() -> ToastUtils.showSingleToast(this, "增加成功"));
+            return true;
+        } catch (FaceException e) {
+            Logger.e(TAG, "加载用户到缓存失败：" +face.getUId() + "," + face.getName(), e);
+            return false;
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
 import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;

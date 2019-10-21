@@ -3,6 +3,8 @@ package com.face.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
@@ -103,34 +106,31 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
         faceImageDir = new File(FaceConfig.getInstance().getAppRootDir(), "face_image");
         faceImageDir.mkdirs();
 
-        Timer timer = new Timer();
 
-
-        TimerTask task=new TimerTask() {
-            @Override
-            public void run() {
-                time--;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        warning.setText(time+"");
-                        if (time==0){
-                            warning.setVisibility(View.GONE);
-                        }
-                    }
-                });
-                if (time==-1){
-                    timer.cancel();
-                    if (face==null) {
-                        EventBus.getDefault().post(face);
-                        finish();
-                    }
-                }
-
-            }
-        };
-        timer.schedule(task,1000,1000);
+        handler.sendEmptyMessageDelayed(0x001,1000);
     }
+
+
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            time--;
+            warning.setText(time+"");
+            if (time==0){
+                warning.setVisibility(View.GONE);
+            }
+            if (time==-1){
+                if (face==null) {
+                    Face face1 = new Face();
+                    EventBus.getDefault().post(face1);
+                    finish();
+                }
+            }
+            handler.sendEmptyMessageDelayed(0x001,1000);
+        }
+    };
 
     private void initCamera() {
         visCamera = FaceConfig.getInstance().getVisCamera();
@@ -262,7 +262,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
             DBUtil dbUtil = BaseApplication.getDbUtil();
             dbUtil.insertOrReplace(face);
             //写数据成功，将用户信息加载到离线1：N搜索库中
-            boolean addSearchLibraryRet = addUserToSearchLibrary(face);
+            boolean addSearchLibraryRet = addUserToSearchLibrary(faceSearchLibrary,face);
             if (addSearchLibraryRet) {
                 EventBus.getDefault().post(face);
                 finish();
@@ -280,7 +280,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
      * @param face
      * @return
      */
-    private boolean addUserToSearchLibrary(Face face) {
+    private boolean addUserToSearchLibrary(FaceSearchLibrary faceSearchLibrary,Face face) {
         try {
             //确保之前在搜索库中的用户信息已经被移除
             faceSearchLibrary.removePersons(new long[]{face.getUId()});
@@ -318,6 +318,10 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
     protected void onDestroy() {
         try {
             super.onDestroy();
+            if (handler!=null) {
+                handler.removeMessages(0x001);
+                handler=null;
+            }
         } finally {
             try {
                 visCameraView.releaseCamera();

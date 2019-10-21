@@ -33,6 +33,7 @@ import com.baselibrary.pojo.Finger6;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
+import com.baselibrary.service.FaceService;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.PwFactory;
 import com.baselibrary.util.FingerListManager;
@@ -166,11 +167,13 @@ public class UserRegisterFragment extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView textView = (TextView) view;
-                String selectItem = textView.getText().toString();
-                if (selectItem.equals(getString(R.string.sex))) {
-                    sex = "";
-                } else {
-                    sex = selectItem;
+                if (textView!=null) {
+                    String selectItem = textView.getText().toString();
+                    if (selectItem.equals(getString(R.string.sex))) {
+                        sex = "";
+                    } else {
+                        sex = selectItem;
+                    }
                 }
             }
 
@@ -551,7 +554,7 @@ public class UserRegisterFragment extends BaseFragment {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(Face face) {
-        if (face != null) {
+        if (face.getUId()!= null) {
             ToastUtils.showSquareImgToast(getActivity(), getString(com.face.R.string.face_register_success),
                     null);
             UserRegisterFragment.this.face = face;
@@ -617,6 +620,12 @@ public class UserRegisterFragment extends BaseFragment {
                             }
                             if (face != null) {
                                 dbUtil.delete(face);
+                                    FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
+                                    try {
+                                        faceService.removeFace(face.getUId());
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 face = null;
                             }
                             if (saveUserInfo != null)

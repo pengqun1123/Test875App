@@ -119,7 +119,7 @@ public abstract  class FaceBaseActivity extends BaseActivity{
     protected void onViewClick(View view) {
         if (view.getId() == R.id.homeMenu) {
             ARouterUtil.navigation(ARouterConstant.MENU_ACTIVITY);
-            finish();
+           this. finish();
         } else if (view.getId()==R.id.defaultOut) {
     /*        long timeInMillis = Calendar.getInstance().getTimeInMillis();
             long l = timeInMillis - lastTime;

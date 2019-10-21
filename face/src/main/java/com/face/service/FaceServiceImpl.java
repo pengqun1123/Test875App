@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.baselibrary.ARouter.ARouterConstant;
+import com.baselibrary.pojo.Face;
 import com.baselibrary.service.*;
 import com.face.common.FaceConfig;
 import com.zqzn.android.face.exceptions.FaceException;
@@ -15,14 +16,22 @@ import com.zqzn.android.face.model.FaceSearchLibrary;
 
 @Route(path = ARouterConstant.FACE_SERVICE)
 public class FaceServiceImpl implements com.baselibrary.service.FaceService {
+
+    private FaceSearchLibrary faceSearchLibrary;
+
     @Override
     public void removeFace(Long faceId) throws Exception {
-        FaceSearchLibrary faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
+
         faceSearchLibrary.removePersons(new long[]{faceId});
     }
 
     @Override
-    public void init(Context context) {
+    public boolean addFace(Face face) {
+      return   FaceService.getInstance().addUserToSearchLibrary(faceSearchLibrary,face);
+    }
 
+    @Override
+    public void init(Context context) {
+        faceSearchLibrary = FaceConfig.getInstance().getFaceSDK().getFaceSearchLibrary();
     }
 }

@@ -213,12 +213,6 @@ public class UserManageFragment extends BaseFragment
         if (userManageAdapter != null) {
             userManageAdapter.removeData(user);
             DBUtil dbUtil = BaseApplication.getDbUtil();
-            if (user.getFinger6Id()!=null) {
-                dbUtil.deleteById(Finger6.class, user.getFinger6Id());
-                FingerListManager.getInstance().removeFingerById(user.getFinger6());
-                //更新指静脉的数据
-                FingerServiceUtil.getInstance().updateFingerData();
-            }
 
             if (user.getFaceId()!=null) {
                 dbUtil.deleteById(Face.class, user.getFaceId());
@@ -230,6 +224,14 @@ public class UserManageFragment extends BaseFragment
                 }
             }
 
+            if (user.getFinger6Id()!=null) {
+                dbUtil.deleteById(Finger6.class, user.getFinger6Id());
+                FingerListManager.getInstance().removeFingerById(user.getFinger6());
+                //更新指静脉的数据
+                FingerServiceUtil.getInstance().updateFingerData();
+            }
+
+
             if (user.getCardId()!=null){
                 dbUtil.deleteById(IdCard.class,user.getCardId());
             }
@@ -238,12 +240,14 @@ public class UserManageFragment extends BaseFragment
                 dbUtil.deleteById(Pw.class,user.getPwId());
             }
 
+            dbUtil.delete(user);
+
             ToastUtils.showSquareImgToast(getActivity(),
                     getString(R.string.delete_success),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
                             , R.drawable.ic_tick));
 
-            dbUtil.delete(user);
+
         }
     }
 

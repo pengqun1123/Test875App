@@ -34,6 +34,7 @@ import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
+import com.baselibrary.service.FaceService;
 import com.baselibrary.service.IdCardService;
 import com.baselibrary.service.factory.PwFactory;
 import com.baselibrary.util.FingerListManager;
@@ -147,7 +148,10 @@ public class UserCenterActivity extends BaseActivity {
             }
         });
     }
-
+    private Pw initPwd;
+    private IdCard initIdCard;
+    private Face initFace;
+    private Finger6 initFg6;
 
     private Long pwdId;
     private Long idCardId;
@@ -190,6 +194,10 @@ public class UserCenterActivity extends BaseActivity {
                    fg6Id=user.getFinger6Id();
                    idCardId=user.getCardId();
                    pwdId=user.getPwId();
+                   initPwd=user.getPw();
+                   initFace=user.getFace();
+                   initIdCard=user.getIdCard();
+                   initFg6=user.getFinger6();
                }
             }
 
@@ -331,20 +339,45 @@ public class UserCenterActivity extends BaseActivity {
                         //删除已经出入数据库的数据
                         DBUtil dbUtil = BaseApplication.getDbUtil();
                         if (pwd != null) {
-
-                            dbUtil.insertOrReplace(user.getPw());
+                            if (initPwd!=null) {
+                                dbUtil.insertOrReplace(initPwd);
+                            }else {
+                                dbUtil.delete(pwd);
+                            }
                             pwd = null;
                         }
                         if (fg6 != null) {
-                            dbUtil.insertOrReplace(user.getFinger6());
+                            if (initFg6!=null) {
+                                dbUtil.insertOrReplace(initFg6);
+                                FingerListManager.getInstance().coverFinger(initFg6);
+                            }else {
+                                dbUtil.delete(fg6);
+                                FingerListManager.getInstance().removeFinger(fg6);
+                            }
+                            FingerServiceUtil.getInstance().updateFingerData();
                             fg6 = null;
                         }
                         if (idCard != null) {
-                            dbUtil.insertOrReplace(user.getIdCard());
+                            if (initIdCard!=null) {
+                                dbUtil.insertOrReplace(initIdCard);
+                            }else {
+                                dbUtil.delete(idCard);
+                            }
                             idCard = null;
                         }
                         if (face != null) {
-                            dbUtil.insertOrReplace(user.getFace());
+                            FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
+                            if (initFace!=null) {
+                                dbUtil.insertOrReplace(initFace);
+                                faceService.addFace(initFace);
+                            }else {
+                                dbUtil.delete(face);
+                                try {
+                                    faceService.removeFace(face.getUId());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
                             face = null;
                         }
                         SkipActivityUtil.skipActivity(UserCenterActivity.this, MenuActivity.class);
