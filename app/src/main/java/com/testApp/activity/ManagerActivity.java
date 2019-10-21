@@ -122,7 +122,7 @@ public class ManagerActivity extends BaseActivity {
 
     public void skipFaceActivity() {
         //跳转人脸识别页面
-        ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+        SkipActivityUtil.skipActivity(this,V3FaceRecActivity.class);
     }
 
     public void addNewUser(User user) {

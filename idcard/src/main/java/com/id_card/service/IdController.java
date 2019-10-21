@@ -198,8 +198,12 @@ public class IdController {
                            @Override
                            public void onSuccess(List<IdCard>result) {
                                try {
-                                   ImageFile= bitmapToFile(bitmap);
-                                   cardInfoListener.onGetCardInfo(result.get(0));
+                                   if (result.size()>0) {
+                                       ImageFile = bitmapToFile(bitmap);
+                                       cardInfoListener.onGetCardInfo(result.get(0));
+                                   }else {
+                                       cardInfoListener.onGetCardInfo(null);
+                                   }
                                } catch (Exception e) {
                                    e.printStackTrace();
                                }

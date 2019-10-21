@@ -2,10 +2,12 @@ package com.testApp.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -21,14 +23,24 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
+import com.baselibrary.pojo.Face;
+import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
+import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
+import com.baselibrary.service.FaceService;
 import com.baselibrary.util.FingerListManager;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.face.activity.FaceVerifyActivity;
+import com.face.common.FaceConfig;
+import com.finger.service.FingerServiceUtil;
 import com.testApp.R;
 import com.testApp.activity.SearchActivity;
 import com.testApp.adapter.UserManageAdapter;
@@ -51,6 +63,7 @@ public class UserManageFragment extends BaseFragment
     private UserManageAdapter userManageAdapter;
     private Long userCount;
     private AppCompatTextView showAllData;
+
 
 
     public static UserManageFragment instance() {
@@ -126,6 +139,7 @@ public class UserManageFragment extends BaseFragment
         userCount = BaseApplication.getDbUtil().count(User.class);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
@@ -177,6 +191,7 @@ public class UserManageFragment extends BaseFragment
 
         }
 
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         public void itemLongClickListener(User user, String managerName, int position) {
             AskDialog.deleteItemDataDialog(Objects.requireNonNull(getActivity()),
@@ -193,21 +208,46 @@ public class UserManageFragment extends BaseFragment
      *
      * @param user user
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void deleteUser(User user) {
         if (userManageAdapter != null) {
             userManageAdapter.removeData(user);
             DBUtil dbUtil = BaseApplication.getDbUtil();
-            dbUtil.delete(user);
-            FingerListManager.getInstance().removeFingerById(user.getFinger6());
-            //更新指静脉的数据
+            if (user.getFinger6Id()!=null) {
+                dbUtil.deleteById(Finger6.class, user.getFinger6Id());
+                FingerListManager.getInstance().removeFingerById(user.getFinger6());
+                //更新指静脉的数据
+                FingerServiceUtil.getInstance().updateFingerData();
+            }
+
+            if (user.getFaceId()!=null) {
+                dbUtil.deleteById(Face.class, user.getFaceId());
+                FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
+                try {
+                    faceService.removeFace(user.getFaceId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (user.getCardId()!=null){
+                dbUtil.deleteById(IdCard.class,user.getCardId());
+            }
+
+            if (user.getPwId()!=null){
+                dbUtil.deleteById(Pw.class,user.getPwId());
+            }
 
             ToastUtils.showSquareImgToast(getActivity(),
                     getString(R.string.delete_success),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
                             , R.drawable.ic_tick));
+
+            dbUtil.delete(user);
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);

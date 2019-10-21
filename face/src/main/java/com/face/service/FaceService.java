@@ -90,8 +90,9 @@ public class FaceService {
     }
     //初始化摄像头
     public void initCamera(FaceRecView visCameraView, FaceRecBoxView faceRecBoxView, FaceCamera nirCamera, BaseFaceRecProcessor.FaceRecCallback faceRecCallback) {
-        visCamera = FaceConfig.getInstance().getVisCamera();
-        visCamera.setAsync(true);
+            visCamera = FaceConfig.getInstance().getVisCamera();
+            visCamera.setAsync(true);
+
         try {
             visCameraView.setCamera(visCamera);
             visCameraView.setViewMode(FaceCameraView.ViewMode.TEXTURE_VIEW);

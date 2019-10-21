@@ -121,7 +121,6 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     protected void initData() {
-        super.initData();
 
         if (!checkPermissions(NEEDED_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, NEEDED_PERMISSIONS, ACTION_REQUEST_PERMISSIONS);
@@ -137,12 +136,8 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
         if (SPUtil.getCardVerifyFlag()) {
             idCardService = ARouter.getInstance().navigation(IdCardService.class);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    idCardService.register_IdCard(V3FaceRecActivity.this, -1L);
-                }
-            }).start();
+
+            idCardService.verify_IdCard(V3FaceRecActivity.this);
         }
 
     }
@@ -203,11 +198,6 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
 
     @Override
     protected void onRestart() {
@@ -438,24 +428,16 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            ToastUtils.showSquareImgToast(V3FaceRecActivity.this
-                    , "身份证验证失败"
-                    , ActivityCompat.getDrawable(V3FaceRecActivity.this
-                            , R.drawable.cry_icon));
+            VerifyResultUi.showVerifyFail(this,  getString(R.string.face_verify_fail), false);
         } else {
             Log.d("999", idCard.getName());
-            ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
+            VerifyResultUi.showVerifySuccess(this,  getString(R.string.face_verify_success), false);
         }
     }
 
     @Override
     public void onRegisterResult(boolean result, IdCard idCard) {
-        if (result) {
-            ToastUtils.showSquareTvToast(this, getString(R.string.face_register_success));
-            Log.d("999", idCard.getName());
-        } else {
-            ToastUtils.showSquareTvToast(this, getString(R.string.face_register_fail));
-        }
+
     }
 
     @Override

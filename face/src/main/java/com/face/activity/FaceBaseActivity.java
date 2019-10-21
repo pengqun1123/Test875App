@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -12,12 +13,15 @@ import com.baselibrary.ARouter.ARouterUtil;
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.service.factory.FingerFactory;
+import com.baselibrary.util.ActManager;
 import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.FingerListManager;
 import com.face.R;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by wangyu on 2019/10/15.
@@ -29,16 +33,21 @@ public abstract  class FaceBaseActivity extends BaseActivity{
 
     protected AppCompatImageView gear1, gear2, gear3, gear4;
 
-    protected FrameLayout face_jump;
+    private final long flagTime = 4000;
+    private long maxTime = 1000;
+    private long lastTime = 0;
+    private int count = 0;
 
     protected ObjectAnimator gear1Anim, gear2Anim, gear3Anim, gear4Anim;
+    private long timeInMillis;
+
     @Override
     protected void initView() {
         gear1 = bindViewWithClick(R.id.gear1, true);
         gear2 = bindViewWithClick(R.id.gear2, true);
         gear3 = bindViewWithClick(R.id.gear3, true);
         gear4 = bindViewWithClick(R.id.gear4, true);
-        face_jump = bindViewWithClick(R.id.fl,true);
+           bindViewWithClick(R.id.defaultOut, true);
 
         gear1Anim = AnimatorUtils.rotateAnim(gear1, 3000L, 359F);
         gear2Anim = AnimatorUtils.rotateAnim(gear2, 2600L, -359F);
@@ -111,6 +120,32 @@ public abstract  class FaceBaseActivity extends BaseActivity{
         if (view.getId() == R.id.homeMenu) {
             ARouterUtil.navigation(ARouterConstant.MENU_ACTIVITY);
             finish();
+        } else if (view.getId()==R.id.defaultOut) {
+    /*        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+            long l = timeInMillis - lastTime;
+            if (((l) < flagTime && count > 0) || count == 0) {
+                count++;
+                lastTime = timeInMillis;
+            }
+            if (count == 5) {
+                count = 0;
+                //退出应用
+                ActManager.getInstance().exitApp();
+            }*/
+         count++;
+         if (count==1){
+             timeInMillis = new Date().getTime();
+             return;
+         }
+            Log.d("yuio",count+"：count---"+timeInMillis+":timeInMillis---"+"now:"+new Date().getTime());
+         if (count==5){
+             if (( new Date().getTime()-timeInMillis)<flagTime){
+                 ActManager.getInstance().exitApp();
+             }else {
+                 count=1;
+                 timeInMillis =new Date().getTime();
+             }
+         }
         }
     }
 }

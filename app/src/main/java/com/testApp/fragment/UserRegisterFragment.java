@@ -245,6 +245,7 @@ public class UserRegisterFragment extends BaseFragment {
                     if (fg6 != null) {
                         newUser.setFinger6Id(fg6.getUId());
                         newUser.setFinger6(fg6);
+                        FingerListManager.getInstance().addFingerData(newUser.getFinger6());
                     }
                     if (idCard != null) {
                         newUser.setCardId(idCard.getUId());
@@ -255,7 +256,6 @@ public class UserRegisterFragment extends BaseFragment {
                     DBUtil dbUtil = BaseApplication.getDbUtil();
                     dbUtil.insertOrReplace(newUser);
                     manageActivity.addNewUser(newUser);
-                    FingerListManager.getInstance().addFingerData(newUser.getFinger6());
                     FingerServiceUtil.getInstance().updateFingerData();
                     ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
                             , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
@@ -570,12 +570,14 @@ public class UserRegisterFragment extends BaseFragment {
     private void skipVerify() {
         //跳转人脸识别的界面(只要开启了人脸)
         if (SPUtil.getOpenFace()) {
-          SkipActivityUtil.skipActivity(getActivity(),V3FaceRecActivity.class);
+            manageActivity.skipFaceActivity();
+
         } else {
             //跳转默认的识别页面(没有开启人脸)
             SkipActivityUtil.skipActivity(getActivity(), DefaultVerifyActivity.class);
         }
         Objects.requireNonNull(getActivity()).finish();
+
     }
 
     /**

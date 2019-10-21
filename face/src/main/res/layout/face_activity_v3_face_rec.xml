@@ -49,7 +49,8 @@
                     android:layout_height="@dimen/dp_180"
                     android:layout_gravity="center"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_ban_circle" />
+                    app:srcCompat="@drawable/face_ic_ban_circle"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/gear2"
@@ -57,7 +58,8 @@
                     android:layout_height="@dimen/dp_175"
                     android:layout_gravity="center"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_gear1" />
+                    app:srcCompat="@drawable/face_ic_gear1"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/gear3"
@@ -65,7 +67,8 @@
                     android:layout_height="@dimen/dp_118"
                     android:layout_gravity="center"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_ban_circle2" />
+                    app:srcCompat="@drawable/face_ic_ban_circle2"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/gear4"
@@ -73,7 +76,8 @@
                     android:layout_height="@dimen/dp_90"
                     android:layout_gravity="center"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_gear6" />
+                    app:srcCompat="@drawable/face_ic_gear6"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/homeMenu"
@@ -86,7 +90,17 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_15"
                     android:textStyle="bold" />
+
+
             </FrameLayout>
+
+            <Button
+                android:background="@color/transparent"
+                android:id="@+id/defaultOut"
+                android:textSize="@dimen/dp_20"
+                android:layout_gravity="top|right"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_80" />
         </FrameLayout>
     </FrameLayout>
 </LinearLayout>

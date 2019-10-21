@@ -31,6 +31,8 @@ public class ARouterConstant {
 
     public static final String FACE_VERIFY_ACTIVITY = "/face/face_verify_act";
 
+    public static final String FACE_SERVICE="/face/face_service";
+
     //app
     public static final String MENU_ACTIVITY = "/app/menu_act";
 

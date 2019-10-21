@@ -23,6 +23,7 @@ import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
@@ -88,7 +89,7 @@ public class SplashActivity extends BaseActivity {
         //清除数据库缓存
 //        DBUtil dbUtil = BaseApplication.getDbUtil();
 //        dbUtil.getDaoSession().clear();
-        clearData();
+      // clearData();
 
         setDevMaxVoice();
 
@@ -113,6 +114,7 @@ public class SplashActivity extends BaseActivity {
         dbUtil.deleteAll(User.class);
         dbUtil.deleteAll(Manager.class);
         dbUtil.deleteAll(Pw.class);
+        dbUtil.deleteAll(IdCard.class);
         dbUtil.deleteAll(Finger6.class);
         dbUtil.deleteAll(Face.class);
         SPUtil.putHasManagerPwd(false);

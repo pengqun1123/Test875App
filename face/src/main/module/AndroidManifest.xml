@@ -19,13 +19,16 @@
         tools:replace="android:theme,label"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity.SDKInitActivity">
+
+        </activity>
+        <activity android:name=".activity.FaceActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".activity.FaceActivity"/>
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.FaceCaptureActivity"/>
         <activity android:name=".activity.UserListActivity"/>

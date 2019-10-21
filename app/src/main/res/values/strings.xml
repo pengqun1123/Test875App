@@ -62,7 +62,7 @@
     <string name="verify_manager_pwd">验证管理员</string>
     <string name="verify_user_pwd">验证用户密码</string>
     <string name="manager_pwd_verify_fail">管理员密码验证失败!</string>
-    <string name="user_pwd_verify_fail">用户密码验证失败!</string>
+    <string name="user_pwd_verify_fail">用户密码验证失败</string>
     <string name="user_pwd_verify_success">用户密码验证成功!</string>
     <string name="max_manager_mun">最多可注册10位管理员</string>
     <string name="manager_list">管理员列表</string>
@@ -106,6 +106,7 @@
     <string name="init_finger_data_fail">指静脉数据初始化失败!</string>
     <string name="dont_equls_user_no">用户编号重复，请重填!</string>
     <string name="ask_user_register_msg_save">注册的信息尚未保存，是否立即保存?</string>
+    <string name="ask_user_update_msg_save">修改的信息尚未保存，是否立即保存?</string>
     <string name="ask_user_register_msg_update">当前模块已注册，是否修改?</string>
     <string name="msg_tip">信息提示</string>
     <string name="menu_set">菜单设置</string>

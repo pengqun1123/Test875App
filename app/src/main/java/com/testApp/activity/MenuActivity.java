@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.service.IdCardService;
+import com.baselibrary.service.factory.FingerFactory;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
@@ -60,10 +63,12 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     @Override
     protected void initData() {
         //接收指静脉设备的连接状态
-        FingerApi.getInstance().receiveFingerDevConnectStatus(this);
+
         //  fingerVerifyResult();
 
     }
+
+
 
     @Override
     protected void onViewClick(View view) {
@@ -100,6 +105,8 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                     public void positionClickListener(int flag) {
                         if (flag == AppConstant.FINGER_MODEL) {
                             BaseApplication.AP.play_inputDownGently();
+                            FingerFactory.getInstance().reStartFingerVerify();
+                            FingerApi.getInstance().receiveFingerDevConnectStatus(MenuActivity.this);
                         } else if (flag == AppConstant.FACE_MODEL) {
                             BaseApplication.AP.playFaceScreen();
                             ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
@@ -119,8 +126,8 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                                 @Override
                                 public void userPwdVerifyCallBack(Long id) {
                                     if (id != null) {
-                                        VerifyResultUi.showVerifyFail(MenuActivity.this,
-                                                getString(R.string.pw_register_success), false);
+                                        VerifyResultUi.showVerifySuccess(MenuActivity.this,
+                                                getString(R.string.user_pwd_verify_success), false);
                                         Bundle bundle = new Bundle();
                                         bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 4);
                                         bundle.putLong(AppConstant.VERIFY_TYPE_ID, id);
@@ -128,7 +135,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                                         finish();
                                     } else {
                                         VerifyResultUi.showVerifyFail(MenuActivity.this,
-                                                getString(R.string.pw_register_fail), false);
+                                                getString(R.string.user_pwd_verify_fail), false);
                                     }
                                 }
                             });
@@ -141,10 +148,6 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     protected void onPause() {
@@ -174,15 +177,12 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     @Override
     public void onGetCardInfo(IdCard idCard) {
-        if (idCard == null) {
-            ToastUtils.showSquareImgToast(MenuActivity.this
-                    , "身份证验证失败"
-                    , ActivityCompat.getDrawable(MenuActivity.this
-                            , com.face.R.drawable.cry_icon));
+        if (idCard==null) {
+            VerifyResultUi.showVerifyFail(MenuActivity.this,getString(R.string.id_card_verify_fail),false);
 
         } else {
-            ToastUtils.showSquareImgToast(this, "身份证验证成功", null);
-            Bundle bundle = new Bundle();
+            VerifyResultUi.showVerifySuccess(MenuActivity.this,getString(R.string.id_card_verify_success),false);
+            Bundle bundle=new Bundle();
             bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 3);
             bundle.putLong(AppConstant.VERIFY_TYPE_ID, idCard.getUId());
             SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
@@ -195,6 +195,11 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+    }
 
     /**
      * 指静脉验证的结果
@@ -270,6 +275,10 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
             bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 1);
             bundle.putLong(AppConstant.VERIFY_TYPE_ID, fingerId);
             SkipActivityUtil.skipDataActivity(this, UserCenterActivity.class, bundle);
+            finish();
+        }else {
+            VerifyResultUi.showVerifySuccess(this,
+                    getString(R.string.verify_fail), false);
         }
     }
 }

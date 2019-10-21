@@ -15,4 +15,11 @@
         android:textColor="@color/colorAccent"
         android:textSize="16sp"
         android:textStyle="bold|italic" />
+    <Button
+        android:id="@+id/tv_query"
+        android:onClick="onClick"
+        android:layout_gravity="center"
+        android:text="查询"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

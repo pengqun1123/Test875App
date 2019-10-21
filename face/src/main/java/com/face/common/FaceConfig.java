@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import com.orhanobut.logger.Logger;
 import com.zqzn.android.face.camera.FaceCamera;
+import com.zqzn.android.face.camera.FaceCameraView;
 import com.zqzn.android.face.model.FaceSDK;
 import com.zqzn.android.face.util.NormalizeHelper;
 import com.zqzn.android.zqznfacesdk.ZqznFaceFeatureExtractor;
@@ -115,6 +116,7 @@ public class FaceConfig {
         ZqznSdkEnvConfig.setRootPath(appRootDir.getAbsolutePath());
         //硬件适配类：提供硬件适配参数（主要是摄像头参数）
         envConfig = new ZqznSdkEnvConfig(context, "env_config.json");
+        envConfig.setFaceCameraViewMode(FaceCameraView.ViewMode.TEXTURE_VIEW);
         //SDK配置类：提供SDK配置参数（包括授权信息及SDK一些相关参数，如最小人脸检测大小）
         sdkConfig = new ZqznSDKConfig(context, "sdk_config.json");
         //设置多人或者单人模式
@@ -198,11 +200,13 @@ public class FaceConfig {
     private void initCamera() {
         //todo 这里使用我们的硬件适配工具生成的适配参数来初始化摄像头(为了适配各种设备上的摄像头参数)
         // todo 如果摄像头参数是固定的，直接在这里new FaceCamera(CameraParams)并设置好相应的参数就行，不需要从EnvConfig里获取
-     //   new FaceCamera();
         visCamera = envConfig.getVisCamera();
+
         nirCamera = envConfig.getNirCamera();
-        try {
-            visCamera.setPreviewSize(800,1232);
+
+       try {
+            visCamera.setPreviewSize(720,1080);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

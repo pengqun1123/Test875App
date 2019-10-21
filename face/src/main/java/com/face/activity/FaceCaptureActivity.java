@@ -318,7 +318,6 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
     protected void onDestroy() {
         try {
             super.onDestroy();
-        //    stopPreview();
         } finally {
             try {
                 visCameraView.releaseCamera();

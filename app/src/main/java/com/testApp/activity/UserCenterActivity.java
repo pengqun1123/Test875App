@@ -116,6 +116,9 @@ public class UserCenterActivity extends BaseActivity {
         pwModel = bindViewWithClick(R.id.pwModel, true);
         registerBtn = bindViewWithClick(R.id.registerBtn, true);
         backBtn.setVisibility(View.VISIBLE);
+        staffNoEt.setEnabled(false);
+        staffNoEt.setClickable(false);
+        staffNoEt.setFocusable(false);
         SoftInputKeyboardUtils.hiddenKeyboard(nameEt);
         spinnerListener();
     }
@@ -126,13 +129,16 @@ public class UserCenterActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView textView = (TextView) view;
-                String selectItem = textView.getText().toString();
-                if (selectItem.equals(getString(R.string.sex))) {
-                    sex = "";
-                } else {
-                    sex = selectItem;
+                if (textView!=null) {
+                    String selectItem = textView.getText().toString();
+                    if (selectItem.equals(getString(R.string.sex))) {
+                        sex = "";
+                    } else {
+                        sex = selectItem;
+                    }
+                    tv_sex.setText(sex);
                 }
-                tv_sex.setText(sex);
+
             }
 
             @Override
@@ -161,7 +167,7 @@ public class UserCenterActivity extends BaseActivity {
         Bundle extras = getIntent().getExtras();
         int type = extras.getInt(AppConstant.VERIFY_RESULT_TYPE);
         long id = extras.getLong(AppConstant.VERIFY_TYPE_ID);
-        Log.d("445",type+"");
+        Log.d("445",id+"");
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<User>() {
             @Override
@@ -211,9 +217,9 @@ public class UserCenterActivity extends BaseActivity {
             WhereCondition whereCondition= UserDao.Properties.PwId.eq(id);
             dbUtil.queryAsync(User.class,whereCondition);
         }
-
         EventBus.getDefault().register(this);
         fingerListToFingerByte();
+        registerBtn.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -221,6 +227,7 @@ public class UserCenterActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.backBtn:
                 boolean changer = isChanger();
+                Log.d("666",changer+"");
                 if (changer){
                     requestIsSave();
                 }else {
@@ -229,7 +236,7 @@ public class UserCenterActivity extends BaseActivity {
                 }
                 break;
             case R.id.fingerModel:
-                if (fg6Id!=0) {
+                if (fg6Id!=null) {
                     AskDialog.showAskUpdateDialog(this, getString(R.string.ask_user_register_msg_update), new PositionBtnClickListener() {
                         @Override
                         public void positionClickListener(int flag) {
@@ -248,7 +255,7 @@ public class UserCenterActivity extends BaseActivity {
                 break;
             case R.id.faceModel:
                 //人脸注册
-                if (faceId!=0) {
+                if (faceId!=null) {
                     AskDialog.showAskUpdateDialog(this, getString(R.string.ask_user_register_msg_update), new PositionBtnClickListener() {
                         @Override
                         public void positionClickListener(int flag) {
@@ -266,7 +273,7 @@ public class UserCenterActivity extends BaseActivity {
                 break;
             case R.id.idCardModel:
                 //身份证注册
-                if (idCardId!=0) {
+                if (idCardId!=null) {
                     AskDialog.showAskUpdateDialog(this, getString(R.string.ask_user_register_msg_update), new PositionBtnClickListener() {
                         @Override
                         public void positionClickListener(int flag) {
@@ -284,7 +291,7 @@ public class UserCenterActivity extends BaseActivity {
                 break;
             case R.id.pwModel:
                 //密码模式注册
-                if (pwdId!=0) {
+                if (pwdId!=null) {
                     AskDialog.showAskUpdateDialog(this, getString(R.string.ask_user_register_msg_update), new PositionBtnClickListener() {
                         @Override
                         public void positionClickListener(int flag) {
@@ -301,7 +308,11 @@ public class UserCenterActivity extends BaseActivity {
                 }
                 break;
             case R.id.registerBtn:
-                registerUser();
+                if (isChanger()) {
+                    registerUser();
+                }else {
+                    SkipActivityUtil.skipActivity(UserCenterActivity.this,MenuActivity.class);
+                }
                 break;
         }
     }
@@ -309,7 +320,7 @@ public class UserCenterActivity extends BaseActivity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestIsSave() {
         AskDialog.showAskSaveDialog(Objects.requireNonNull(this),
-                null, new PositionBtnClickListener() {
+                getString(R.string.ask_user_update_msg_save), new PositionBtnClickListener() {
                     @Override
                     public void positionClickListener(int flag) {
                        registerUser();
@@ -320,6 +331,7 @@ public class UserCenterActivity extends BaseActivity {
                         //删除已经出入数据库的数据
                         DBUtil dbUtil = BaseApplication.getDbUtil();
                         if (pwd != null) {
+
                             dbUtil.insertOrReplace(user.getPw());
                             pwd = null;
                         }
@@ -353,29 +365,29 @@ public class UserCenterActivity extends BaseActivity {
 
         String department = departmentEt.getText().toString().trim();
 
-        String sex=tv_sex.getText().toString().trim();
+        String sex= tv_sex.getText().toString().trim();
 
-        if (user.getName().equals(userName)) {
+        if (!user.getName().equals(userName)) {
             isChanger = true;
             return isChanger;
         }
-        if (user.getAge().equals(userAge)) {
+        if (!user.getAge().equals(userAge)) {
             isChanger = true;
             return isChanger;
         }
-        if (user.getPhone().equals(userPhone)) {
+        if (!user.getPhone().equals(userPhone)) {
             isChanger = true;
             return isChanger;
         }
-        if (user.getOrganizName().equals(companyName)) {
+        if (!user.getOrganizName().equals(companyName)) {
             isChanger = true;
             return isChanger;
         }
-        if (user.getSection().equals(department)) {
+        if (!user.getSection().equals(department)) {
             isChanger = true;
             return isChanger;
         }
-        if (user.getSex().equals(sex)){
+        if (!user.getSex().equals(sex)){
             return  true;
         }
         if (face!=null){
@@ -419,27 +431,28 @@ public class UserCenterActivity extends BaseActivity {
             user.setOrganizName(companyName);
             user.setSection(department);
 
-
                         if (pwd != null) {
+                            user.setPwId(pwd.getUId());
                             user.setPw(pwd);
                         }
+
                         if (fg6 != null) {
+                            user.setFinger6Id(fg6.getUId());
                             user.setFinger6(fg6);
-                            FingerListManager.getInstance().addFingerData(user.getFinger6());
+                            FingerListManager.getInstance().addFingerData(fg6);
                             FingerServiceUtil.getInstance().updateFingerData();
                         }
                         if (idCard != null) {
-                           // user.setCardId(idCard.getUId());
+                            user.setCardId(idCard.getUId());
                             user.setIdCard(idCard);
                         }
                         if (face != null) {
-                           // user.setFaceId(face.getUId());
+                            user.setFaceId(face.getUId());
                             user.setFace(face);
                         }
                         try {
                             DBUtil dbUtil = BaseApplication.getDbUtil();
                             dbUtil.insertOrReplace(user);
-                            // addNewUser(user);
 
                             ToastUtils.showSquareImgToast(this, getString(R.string.register_success)
                                     , ActivityCompat.getDrawable(Objects.requireNonNull(this),
@@ -479,10 +492,12 @@ public class UserCenterActivity extends BaseActivity {
                 ToastUtils.showSingleToast(this, getResources().getString(R.string.please_input_name));
             } else {
                 Bundle bundle = new Bundle();
-                if (faceId !=0) {
+                if (faceId !=null) {
                     bundle.putLong(AppConstant.FACE_ID, faceId);
-                    File file = new File(face.getImagePath());
-                    file.delete();
+                    if (face!=null) {
+                        File file = new File(face.getImagePath());
+                        file.delete();
+                    }
                 }
                 bundle.putString("name", userName);
                 ARouterUtil.navigation(ARouterConstant.FACE_RIGSTER_ACTIVITY, bundle);
@@ -504,6 +519,7 @@ public class UserCenterActivity extends BaseActivity {
           VerifyResultUi.showRegisterSuccess(this, getString(com.face.R.string.face_register_success),
                     false);
             UserCenterActivity.this.face = face;
+            UserCenterActivity.this.faceId=face.getUId();
         } else {
             VerifyResultUi.showRegisterSuccess(this, getString(com.face.R.string.face_register_fail),
                     false);
@@ -524,13 +540,13 @@ public class UserCenterActivity extends BaseActivity {
                 VerifyResultUi.showRegisterFail(Objects.requireNonNull(this),
                         getString(R.string.pw_register_repeat), false);
             } else {
-                if (pwdId!=0) {
+                if (pwdId!=null) {
                     pw.setUId(pwdId);
                 }
                 dbUtil.insertOrReplace(pw);
                 //可添加到User表的pwd
+                UserCenterActivity.this.pwdId=pw.getUId();
                 UserCenterActivity.this.pwd = pw;
-                registerBtn.setVisibility(View.VISIBLE);
                 VerifyResultUi.showRegisterSuccess(Objects.requireNonNull(this),
                         getString(R.string.pw_register_success), false);
             }
@@ -542,7 +558,7 @@ public class UserCenterActivity extends BaseActivity {
      */
     private void idCardRegister() {
         Long idCardId = -1L;
-        if (this.idCardId!=0) {
+        if (this.idCardId!=null) {
             idCardId = this.idCardId;
         }
         IdCardService idCardService = ARouter.getInstance().navigation(IdCardService.class);
@@ -561,7 +577,7 @@ public class UserCenterActivity extends BaseActivity {
                     Logger.d("身份证注册成功");
                     //可插入User表的数据
                     UserCenterActivity.this.idCard = idCard;
-                    registerBtn.setVisibility(View.VISIBLE);
+                    UserCenterActivity.this.idCardId=idCard.getUId();
                     VerifyResultUi.showRegisterSuccess(UserCenterActivity.this, getString(com.id_card.R.string.id_card_register_success),false);
 
                 } else {
@@ -621,10 +637,13 @@ public class UserCenterActivity extends BaseActivity {
      */
     private void insertOrReplaceFinger(byte[] fingerData) {
         Finger6 finger6 = new Finger6();
-        if (fg6Id!=0) {
+        if (fg6Id!=null) {
             finger6.setUId(fg6Id);
         }
         finger6.setFinger6Feature(fingerData);
+        if (fg6Id!=null){
+            FingerListManager.getInstance().coverFinger(finger6);
+        }
         DBUtil dbUtil = BaseApplication.getDbUtil();
         dbUtil.setDbCallBack(new DbCallBack<Finger6>() {
             @Override
@@ -632,7 +651,6 @@ public class UserCenterActivity extends BaseActivity {
                 Logger.d("Fg6成功插入：" + result);
                 //可插入User表的数据
                 UserCenterActivity.this.fg6 = result;
-                registerBtn.setVisibility(View.VISIBLE);
                 FingerServiceUtil.getInstance().addFinger(result.getFinger6Feature());
             }
 
