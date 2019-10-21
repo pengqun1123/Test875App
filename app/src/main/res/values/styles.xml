@@ -149,4 +149,13 @@
         <item name="android:textColor">@color/black_0</item>
         <item name="android:textSize">@dimen/sp_17</item>
     </style>
+
+    <style name="managerLabelStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/dp_10</item>
+        <item name="android:padding">@dimen/dp_5</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
 </resources>

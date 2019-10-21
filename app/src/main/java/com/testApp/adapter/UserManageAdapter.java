@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baselibrary.pojo.Face;
+import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Manager;
+import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.glidUtils.GlideUtil;
 
@@ -79,9 +82,30 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         User user = users.get(i);
         Face face = user.getFace();
+        Finger6 finger6 = user.getFinger6();
+        Pw pw = user.getPw();
+        IdCard idCard = user.getIdCard();
         String imagePath = null;
         if (face != null) {
             imagePath = face.getImagePath();
+            holder.faceLabel.setVisibility(View.VISIBLE);
+        } else {
+            holder.faceLabel.setVisibility(View.GONE);
+        }
+        if (finger6 == null) {
+            holder.fingerLabel.setVisibility(View.GONE);
+        } else {
+            holder.fingerLabel.setVisibility(View.VISIBLE);
+        }
+        if (pw == null) {
+            holder.pwLabel.setVisibility(View.GONE);
+        } else {
+            holder.pwLabel.setVisibility(View.VISIBLE);
+        }
+        if (idCard == null) {
+            holder.cardLabel.setVisibility(View.GONE);
+        } else {
+            holder.cardLabel.setVisibility(View.VISIBLE);
         }
         GlideUtil.loadCircleImage(holder.itemView.getContext(), R.drawable.ic_default_user_avatar,
                 imagePath, holder.userAvatar);
@@ -114,8 +138,8 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
         private final AppCompatTextView userName;
         private final AppCompatTextView userSex;
         private final AppCompatTextView userAge;
-        private final AppCompatTextView userPhone;
-        private final AppCompatTextView userSection, userCompany,userNo;
+        private final AppCompatTextView userPhone, fingerLabel, pwLabel, faceLabel, cardLabel;
+        private final AppCompatTextView userSection, userCompany, userNo;
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -127,6 +151,10 @@ public class UserManageAdapter extends RecyclerView.Adapter<UserManageAdapter.Ho
             userSection = itemView.findViewById(R.id.userSection);
             userCompany = itemView.findViewById(R.id.userCompany);
             userNo = itemView.findViewById(R.id.userNo);
+            pwLabel = itemView.findViewById(R.id.pwLabel);
+            cardLabel = itemView.findViewById(R.id.cardLabel);
+            faceLabel = itemView.findViewById(R.id.faceLabel);
+            fingerLabel = itemView.findViewById(R.id.fingerLabel);
 
         }
     }

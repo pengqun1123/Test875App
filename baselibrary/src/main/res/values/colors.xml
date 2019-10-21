@@ -152,6 +152,7 @@
     <color name="blue_8">#87CEFA</color>
     <color name="blue_9">#48D1CC</color>
     <color name="blue_10">#00FFFF</color>
+    <color name="blue_10_a">#FF00FFFF</color>
     <color name="tint_green">#1DF5BE</color>
     <color name="tint_cyan">#9D6BECFF</color>
     <color name="tint_blue">#A0DDF6</color>

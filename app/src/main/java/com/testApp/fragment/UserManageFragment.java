@@ -63,7 +63,7 @@ public class UserManageFragment extends BaseFragment
     private UserManageAdapter userManageAdapter;
     private Long userCount;
     private AppCompatTextView showAllData;
-
+    private AppCompatTextView noData;
 
 
     public static UserManageFragment instance() {
@@ -86,7 +86,7 @@ public class UserManageFragment extends BaseFragment
     protected void initView() {
         bindViewWithClick(R.id.searchUserBtn, true);
         RecyclerView userRv = bindViewWithClick(R.id.userRv, false);
-        AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
+        noData = bindViewWithClick(R.id.noData, false);
         showAllData = bindViewWithClick(R.id.showAllData, false);
         noData.setVisibility(View.VISIBLE);
         /*//设置reFresh禁止刷新
@@ -213,8 +213,15 @@ public class UserManageFragment extends BaseFragment
         if (userManageAdapter != null) {
             userManageAdapter.removeData(user);
             DBUtil dbUtil = BaseApplication.getDbUtil();
+            if (user.getFinger6Id() != null) {
+                dbUtil.deleteById(Finger6.class, user.getFinger6Id());
+                Finger6 finger6 = user.getFinger6();
+                FingerListManager.getInstance().removeFingerById(finger6);
+                //更新指静脉的数据
+                FingerServiceUtil.getInstance().updateFingerData();
+            }
 
-            if (user.getFaceId()!=null) {
+            if (user.getFaceId() != null) {
                 dbUtil.deleteById(Face.class, user.getFaceId());
                 FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
                 try {
@@ -224,20 +231,12 @@ public class UserManageFragment extends BaseFragment
                 }
             }
 
-            if (user.getFinger6Id()!=null) {
-                dbUtil.deleteById(Finger6.class, user.getFinger6Id());
-                FingerListManager.getInstance().removeFingerById(user.getFinger6());
-                //更新指静脉的数据
-                FingerServiceUtil.getInstance().updateFingerData();
+            if (user.getCardId() != null) {
+                dbUtil.deleteById(IdCard.class, user.getCardId());
             }
 
-
-            if (user.getCardId()!=null){
-                dbUtil.deleteById(IdCard.class,user.getCardId());
-            }
-
-            if (user.getPwId()!=null){
-                dbUtil.deleteById(Pw.class,user.getPwId());
+            if (user.getPwId() != null) {
+                dbUtil.deleteById(Pw.class, user.getPwId());
             }
 
             dbUtil.delete(user);
@@ -246,8 +245,10 @@ public class UserManageFragment extends BaseFragment
                     getString(R.string.delete_success),
                     ActivityCompat.getDrawable(Objects.requireNonNull(getActivity())
                             , R.drawable.ic_tick));
-
-
+            if (userManageAdapter.getUsers().size() == 0) {
+                noData.setVisibility(View.VISIBLE);
+                showAllData.setVisibility(View.GONE);
+            }
         }
     }
 

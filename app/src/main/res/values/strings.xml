@@ -135,6 +135,10 @@
     <string name="delete_user">删除用户</string>
     <string name="pw_register_repeat">密码注册重复!</string>
     <string name="user_no">用户编号</string>
+    <string name="register_finger">已注册指静脉</string>
+    <string name="has_register_face">已注册人脸</string>
+    <string name="has_register_card">已注册身份证</string>
+    <string name="has_register_pw">已注册密码</string>
 
 
 </resources>

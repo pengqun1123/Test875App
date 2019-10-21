@@ -47,7 +47,7 @@
         android:layout_marginTop="@dimen/dp_33"
         android:background="?android:attr/selectableItemBackground"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_up_arrow_two" />
+        app:srcCompat="@drawable/ic_back_last" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/rightTv"

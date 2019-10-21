@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grid"
+    android:background="@drawable/image3"
     tools:context=".activity.SplashActivity">
 
     <android.support.v7.widget.AppCompatImageView
@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="200dp"
         android:visibility="gone"
-        app:srcCompat="@drawable/sd_logo" />
+        app:srcCompat="@drawable/image2" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"

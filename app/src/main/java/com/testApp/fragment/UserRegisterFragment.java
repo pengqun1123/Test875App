@@ -263,6 +263,7 @@ public class UserRegisterFragment extends BaseFragment {
                     ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
                             , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                                     R.drawable.ic_emoje));
+                    BaseApplication.AP.play_checkInSuccess();
                     if (saveUserInfo != null) {
                         saveUserInfo.saveUserInfo(true);
                     } else {
