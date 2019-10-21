@@ -74,4 +74,8 @@
     <dimen name="dp_118">118dp</dimen>
     <dimen name="dp_320">320dp</dimen>
     <dimen name="sp_40">40sp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_250">250dp</dimen>
+    <dimen name="dp_270">270dp</dimen>
+    <dimen name="sp_38">38sp</dimen>
 </resources>

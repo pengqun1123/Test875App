@@ -9,24 +9,24 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/logo"
-        android:layout_width="@dimen/dp_75"
-        android:layout_height="@dimen/dp_75"
-        android:layout_alignParentBottom="true"
+        android:layout_width="@dimen/dp_270"
+        android:layout_height="@dimen/dp_270"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="200dp"
-        android:visibility="gone"
-        app:srcCompat="@drawable/image2" />
+        android:layout_marginTop="@dimen/dp_295"
+        android:visibility="visible"
+        app:srcCompat="@drawable/logo_white" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="170dp"
-        android:text="@string/sd_name"
-        android:textColor="@color/gold_2"
-        android:textSize="@dimen/sp_18"
-        android:visibility="gone" />
+        android:layout_marginTop="470dp"
+        android:text="@string/wellcom_tip"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_38"
+        android:visibility="visible" />
 
     <TextView
         android:layout_width="match_parent"
