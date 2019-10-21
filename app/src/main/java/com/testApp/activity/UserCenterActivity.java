@@ -82,6 +82,7 @@ public class UserCenterActivity extends BaseActivity {
     private AppCompatTextView pwModel;
     private AppCompatButton registerBtn;
     private AppCompatTextView tv_sex;
+    private IdCardService idCardService;
 
     @Override
     protected Integer contentView() {
@@ -148,6 +149,16 @@ public class UserCenterActivity extends BaseActivity {
             }
         });
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (idCardService!=null){
+            idCardService.destroyIdCard();
+        }
+    }
+
     private Pw initPwd;
     private IdCard initIdCard;
     private Face initFace;
@@ -324,6 +335,8 @@ public class UserCenterActivity extends BaseActivity {
                 break;
         }
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void requestIsSave() {
@@ -594,7 +607,7 @@ public class UserCenterActivity extends BaseActivity {
         if (this.idCardId!=null) {
             idCardId = this.idCardId;
         }
-        IdCardService idCardService = ARouter.getInstance().navigation(IdCardService.class);
+        idCardService = ARouter.getInstance().navigation(IdCardService.class);
         Long finalIdCardId = idCardId;
         new Thread(() -> idCardService.register_IdCard(new CardInfoListener() {
 
