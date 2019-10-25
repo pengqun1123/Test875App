@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.baselibrary.R;
 import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.util.ActManager;
+import com.baselibrary.util.GetUIDimens;
 import com.baselibrary.util.HideNavBarUtil;
 import com.baselibrary.util.ToastUtils;
 
@@ -45,14 +47,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Activity全屏设置
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        //隐藏状态栏
+        GetUIDimens.hideStatusBar(this);
         setContentView(contentView());
-        HideNavBarUtil.hideBottomUIMenu1(this);
+        HideNavBarUtil.hideBottomUIMenu(this);
         initToolBar();
         initView();
         initData();

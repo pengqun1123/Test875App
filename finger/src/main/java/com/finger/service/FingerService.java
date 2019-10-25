@@ -162,7 +162,7 @@ public class FingerService extends Service {
         FingerService.this.isCancelVerify = false;
         if (!isLoop) {
             Logger.d("启动FingerService  111");
-            timer.schedule(myTask, 1200, 700);
+            timer.schedule(myTask, 800, 700);
         }
     }
 
@@ -199,12 +199,10 @@ public class FingerService extends Service {
                                     fingerVerifyResultListener.fingerVerifyResult(1,
                                             msg.getTip(), msg.getScore(), index,
                                             fingerId, msg.getFingerData());
+                                } else {
+                                    fingerVerifyResultListener.fingerVerifyResult(msg.getResult(), msg.getTip()
+                                            , 0, 0, 0L, null);
                                 }
-//                                else {
-//                                    fingerVerifyResultListener.fingerVerifyResult(msg.getResult(),
-//                                            msg.getTip(), 0, 0,
-//                                            0L, null);
-//                                }
                             }
                         });
             }

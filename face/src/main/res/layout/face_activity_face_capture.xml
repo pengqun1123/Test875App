@@ -64,7 +64,7 @@
 
                             <TextView
                                 android:id="@+id/tv_warning"
-                                android:layout_marginTop="@dimen/dp_50"
+                                android:layout_marginTop="@dimen/dp_20"
                                 android:layout_gravity="center_horizontal"
                                 android:textColor="@color/blue_6"
                                 android:text="5"

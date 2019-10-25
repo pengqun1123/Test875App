@@ -7,16 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baselibrary.base.BaseActivity;
-import com.baselibrary.base.BaseApplication;
 import com.baselibrary.callBack.CardInfoListener;
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
@@ -27,14 +24,15 @@ import com.baselibrary.util.AnimatorUtils;
 import com.baselibrary.util.CalendarUtil;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
-import com.baselibrary.util.ToastUtils;
 
 import com.baselibrary.util.VerifyResultUi;
 import com.finger.callBack.FingerDevStatusCallBack;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
-
+import com.sd.tgfinger.CallBack.DevOpenCallBack;
+import com.sd.tgfinger.CallBack.DevStatusCallBack;
+import com.sd.tgfinger.pojos.Msg;
 import com.testApp.R;
 
 import java.text.MessageFormat;
@@ -76,13 +74,6 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     @Override
     protected void initToolBar() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//        Toolbar toolBar = bindViewWithClick(R.id.toolbar, false);
-//        if (toolBar == null) {
-//            return;
-//        }
-//        TextView toolbarTitle = bindViewWithClick(R.id.toolbar_title, false);
-//        String title = getString(R.string.pw_register);
-//        toolbarTitle.setText(title);
     }
 
     @Override
@@ -95,6 +86,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         }
         getSystemTime();
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -205,16 +197,26 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
 
     @Override
     public void fingerDevStatus(int res, String msg) {
-        if (res == 1 && !isStartService) {
-            Logger.d("测试 DefaultActivity 执行启动FingerService  ");
-            FingerServiceUtil.getInstance().startFingerService(this,
-                    isStart -> {
-                        isStartService = isStart;
-                        if (isStart) {
-                            Logger.d("测试  DefaultActivity  调用FingerService 1：N验证");
-                            FingerServiceUtil.getInstance().setFingerVerifyResult(this);
-                        }
-                    });
+        Logger.d("   设备的连接状态：" + res + "  isStartService:" + isStartService);
+        if (res == 1) {
+            if (!isStartService) {
+                Logger.d("测试 DefaultActivity 执行启动FingerService  ");
+                FingerServiceUtil.getInstance().startFingerService(this,
+                        isStart -> {
+                            isStartService = isStart;
+                            if (isStart) {
+                                Logger.d("测试  DefaultActivity  调用FingerService 1：N验证");
+                                FingerServiceUtil.getInstance().setFingerVerifyResult(this);
+                            }
+                        });
+            }
+        } else {
+            if (isStartService) {
+                FingerServiceUtil.getInstance().pauseFingerVerify();
+                Logger.d("连接状态不等于1  DefaultActivity  解绑FingerService ");
+                FingerServiceUtil.getInstance().unbindFingerService(this);
+                isStartService = false;
+            }
         }
     }
 
@@ -242,6 +244,9 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
                                    int index, Long fingerId, byte[] updateFinger) {
         if (res == 1) {
             VerifyResultUi.showVerifySuccess(this, getString(R.string.verify_success), true);
+        } else {
+            if (res == -1 || res == -2)
+                VerifyResultUi.showVerifyFail(this, getString(R.string.verify_fail), true);
         }
     }
 
@@ -289,4 +294,5 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
         currentTime.setText(MessageFormat.format("{0}:{1}", hour, minute));
         currentDate.setText(MessageFormat.format("{0}-{1}-{2}", year, month, day));
     }
+
 }

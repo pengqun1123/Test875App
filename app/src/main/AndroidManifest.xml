@@ -9,7 +9,7 @@
     <application
         android:name=".base.TestApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/images"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -17,9 +17,6 @@
         tools:ignore=",AllowBackup,GoogleAppIndexingWarning,RtlEnabled"
         tools:replace="android:name"
         tools:targetApi="donut">
-        <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.AppRegisterActivity"
             android:theme="@style/activityPublicStyle" />

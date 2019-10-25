@@ -2,6 +2,7 @@ package com.testApp.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,9 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.base.BaseFragment;
@@ -17,6 +21,7 @@ import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.adapter.ManagerAdapter;
 import com.testApp.adapter.UserManageAdapter;
@@ -55,6 +60,9 @@ public class ManagerFragment extends BaseFragment {
         AppCompatTextView noData = bindViewWithClick(R.id.noData, false);
         bindViewWithClick(R.id.verifySet, true);
         bindViewWithClick(R.id.addNewManager, true);
+        RadioGroup faceOpenRg = bindViewWithClick(R.id.faceOpenRg, false);
+        AppCompatRadioButton openFace = bindViewWithClick(R.id.openFace, false);
+        AppCompatRadioButton noOpenFace = bindViewWithClick(R.id.noOpenFace, false);
 
         noData.setVisibility(View.VISIBLE);
         registerManagerMaxNum.setText(MessageFormat.format("{0}{1}",
@@ -68,8 +76,12 @@ public class ManagerFragment extends BaseFragment {
         managerRv.setAdapter(managerAdapter);
         queryAllManagerData(managerAdapter, noData);
 
+        setRgCheckStatus(openFace, noOpenFace);
+        setRgCheckListener(faceOpenRg, openFace, noOpenFace);
         //为RecyclerView设置FooterView
         setFooterView(managerRv, managerAdapter);
+
+
     }
 
     @Override
@@ -146,6 +158,34 @@ public class ManagerFragment extends BaseFragment {
     private void setFooterView(RecyclerView rv, ManagerAdapter managerAdapter) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.manager_item_footer, rv, false);
         managerAdapter.setFooterView(view);
+    }
+
+    /**
+     * 设置RadioGroup的初始化选项
+     *
+     * @param openFace   开启人脸识别
+     * @param noOpenFace 不开启人脸识别
+     */
+    private void setRgCheckStatus(AppCompatRadioButton openFace, AppCompatRadioButton noOpenFace) {
+        Boolean spOpenFace = SPUtil.getOpenFace();
+        if (spOpenFace) {
+            openFace.setChecked(true);
+            noOpenFace.setChecked(false);
+        } else {
+            openFace.setChecked(false);
+            noOpenFace.setChecked(true);
+        }
+    }
+
+    private void setRgCheckListener(RadioGroup faceOpenRg, AppCompatRadioButton openFace
+            , AppCompatRadioButton noOpenFace) {
+        faceOpenRg.setOnCheckedChangeListener((radioGroup, i) -> {
+            if (openFace.getId() == i) {
+                SPUtil.putOpenFace(true);
+            } else if (noOpenFace.getId() == i) {
+                SPUtil.putOpenFace(false);
+            }
+        });
     }
 
 }

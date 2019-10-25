@@ -128,7 +128,7 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
             FaceService.getInstance().initCamera(visCameraView, faceRecBoxView, nirCamera, this);
         }
         tv_result.setTextColor(getResources().getColor(R.color.blue_10));
-        tv_result.setText("管理");
+        tv_result.setText("菜单管理");
 
         if (SPUtil.getFingerVerifyFlag()) {
             FingerFactory.getInstance().fingerDevConnectStatus(this);
@@ -428,10 +428,10 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onGetCardInfo(IdCard idCard) {
         if (idCard == null) {
-            VerifyResultUi.showVerifyFail(this,  getString(R.string.face_verify_fail), false);
+            VerifyResultUi.showVerifyFail(this, getString(R.string.face_verify_fail), false);
         } else {
             Log.d("999", idCard.getName());
-            VerifyResultUi.showVerifySuccess(this,  getString(R.string.face_verify_success), false);
+            VerifyResultUi.showVerifySuccess(this, getString(R.string.face_verify_success), false);
         }
     }
 
@@ -444,6 +444,10 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     public void fingerVerifyResult(int res, String msg, int score, int index, Long fingerId, byte[] updateFinger) {
         if (res == 1) {
             VerifyResultUi.showVerifySuccess(this, getString(R.string.face_verify_success), true);
+        } else {
+            Logger.d(" V3  指静脉验证结果：" + res);
+            if (res == -1 || res == -2)
+                VerifyResultUi.showVerifyFail(this, getString(R.string.face_verify_fail), true);
         }
     }
 }

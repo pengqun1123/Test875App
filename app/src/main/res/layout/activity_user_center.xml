@@ -115,11 +115,8 @@
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/staffNoEt"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:focusableInTouchMode="false"
-                    android:focusable="false"
                     style="@style/manage_et_style"
+                    android:clickable="false"
                     android:hint="@string/please_input_staff_no"
                     android:inputType="number"
                     android:maxLength="16" />
@@ -216,12 +213,14 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/fingerModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_finger"
                         android:text="@string/finger" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/faceModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_face"
                         android:text="@string/face1" />
                 </LinearLayout>
@@ -234,12 +233,14 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/idCardModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_id_card"
                         android:text="@string/id_card" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/pwModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_password_verify"
                         android:text="@string/pw" />
                 </LinearLayout>

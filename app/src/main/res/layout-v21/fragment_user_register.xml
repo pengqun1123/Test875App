@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -212,12 +211,14 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/fingerModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_finger"
                         android:text="@string/finer" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/faceModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_face"
                         android:text="@string/face1" />
                 </LinearLayout>
@@ -230,12 +231,14 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/idCardModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_id_card"
                         android:text="@string/id_card" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/pwModel"
                         style="@style/manage_register_style"
+                        android:background="?android:attr/selectableItemBackground"
                         android:drawableTop="@drawable/ic_password_verify"
                         android:text="@string/pw" />
                 </LinearLayout>

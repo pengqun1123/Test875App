@@ -4,7 +4,6 @@
     package="com.finger">
 
     <application>
-        <activity android:name=".activity.FingerActivity" />
 
         <service
             android:name=".service.FingerService"

@@ -39,14 +39,14 @@
                 android:id="@+id/fl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_gravity="bottom|right"
-                android:layout_marginRight="@dimen/dp_20"
-                android:layout_marginBottom="@dimen/dp_20">
+                 android:layout_gravity="bottom|end"
+                android:layout_marginEnd="@dimen/dp_45"
+                android:layout_marginBottom="@dimen/dp_55">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/gear1"
-                    android:layout_width="@dimen/dp_180"
-                    android:layout_height="@dimen/dp_180"
+                    android:layout_width="@dimen/dp_185"
+                    android:layout_height="@dimen/dp_185"
                     android:layout_gravity="center"
                     android:visibility="visible"
                     app:srcCompat="@drawable/face_ic_ban_circle"
@@ -54,8 +54,8 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/gear2"
-                    android:layout_width="@dimen/dp_175"
-                    android:layout_height="@dimen/dp_175"
+                    android:layout_width="@dimen/dp_180"
+                    android:layout_height="@dimen/dp_180"
                     android:layout_gravity="center"
                     android:visibility="visible"
                     app:srcCompat="@drawable/face_ic_gear1"
@@ -81,16 +81,15 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/homeMenu"
-                    android:layout_width="@dimen/dp_95"
-                    android:layout_height="@dimen/dp_95"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="@dimen/dp_100"
                     android:layout_gravity="center"
                     android:background="@drawable/circle_transparent"
                     android:gravity="center"
-                    android:text="管理"
+                    android:text="菜单管理"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_15"
+                    android:textSize="@dimen/sp_16"
                     android:textStyle="bold" />
-
 
             </FrameLayout>
 

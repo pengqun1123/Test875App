@@ -1,81 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activity.FingerActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="这是finger组件的Activity"
-        android:textColor="@color/finger_colorAccent"
-        android:textSize="16sp"
-        android:textStyle="bold|italic" />
-
-    <TextView
-        android:id="@+id/params"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="这是finger组件的Activity"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:textStyle="normal" />
+    android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn7"
-        android:layout_width="match_parent"
+        android:id="@+id/openFingerDev"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="打开数据库" />
-
-    <Button
-        android:id="@+id/btn8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="关闭数据库" />
-
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="调用跨组件的方法" />
-
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="查询User" />
-
-    <Button
-        android:id="@+id/btn5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="删除User" />
-
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="创建Student" />
-
-    <Button
-        android:id="@+id/btn4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="查询Student" />
-
-    <Button
-        android:id="@+id/btn6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="清空Student" />
+        android:layout_marginTop="@dimen/dp_80"
+        android:text="打开设备" />
 
 </LinearLayout>

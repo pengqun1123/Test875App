@@ -15,7 +15,8 @@
         android:paddingBottom="@dimen/dp_10"
         android:text="@string/delete_manager"
         android:textColor="@color/black_0"
-        android:textSize="@dimen/sp_18" />
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:id="@+id/topView"

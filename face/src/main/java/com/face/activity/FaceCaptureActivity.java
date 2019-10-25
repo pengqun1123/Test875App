@@ -18,6 +18,7 @@ import com.baselibrary.base.BaseApplication;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.pojo.Face;
+import com.baselibrary.util.HideNavBarUtil;
 import com.baselibrary.util.ToastUtils;
 import com.face.R;
 import com.face.common.FaceConfig;
@@ -75,10 +76,23 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
 
     private int time=5;
 
+    //系统ui变化监听（一般都是状态栏和导航栏）
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.face_activity_face_capture);
+        HideNavBarUtil.hideBottomUIMenu(this);
         visCameraView = (FaceRecView) findViewById(R.id.camera_view);
         faceRecBoxView = (FaceRecBoxView) findViewById(R.id.camera_mask_view);
         faceRecBoxView.bringToFront();
@@ -121,7 +135,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
             if (time==0){
                 warning.setVisibility(View.GONE);
             }
-            if (time==-1){
+            if (time==-2){
                 if (face==null) {
                     Face face1 = new Face();
                     EventBus.getDefault().post(face1);
@@ -181,6 +195,7 @@ public class FaceCaptureActivity extends AppCompatActivity implements FaceDetect
                 float blur = faceQuality.getBlur();
                 if (Math.abs(roll) <= 10 && Math.abs(yaw) <= 10 && Math.abs(pitch) <= 10) {
                     //质量符合要求
+                    handler.removeMessages(0x001);
                     FaceRect faceRect = maxFace.getFaceRect();
                     //截取人脸图，最后一个参数rectScale的意思是基于检测出来的人脸大小，放大多少倍来截取原始图片中的人脸
                     Bitmap faceBitmap = faceDetectData.getImage().cropBitmap(faceRect.getLeft(), faceRect.getTop(),

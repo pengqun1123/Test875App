@@ -16,6 +16,7 @@ import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.glidUtils.GlideUtil;
 
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 
 import java.text.MessageFormat;
@@ -118,6 +119,11 @@ public class UserManageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             RvHolder footerHolder = (RvHolder) holder;
             footerHolder.showAllData.setText(footerHolder.itemView.getContext()
                     .getString(R.string.show_all_data));
+            if (users.size() > 0) {
+                footerHolder.showAllData.setVisibility(View.VISIBLE);
+            } else {
+                footerHolder.showAllData.setVisibility(View.GONE);
+            }
             return;
         }
         if (getItemViewType(i) == TYPE_NORMAL && holder instanceof Holder) {

@@ -33,6 +33,7 @@ import com.baselibrary.util.PermissionUtils;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.ToastUtils;
+import com.face.activity.V3FaceRecActivity;
 import com.face.callback.FaceListener;
 import com.face.service.FaceService;
 import com.finger.callBack.AllFingerData;
@@ -89,7 +90,7 @@ public class SplashActivity extends BaseActivity {
         //清除数据库缓存
 //        DBUtil dbUtil = BaseApplication.getDbUtil();
 //        dbUtil.getDaoSession().clear();
-//       clearData();
+//        clearData();
 
         setDevMaxVoice();
 
@@ -106,7 +107,7 @@ public class SplashActivity extends BaseActivity {
         //设置音量
         float streamVolumeMax = BaseApplication.AP.getStreamVolumeMax();
         Logger.d("设备的最大音量:" + streamVolumeMax);
-        BaseApplication.AP.setVolume((int) streamVolumeMax);
+        BaseApplication.AP.setVolume((int) streamVolumeMax - 3);
     }
 
     private void clearData() {
@@ -226,6 +227,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void openFingerDev() {
+        Logger.d("=== 打开指静脉 11 ");
         FingerApi.getInstance().openDev(SplashActivity.this, true,
                 new DevOpenCallBack() {
                     @Override
@@ -280,7 +282,7 @@ public class SplashActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Logger.d("===初始化    人脸初始化失败:");
+                        Logger.d("===初始化    人脸初始化失败:" + error);
                         ToastUtils.showSquareImgToast(SplashActivity.this, error,
                                 ActivityCompat.getDrawable(SplashActivity.this, R.drawable.cry_icon));
                     }
@@ -309,7 +311,8 @@ public class SplashActivity extends BaseActivity {
         Boolean openFace = SPUtil.getOpenFace();
         if (openFace) {
             //跳转人脸识别页面
-            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+//            ARouterUtil.navigation(ARouterConstant.FACE_1_N_ACTIVITY);
+            SkipActivityUtil.skipActivity(SplashActivity.this, V3FaceRecActivity.class);
         } else {
             //跳转不带人脸识别的页面
             SkipActivityUtil.skipActivity(SplashActivity.this,

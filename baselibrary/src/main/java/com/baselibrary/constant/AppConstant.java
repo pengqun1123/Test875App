@@ -40,8 +40,8 @@ public final class AppConstant {
 
     //视频激活码
     public static final String FACE_ACTIVITY_CODE =
-//            "3J7D-BB84-JD8E-UA96";
-            "CG8A-HJ92-7W8E-EJ8F";
+            "3J7D-BB84-JD8E-UA96";
+//            "CG8A-HJ92-7W8E-EJ8F";
     //3J7D-BB84-JD8E-UA96
     /*TWAB-UI9E-AO90-7X8F*/;
 

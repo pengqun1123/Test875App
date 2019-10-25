@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.pojo.Manager;
+import com.orhanobut.logger.Logger;
 import com.testApp.R;
 
 import java.text.MessageFormat;
@@ -92,8 +93,14 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RvHolder footerHolder = (RvHolder) holder;
             footerHolder.showAllData.setText(footerHolder.itemView.getContext()
                     .getString(R.string.show_all_data));
+            if (managers.size() > 0) {
+                footerHolder.showAllData.setVisibility(View.VISIBLE);
+            } else {
+                footerHolder.showAllData.setVisibility(View.GONE);
+            }
             return;
-        } else if (getItemViewType(i) == TYPE_NORMAL && holder instanceof Holder) {
+        }
+        if (getItemViewType(i) == TYPE_NORMAL && holder instanceof Holder) {
             Holder normalHolder = (Holder) holder;
             normalHolder.managerNo.setText(MessageFormat.format("{0}{1}",
                     holder.itemView.getContext().getString(R.string.manager), i));
@@ -115,23 +122,22 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return false;
             });
         }
-
     }
 
     @Override
     public int getItemViewType(int position) {
+        if (footerView != null && position == getItemCount() - 1) {
+            return TYPE_FOOTER;
+        }
         if (footerView == null) {
             return TYPE_NORMAL;
-        } else if (position == getItemCount() - 1) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_NORMAL;
         }
+        return TYPE_NORMAL;
     }
 
     @Override
     public int getItemCount() {
-        if (footerView == null) {
+        if (footerView != null) {
             return managers.size() + 1;
         } else {
             return managers.size();

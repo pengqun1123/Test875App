@@ -79,7 +79,7 @@ public class FingerApi {
         if (!TGBApi.getTGAPI().isDevOpen()) {
             //初始化准备数据
             TGBApi.getTGAPI().openDev(activity, Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, sound
-                    , devOpenCallBack, devStatusCallBack);
+                    , false, devOpenCallBack, devStatusCallBack);
         } else {
             Logger.d(activity.getString(R.string.dev_open));
         }
@@ -272,6 +272,7 @@ public class FingerApi {
      */
     public void startReStartFinger(Context context) {
         if (!isStart) {
+            Logger.d("开启连接指静脉状态的Service");
             TGBApi.getTGAPI().startDevService(context, new OnStartDevStatusServiceListener() {
                 @Override
                 public void startDevServiceStatus(Boolean aBoolean) {

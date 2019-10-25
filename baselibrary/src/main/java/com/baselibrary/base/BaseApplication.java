@@ -32,7 +32,6 @@ public class BaseApplication extends Application {
             dbUtil = DBUtil.getInstance(this);
         if (AP == null)
             AP = getAP(this);
-//        DBUtil.instance().initDB(this);
         //APP的相关配置初始化
         AppConfig.INSTANCE.initConfig(this);
         //

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/image2" />
+        app:srcCompat="@drawable/image3" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/defaultOut"
@@ -69,16 +69,16 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/gear1"
-            android:layout_width="@dimen/dp_180"
-            android:layout_height="@dimen/dp_180"
+            android:layout_width="@dimen/dp_185"
+            android:layout_height="@dimen/dp_185"
             android:layout_gravity="center"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_ban_circle" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/gear2"
-            android:layout_width="@dimen/dp_175"
-            android:layout_height="@dimen/dp_175"
+            android:layout_width="@dimen/dp_180"
+            android:layout_height="@dimen/dp_180"
             android:layout_gravity="center"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_gear1" />
@@ -101,14 +101,14 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/homeMenu"
-            android:layout_width="@dimen/dp_95"
-            android:layout_height="@dimen/dp_95"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
             android:layout_gravity="center"
             android:background="@drawable/circle_transparent"
             android:gravity="center"
             android:text="@string/menu_set"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_15"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
 
     </FrameLayout>

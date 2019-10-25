@@ -1,15 +1,8 @@
 package com.testApp.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.support.v7.view.menu.MenuWrapperFactory;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -69,7 +62,6 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     }
 
 
-
     @Override
     protected void onViewClick(View view) {
         switch (view.getId()) {
@@ -80,7 +72,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                 } else {
                     SkipActivityUtil.skipActivity(MenuActivity.this, DefaultVerifyActivity.class);
                 }
-                finish();
+                MenuActivity.this.finish();
                 break;
             case R.id.manageMenu:
                 AskDialog.verifyManagerPwd(this, new AskDialog.ManagerPwdVerifyCallBack() {
@@ -89,7 +81,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                         if (isVerify) {
                             SkipActivityUtil.skipActivity(MenuActivity.this,
                                     ManagerActivity.class);
-                            finish();
+                            MenuActivity.this.finish();
                         } else {
                             ToastUtils.showSquareImgToast(MenuActivity.this,
                                     getString(R.string.manager_pwd_verify_fail),
@@ -104,15 +96,15 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                     @Override
                     public void positionClickListener(int flag) {
                         if (flag == AppConstant.FINGER_MODEL) {
-                            BaseApplication.AP.play_inputDownGently();
+                            BaseApplication.AP.playDownFinger();
                             FingerFactory.getInstance().reStartFingerVerify();
                             FingerApi.getInstance().receiveFingerDevConnectStatus(MenuActivity.this);
                         } else if (flag == AppConstant.FACE_MODEL) {
                             BaseApplication.AP.playFaceScreen();
                             ARouterUtil.navigation(ARouterConstant.FACE_VERIFY_ACTIVITY);
-                            finish();
+                            MenuActivity.this.finish();
                         } else if (flag == AppConstant.ID_CARD_MODEL) {
-                            BaseApplication.AP.play_rfid_card();
+                            BaseApplication.AP.playCardToPlace();
                             idCardService = ARouter.getInstance().navigation(IdCardService.class);
                             new Thread(new Runnable() {
                                 @Override
@@ -132,7 +124,7 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
                                         bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 4);
                                         bundle.putLong(AppConstant.VERIFY_TYPE_ID, id);
                                         SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
-                                        finish();
+                                        MenuActivity.this.finish();
                                     } else {
                                         VerifyResultUi.showVerifyFail(MenuActivity.this,
                                                 getString(R.string.user_pwd_verify_fail), false);
@@ -167,9 +159,6 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       /* if (receiver!=null) {
-            unregisterReceiver(receiver);
-        }*/
         if (idCardService != null) {
             idCardService.destroyIdCard();
         }
@@ -177,12 +166,11 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
 
     @Override
     public void onGetCardInfo(IdCard idCard) {
-        if (idCard==null) {
-            VerifyResultUi.showVerifyFail(MenuActivity.this,getString(R.string.id_card_verify_fail),false);
-
+        if (idCard == null) {
+            VerifyResultUi.showVerifyFail(MenuActivity.this, getString(R.string.id_card_verify_fail), false);
         } else {
-            VerifyResultUi.showVerifySuccess(MenuActivity.this,getString(R.string.id_card_verify_success),false);
-            Bundle bundle=new Bundle();
+            VerifyResultUi.showVerifySuccess(MenuActivity.this, getString(R.string.id_card_verify_success), false);
+            Bundle bundle = new Bundle();
             bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 3);
             bundle.putLong(AppConstant.VERIFY_TYPE_ID, idCard.getUId());
             SkipActivityUtil.skipDataActivity(MenuActivity.this, UserCenterActivity.class, bundle);
@@ -211,12 +199,12 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
      */
     @Override
     public void fingerDevStatus(int res, String msg) {
-        if (res == 1 && !isStartService){
+        if (res == 1 && !isStartService) {
             Logger.d("测试  MenuActivity  启动FingerService ");
             FingerServiceUtil.getInstance().startFingerService(this,
                     isStart -> {
                         isStartService = isStart;
-                        if (isStart){
+                        if (isStart) {
                             Logger.d("测试  MenuActivity  调用FingerService 1：N验证");
                             FingerServiceUtil.getInstance().setFingerVerifyResult(this);
                         }
@@ -245,9 +233,9 @@ public class MenuActivity extends BaseActivity implements CardInfoListener, Fing
             bundle.putInt(AppConstant.VERIFY_RESULT_TYPE, 1);
             bundle.putLong(AppConstant.VERIFY_TYPE_ID, fingerId);
             SkipActivityUtil.skipDataActivity(this, UserCenterActivity.class, bundle);
-            finish();
-        }else {
-            VerifyResultUi.showVerifySuccess(this,
+            MenuActivity.this.finish();
+        } else {
+            VerifyResultUi.showVerifyFail(this,
                     getString(R.string.verify_fail), false);
         }
     }

@@ -42,20 +42,15 @@ import com.baselibrary.util.SkipActivityUtil;
 import com.baselibrary.util.SoftInputKeyboardUtils;
 import com.baselibrary.util.ToastUtils;
 import com.baselibrary.util.VerifyResultUi;
-import com.face.activity.V3FaceRecActivity;
 import com.finger.fingerApi.FingerApi;
 import com.finger.service.FingerServiceUtil;
 import com.orhanobut.logger.Logger;
-import com.sd.tgfinger.CallBack.RegisterCallBack;
-import com.sd.tgfinger.pojos.Msg;
-import com.sd.tgfinger.pojos.VerifyResult;
 import com.testApp.R;
 import com.testApp.activity.DefaultVerifyActivity;
 import com.testApp.activity.ManagerActivity;
 import com.testApp.callBack.CancelBtnClickListener;
 import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.callBack.QueryUserNo;
-import com.testApp.callBack.RegisterUserCallBack;
 import com.testApp.callBack.SaveUserInfo;
 import com.testApp.dialog.AskDialog;
 
@@ -117,8 +112,12 @@ public class UserRegisterFragment extends BaseFragment {
         spinnerListener();
         //隐藏注册的按钮，当用户至少选择了一种验证模式注册完成后才显示注册按钮
         registerBtn.setVisibility(View.GONE);
-
-
+        //判断是否启用了人脸
+        if (SPUtil.getOpenFace()) {
+            faceModel.setVisibility(View.VISIBLE);
+        } else {
+            faceModel.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -126,7 +125,6 @@ public class UserRegisterFragment extends BaseFragment {
         manageActivity = (ManagerActivity) getActivity();
         EventBus.getDefault().register(this);
         fingerListToFingerByte();
-        //查询所有用户的工号
     }
 
     @Override
@@ -167,7 +165,7 @@ public class UserRegisterFragment extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView textView = (TextView) view;
-                if (textView!=null) {
+                if (textView != null) {
                     String selectItem = textView.getText().toString();
                     if (selectItem.equals(getString(R.string.sex))) {
                         sex = "";
@@ -259,11 +257,13 @@ public class UserRegisterFragment extends BaseFragment {
                     DBUtil dbUtil = BaseApplication.getDbUtil();
                     dbUtil.insertOrReplace(newUser);
                     manageActivity.addNewUser(newUser);
-                    FingerServiceUtil.getInstance().updateFingerData();
+                    if (fg6 != null) {
+                        FingerServiceUtil.getInstance().addFinger(fg6.getFinger6Feature());
+                    }
                     ToastUtils.showSquareImgToast(getActivity(), getString(R.string.register_success)
                             , ActivityCompat.getDrawable(Objects.requireNonNull(getActivity()),
                                     R.drawable.ic_emoje));
-                    BaseApplication.AP.play_checkInSuccess();
+                    BaseApplication.AP.playRegisterSuccess();
                     if (saveUserInfo != null) {
                         saveUserInfo.saveUserInfo(true);
                     } else {
@@ -301,6 +301,7 @@ public class UserRegisterFragment extends BaseFragment {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void pwRegister() {
+        BaseApplication.AP.playInputPw();
         PwFactory.createPw(getActivity(), pw -> {
             DBUtil dbUtil = BaseApplication.getDbUtil();
             PwDao pwDao = dbUtil.getDaoSession().getPwDao();
@@ -324,6 +325,7 @@ public class UserRegisterFragment extends BaseFragment {
      * 身份证注册
      */
     private void idCardRegister() {
+        BaseApplication.AP.playCardToPlace();
         Long idCardId = -1L;
         if (this.idCard != null) {
             idCardId = idCard.getUId();
@@ -344,11 +346,11 @@ public class UserRegisterFragment extends BaseFragment {
                     //可插入User表的数据
                     UserRegisterFragment.this.idCard = idCard;
                     registerBtn.setVisibility(View.VISIBLE);
-                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_success),false);
+                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_success), false);
 
                 } else {
                     Logger.d("身份证注册失败");
-                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_fail),false);
+                    VerifyResultUi.showRegisterSuccess(getActivity(), getString(com.id_card.R.string.id_card_register_fail), false);
                 }
             }
         }, finalIdCardId)).start();
@@ -358,6 +360,7 @@ public class UserRegisterFragment extends BaseFragment {
      * 人脸注册
      */
     private void faceRegister() {
+        BaseApplication.AP.playFaceScreen();
         Boolean openFace = SPUtil.getOpenFace();
         if (openFace) {
             String userName = nameEt.getText().toString().trim();
@@ -436,7 +439,9 @@ public class UserRegisterFragment extends BaseFragment {
                 //可插入User表的数据
                 UserRegisterFragment.this.fg6 = result;
                 registerBtn.setVisibility(View.VISIBLE);
+                FingerListManager.getInstance().addFingerData(result);
                 FingerServiceUtil.getInstance().addFinger(result.getFinger6Feature());
+                fingerListToFingerByte();
             }
 
             @Override
@@ -555,7 +560,7 @@ public class UserRegisterFragment extends BaseFragment {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleEvent(Face face) {
-        if (face.getUId()!= null) {
+        if (face.getUId() != null) {
             ToastUtils.showSquareImgToast(getActivity(), getString(com.face.R.string.face_register_success),
                     null);
             UserRegisterFragment.this.face = face;
@@ -621,12 +626,12 @@ public class UserRegisterFragment extends BaseFragment {
                             }
                             if (face != null) {
                                 dbUtil.delete(face);
-                                    FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
-                                    try {
-                                        faceService.removeFace(face.getUId());
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                FaceService faceService = ARouter.getInstance().navigation(FaceService.class);
+                                try {
+                                    faceService.removeFace(face.getUId());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 face = null;
                             }
                             if (saveUserInfo != null)

@@ -3,94 +3,53 @@ package com.finger.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-import android.widget.Button;
-import android.widget.TextView;
-
-
-import com.alibaba.android.arouter.facade.annotation.Autowired;
-import com.alibaba.android.arouter.facade.annotation.Route;
-import com.baselibrary.ARouter.ARouterConstant;
-
-import com.baselibrary.base.BaseApplication;
-import com.baselibrary.callBack.PermissionC;
+import com.baselibrary.base.BaseActivity;
 import com.baselibrary.callBack.PermissionResultCallBack;
-import com.baselibrary.dao.db.DBUtil;
-import com.baselibrary.dao.db.DaoSession;
-import com.baselibrary.model.TestBean;
-import com.baselibrary.pojo.Student;
-import com.baselibrary.pojo.User;
 import com.baselibrary.util.PermissionUtils;
 import com.finger.R;
-import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.FvInitCallBack;
 import com.sd.tgfinger.pojos.Msg;
+import com.sd.tgfinger.tgApi.Constant;
+import com.sd.tgfinger.tgApi.TGBApi;
+import com.sd.tgfinger.utils.ToastUtil;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-/**
- * Created By pq
- * on 2019/9/11
- */
-@Route(path = ARouterConstant.FINGER_ACTIVITY, group = ARouterConstant.GROUP_FINGER)
-public class FingerActivity extends AppCompatActivity {
+public class FingerActivity extends BaseActivity implements DevStatusCallBack {
 
+    private TGBApi tgapi;
+    String[] per = {Manifest.permission.WRITE_EXTERNAL_STORAGE
+            , Manifest.permission.ACCESS_NETWORK_STATE};
 
-    private DBUtil dbUtil;
-
-    String[] per={Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.finger_activity_finger);
+    protected Integer contentView() {
+        return R.layout.finger_activity_finger;
+    }
 
-        dbUtil = BaseApplication.getDbUtil();
-//        dbUtil = DBUtil.getInstance(getApplication());
-//        dbUtil = DBUtil.instance(getApplication());
-
-        Button btn1 = findViewById(R.id.btn1);
-        Button btn2 = findViewById(R.id.btn2);
-        Button btn3 = findViewById(R.id.btn3);
-        Button btn4 = findViewById(R.id.btn4);
-        Button btn5 = findViewById(R.id.btn5);
-        Button btn6 = findViewById(R.id.btn6);
-        Button btn7 = findViewById(R.id.btn7);
-        Button btn8 = findViewById(R.id.btn8);
-        TextView params = findViewById(R.id.params);
-
-        checkMyPermissions(per);
-
-       FingerApi.getInstance().startReStartFinger(this);
-
+    @Override
+    protected void initToolBar() {
 
     }
 
-    private void FvInit(){
-        InputStream LicenseIs = getResources().openRawResource(R.raw.license);
-        FingerApi.getInstance().fingerInit(this, LicenseIs, new FvInitCallBack() {
-            @Override
-            public void fvInitResult(Msg msg) {
-                if (msg.getResult() == 1) {
-                    openDev();
-                }
-                Logger.d("===:"+msg.getTip());
-            }
-        });
+    @Override
+    protected void initView() {
+        bindViewWithClick(R.id.openFingerDev, true);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void initData() {
+        tgapi = TGBApi.getTGAPI();
+        initFV();
+//        checkMyPermissions(per);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -110,124 +69,50 @@ public class FingerActivity extends AppCompatActivity {
                     new PermissionResultCallBack() {
                         @Override
                         public void permissionCallBack() {
-                            FvInit();
+                            initFV();
                         }
                     });
         } else {
-            FvInit();
+            initFV();
         }
     }
 
-    private void openDev(){
-        FingerApi.getInstance().openDev(this, true,
+    private void initFV() {
+        //初始化指静脉
+        tgapi.init(this, null, new FvInitCallBack() {
+            @Override
+            public void fvInitResult(Msg msg) {
+                Integer result = msg.getResult();
+                if (result >= 0) {
+                    ToastUtil.toast(FingerActivity.this, "指静脉算法初始化成功");
+                    openDev();
+                }
+            }
+        });
+    }
+
+    private void openDev() {
+        tgapi.openDev(this, Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, true, false,
                 new DevOpenCallBack() {
                     @Override
                     public void devOpenResult(Msg msg) {
-                      Logger.d("===:"+msg.getTip());
+                        Integer result = msg.getResult();
+                        if (result >= 0) {
+                            ToastUtil.toast(FingerActivity.this, "指静脉打开成功");
+                        }
                     }
-                }, new DevStatusCallBack() {
-                    @Override
-                    public void devStatus(Msg msg) {
-                        Logger.d("===:"+msg.getTip());
-                    }
-                });
+                }, this);
     }
 
+    @Override
+    protected void onViewClick(View view) {
+        if (view.getId() == R.id.openFingerDev) {
 
-    //增
-    public void insert() {
-//        DaoSession daoSession = dbUtil.getDaoSession();
-        for (int i = 50; i < 60; i++) {
-            User user = new User();
-            int age = new Random().nextInt(10) + 10;
-            String name = name();
-            user.setName(name);
-
-            //daoSession.insert(user);
-            //插入或替换
-            // daoSession.insertOrReplace(user);
-            Logger.d(user);
-            dbUtil.insert(user);
         }
     }
 
-    public void insert1() {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        for (int i = 0; i < 30; i++) {
-            Student student = new Student();
-            student.setStudentNo(i);
-            String name = name();
-            student.setName(name);
-//            daoSession.insert(student);
-            //插入或替换
-            // daoSession.insertOrReplace(user);
-            Logger.d(student);
-            dbUtil.insert(student);
-        }
-    }
-
-    //删除
-    private void delete(User s) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        daoSession.delete(s);
-    }
-
-    //删除全部
-    private void deleteAll(Class clazz) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        daoSession.deleteAll(clazz);
-    }
-
-    //改  通过Update来修改
-    private void update(User user) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        daoSession.update(user);
-    }
-
-    /**
-     * 查询的方法
-     * loadAll()：查询所有数据。
-     * queryRaw()：根据条件查询。
-     * queryBuilder() : 方便查询的创建，后面详细讲解。
-     */
-    public List queryAll(Class clazz) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        List list = daoSession.loadAll(clazz);
-        return list;
-    }
-
-    //根据条件查询
-    private List queryRaw(Class clazz, String id) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        List list = daoSession.queryRaw(clazz, "where id = ?", id);
-        return list;
-    }
-
-    //查询所有的数据
-    private List queryAllData(Class clazz) {
-        DaoSession daoSession = dbUtil.getDaoSession();
-        QueryBuilder queryBuilder = daoSession.queryBuilder(clazz);
-        List list = queryBuilder.list();
-        return list;
-    }
-
-
-    private String name() {
-        String a = "QWERTYUIOPASDFGHJKLZXCVBNM";
-        StringBuilder sb = new StringBuilder();
-        for (int i1 = 0; i1 < 2; i1++) {
-            int i = new Random().nextInt(a.length());
-            sb.append(a.charAt(i));
-        }
-        return sb.toString();
-    }
-
-    private String telNo() {
-        String a = "134567435739689102";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 11; i++) {
-            sb.append(a.charAt(i));
-        }
-        return sb.toString();
+    @Override
+    public void devStatus(Msg msg) {
+        Logger.d("  msg:" + msg.getResult() + "  :  " + msg.getTip());
     }
 }

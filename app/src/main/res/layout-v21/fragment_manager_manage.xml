@@ -39,15 +39,76 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/verifySet"
                 style="@style/manage_register_style"
+                android:background="?android:attr/selectableItemBackground"
                 android:drawableTop="@drawable/ic_verify"
                 android:text="@string/verify_set" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/addNewManager"
                 style="@style/manage_register_style"
+                android:background="?android:attr/selectableItemBackground"
                 android:drawableTop="@drawable/ic_add_manager"
                 android:text="@string/add_new_manager" />
 
+        </LinearLayout>
+
+        <View
+            android:id="@+id/addManagerLine1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_8"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@color/common_line"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableStart="@drawable/tv_line"
+                android:drawablePadding="@dimen/dp_2"
+                android:gravity="center"
+                android:text="@string/is_open_face"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_17" />
+
+            <RadioGroup
+                android:id="@+id/faceOpenRg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/openFace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_25"
+                    android:padding="@dimen/dp_5"
+                    android:text="@string/yes"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_17" />
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/noOpenFace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_25"
+                    android:padding="@dimen/dp_5"
+                    android:text="@string/no"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_17" />
+
+            </RadioGroup>
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
@@ -69,11 +130,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_8"
             android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginEnd="@dimen/dp_10"
             android:background="@color/common_line" />
 
         <View
-            android:id="@+id/addManagerLine"
+            android:id="@+id/addManagerLine2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_8"
             android:layout_marginStart="@dimen/dp_10"

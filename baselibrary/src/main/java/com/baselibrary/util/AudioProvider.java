@@ -332,7 +332,7 @@ public class AudioProvider implements SoundPool.OnLoadCompleteListener {
     //请脸部正对屏幕
     public void playFaceScreen() {
         if (soundPool != null) {
-            soundPool.load(mContext, R.raw.face_screen, 1);
+            soundPool.load(mContext, R.raw.please_face_screen, 1);
         }
     }
 
@@ -342,6 +342,21 @@ public class AudioProvider implements SoundPool.OnLoadCompleteListener {
             soundPool.load(mContext, R.raw.please_input_pw, 1);
         }
     }
+
+    //请将身份证放置感应区
+    public void playCardToPlace(){
+        if (soundPool != null) {
+            soundPool.load(mContext, R.raw.please_card_set_place, 1);
+        }
+    }
+
+    //请将轻放手指
+    public void playDownFinger(){
+        if (soundPool != null) {
+            soundPool.load(mContext, R.raw.please_down_finger, 1);
+        }
+    }
+
 
     /**
      * 给声音池添加声音（请谨慎调用，注意调用次数不要超过256）
@@ -366,6 +381,14 @@ public class AudioProvider implements SoundPool.OnLoadCompleteListener {
     public void play_didi() {
         if (soundPool != null) {
             soundPool.load(mContext, R.raw.waw2, 1);
+        }
+    }
+
+    //注册成功
+    public void playRegisterSuccess() {
+        releaseAndCreatePool();
+        if (soundPool != null) {
+            soundPool.load(mContext, R.raw.register_success, 1);
         }
     }
 

@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">UE875Beta</string>
     <string name="select_verify_model">请选择验证模式</string>
     <string name="finger">指静脉验证</string>
+    <string name="finger1">指静脉</string>
     <string name="face">人脸验证</string>
     <string name="face1">人脸</string>
     <string name="idCard">身份证验证</string>
@@ -47,6 +48,7 @@
     <string name="finger_n_verify">指静脉验证N</string>
     <string name="finger_1_verify">指静脉验证1</string>
     <string name="card_verify">身份证验证</string>
+    <string name="card">身份证</string>
     <string name="manager_set">管理员设置</string>
     <string name="please_manager_pw">请输入管理员密码:</string>
     <string name="please_verify_pw">请输入验证密码:</string>
@@ -124,6 +126,7 @@
     <string name="show_all_data">已经呈现全部数据</string>
     <string name="finger_registed">指静脉(已注册)</string>
     <string name="save">保存</string>
+    <string name="save_success">保存成功</string>
     <string name="please_input_user_no">请填写用户工号:</string>
     <string name="please_select_verify_method">请选择您已注册过的验证方式进行身份验证!</string>
     <string name="manage_no_had">该管理员密码已存在,请重新输入</string>
@@ -139,6 +142,9 @@
     <string name="has_register_face">已注册人脸</string>
     <string name="has_register_card">已注册身份证</string>
     <string name="has_register_pw">已注册密码</string>
+    <string name="no_register">未注册</string>
+    <string name="had_register">已注册</string>
+    <string name="is_open_face">启用人脸识别:</string>
 
 
 </resources>
