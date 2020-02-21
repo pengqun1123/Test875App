@@ -45,7 +45,8 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Finger3Id = new Property(9, Long.class, "finger3Id", false, "finger3Id");
         public final static Property Finger6Id = new Property(10, Long.class, "finger6Id", false, "finger6Id");
         public final static Property FaceId = new Property(11, Long.class, "faceId", false, "faceId");
-        public final static Property CardId = new Property(12, Long.class, "cardId", false, "cardId");
+        public final static Property ArcFaceId = new Property(12, Long.class, "arcFaceId", false, "arcFaceId");
+        public final static Property CardId = new Property(13, Long.class, "cardId", false, "cardId");
     }
 
     private DaoSession daoSession;
@@ -76,7 +77,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"finger3Id\" INTEGER," + // 9: finger3Id
                 "\"finger6Id\" INTEGER," + // 10: finger6Id
                 "\"faceId\" INTEGER," + // 11: faceId
-                "\"cardId\" INTEGER);"); // 12: cardId
+                "\"arcFaceId\" INTEGER," + // 12: arcFaceId
+                "\"cardId\" INTEGER);"); // 13: cardId
     }
 
     /** Drops the underlying database table. */
@@ -149,9 +151,14 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(12, faceId);
         }
  
+        Long arcFaceId = entity.getArcFaceId();
+        if (arcFaceId != null) {
+            stmt.bindLong(13, arcFaceId);
+        }
+ 
         Long cardId = entity.getCardId();
         if (cardId != null) {
-            stmt.bindLong(13, cardId);
+            stmt.bindLong(14, cardId);
         }
     }
 
@@ -219,9 +226,14 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(12, faceId);
         }
  
+        Long arcFaceId = entity.getArcFaceId();
+        if (arcFaceId != null) {
+            stmt.bindLong(13, arcFaceId);
+        }
+ 
         Long cardId = entity.getCardId();
         if (cardId != null) {
-            stmt.bindLong(13, cardId);
+            stmt.bindLong(14, cardId);
         }
     }
 
@@ -251,7 +263,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // finger3Id
             cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // finger6Id
             cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // faceId
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // cardId
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // arcFaceId
+            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // cardId
         );
         return entity;
     }
@@ -270,7 +283,8 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setFinger3Id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
         entity.setFinger6Id(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
         entity.setFaceId(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
-        entity.setCardId(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setArcFaceId(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setCardId(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
      }
     
     @Override

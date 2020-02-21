@@ -1,1 +1,1 @@
-include ':app', ':finger', ':baselibrary', ':pw', ':idcard', ':face'
+include ':app', ':finger', ':baselibrary', ':pw', ':idcard', ':face', ':arcface', ':mywifi'

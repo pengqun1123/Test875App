@@ -255,7 +255,6 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
                 }
             }
         });
-
         Log.d("555", "onFaceDetected" + faceDetectData);
 
         //人脸框绘制
@@ -264,6 +263,10 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
 
     @Override
     public void onLivenessDetected(FaceDetectData faceDetectData) {
+        Float visLivenessScore = faceDetectData.getVisLivenessScore();
+        String visLivenessScoreString = faceDetectData.getVisLivenessScoreString();
+        Logger.d("红外检测：  visLivenessScore:" + visLivenessScore +
+                "   visLivenessScoreString:" + visLivenessScoreString);
         Log.d("555", "活体检测");
     }
 
@@ -286,6 +289,9 @@ public class V3FaceRecActivity extends FaceBaseActivity implements BaseFaceRecPr
     @Override
     public void onFaceRecCompleted(FaceDetectData faceDetectData, FaceData faceData,
                                    BaseFaceRecProcessor.FaceTrackData faceTrackData) {
+        Logger.d("红外检测：  是否通过:" + faceTrackData.livenessPass
+                + "  分数：" + faceTrackData.livenessScore);
+
         //faceRecConfig.livenessDetectMode = BaseFaceRecProcessor.LivenessDetectMode.NIR_LIVENESS;
         // Log.d("888","onFaceRecCompleted:"+faceTrackData.searchedPerson.getFaceId());
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());

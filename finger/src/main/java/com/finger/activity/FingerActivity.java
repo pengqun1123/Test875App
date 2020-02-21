@@ -92,8 +92,8 @@ public class FingerActivity extends BaseActivity implements DevStatusCallBack {
     }
 
     private void openDev() {
-        tgapi.openDev(this, Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, true, false,
-                new DevOpenCallBack() {
+        tgapi.openDev(this,Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, true,
+                false,new DevOpenCallBack() {
                     @Override
                     public void devOpenResult(Msg msg) {
                         Integer result = msg.getResult();

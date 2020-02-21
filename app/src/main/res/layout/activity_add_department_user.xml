@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AddDepartmentUserActivity">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/normal_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/name"
+            android:padding="@dimen/dp_6"
+            android:textColor="@color/black_0"
+            android:textColorHint="@color/white_8a"
+            android:textSize="@dimen/sp_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@color/white_8a" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/userNo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/user_no"
+            android:padding="@dimen/dp_6"
+            android:textColor="@color/black_0"
+            android:textColorHint="@color/white_8a"
+            android:textSize="@dimen/sp_16" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/department"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/departmentValue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/department"
+            android:paddingStart="@dimen/dp_14"
+            android:paddingEnd="@dimen/dp_14"
+            android:textColor="@color/black_0"
+            android:textColorHint="@color/white_8a"
+            android:textSize="@dimen/sp_16" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/departmentArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/ic_arrow_circle_down" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/jurisdiction"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/jurisdictionValue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/jurisdiction"
+            android:paddingStart="@dimen/dp_14"
+            android:paddingEnd="@dimen/dp_14"
+            android:textColor="@color/black_0"
+            android:textColorHint="@color/white_8a"
+            android:textSize="@dimen/sp_16" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/jurisdictionArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/ic_arrow_circle_down" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/face"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/faceValue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/face1"
+            android:paddingStart="@dimen/dp_14"
+            android:paddingEnd="@dimen/dp_14"
+            android:textColor="@color/black_0"
+            android:textColorHint="@color/white_8a"
+            android:textSize="@dimen/sp_16" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/faceArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/ic_delete" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_1"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger1Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_2"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger2Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_3"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger3Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_4"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger4Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_5"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger5Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/finger6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_6"
+                android:text="@string/finger_6"
+                android:textColor="@color/black_0"
+                android:textSize="@dimen/sp_16" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/finger6Arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="@dimen/dp_5"
+                app:srcCompat="@drawable/ic_delete" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/moreSelect"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/shape_gray_8_radius"
+        android:gravity="center"
+        android:text="@string/more_select"
+        android:paddingStart="@dimen/dp_14"
+        android:paddingEnd="@dimen/dp_14"
+        android:textColor="@color/black_0"
+        android:textSize="@dimen/sp_16" />
+
+</LinearLayout>

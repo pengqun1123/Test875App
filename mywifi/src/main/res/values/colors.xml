@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="wf_colorPrimary">#008577</color>
+    <color name="wf_colorPrimaryDark">#00574B</color>
+    <color name="wf_colorAccent">#D81B60</color>
+</resources>

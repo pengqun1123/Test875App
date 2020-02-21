@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.UserActivity">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/normal_toolbar" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/searchUserBtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_75"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/search_bg"
+        android:drawableStart="@drawable/ic_search"
+        android:gravity="center"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:text="@string/search_user"
+        android:textColor="@color/white_8a"
+        android:textSize="@dimen/sp_16" />
+
+    <RelativeLayout
+        android:id="@+id/goToAllDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_below="@+id/searchUserBtn"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingStart="@dimen/dp_30"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:text="@string/all_department"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/goToAllDepartment"
+        android:layout_marginTop="@dimen/dp_1"
+        android:background="@color/white">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/userList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/dp_30"
+        android:layout_marginBottom="@dimen/dp_30"
+        app:srcCompat="@drawable/ic_add"
+        app:backgroundTint="@color/fabbg"
+        app:borderWidth="0dp"
+        app:elevation="5dp"
+        app:fabSize="mini"
+        app:layout_anchorGravity="bottom|right|end"
+        app:pressedTranslationZ="10dp"
+        app:rippleColor="#a6a6a6"
+        />
+
+
+
+</RelativeLayout>

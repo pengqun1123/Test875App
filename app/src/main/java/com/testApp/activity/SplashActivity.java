@@ -39,6 +39,7 @@ import com.face.service.FaceService;
 import com.finger.callBack.AllFingerData;
 import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
+import com.sd.tgfinger.CallBack.DevFwCallBack;
 import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.FvInitCallBack;
@@ -233,6 +234,13 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void devOpenResult(Msg msg) {
                         if (msg.getResult() == 1) {
+                            FingerApi.getInstance().getFingerDevFW(SplashActivity.this,
+                                    new DevFwCallBack() {
+                                @Override
+                                public void devFwCallBack(String s) {
+                                    Logger.d("指静脉固件：" + s);
+                                }
+                            });
                             Logger.d("=== 打开指静脉：" + msg.getTip());
                         } else {
                             Logger.d("===指静脉打开失败：" + msg.getTip());
@@ -298,6 +306,7 @@ public class SplashActivity extends BaseActivity {
                         SplashActivity.this.faceLoadOver = true;
                         Logger.d("  指静脉数据加载完成：fingerLoadOver：" + fingerLoadOver);
                         if (SplashActivity.this.fingerLoadOver) {
+
                             skipVerifyActivity();
                         }
                     }

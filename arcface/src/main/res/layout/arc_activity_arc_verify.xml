@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ArcRGBDetachActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.arcFace.widget.MyTextureView
+            android:id="@+id/single_camera_texture_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.arcFace.widget.FaceRectView
+            android:id="@+id/single_camera_face_rect_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/single_camera_switch_liveness_detect"
+        android:layout_width="@dimen/dp_110"
+        android:layout_height="@dimen/dp_60"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        android:text="@string/arc_liveness_detect"
+        android:textSize="@dimen/sp_16" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:onClick="register"
+            android:text="@string/arc_register"
+            tools:ignore="OnClick" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="switchCamera"
+            android:text="@string/arc_switch_camera"
+            android:visibility="gone"
+            tools:ignore="OnClick" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/single_camera_recycler_view_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/statusTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_100"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_50"
+        android:gravity="center"
+        android:inputType="textMultiLine"
+        android:textColor="@color/green_7"
+        android:textSize="@dimen/arc_sp_34"
+        android:textStyle="bold" />
+
+</FrameLayout>

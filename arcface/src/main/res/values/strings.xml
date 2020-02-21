@@ -1,0 +1,45 @@
+<resources>
+    <string name="arc_app_name">arcFace</string>
+    <string name="arc_agree_per">App运行需要这些权限，请同意!</string>
+    <string name="arc_active_brn">激活成功</string>
+    <string name="arc_skip_rgb_activity">跳转RGB验证</string>
+    <string name="arc_skip_rgb_ir_activity">跳转RGB+IR验证</string>
+    <string name="arc_already_activated">已经激活</string>
+    <string name="arc_active_success">激活成功</string>
+    <string name="arc_active_failed">激活失败</string>
+    <string name="arc_library_not_found">未找到库文件，请检查是否有将.so文件放至工程的 app\\src\\main\\jniLibs 目录下</string>
+    <string name="arc_liveness_detect">活体检测</string>
+    <string name="arc_register">注册</string>
+    <string name="arc_draw_ir_rect_mirror_horizontal">IR人脸框水平镜像绘制</string>
+    <string name="arc_draw_ir_rect_mirror_vertical">IR人脸框垂直镜像绘制</string>
+    <string name="arc_switch_camera">切换摄像头</string>
+    <string name="arc_app_need_permission">App运行需要同意这些权限!</string>
+    <string name="arc_specific_engine_init_failed">%s 初始化失败，错误码为:%d</string>
+    <string name="arc_low_confidence_level">人脸置信度低</string>
+    <string name="arc_recognize_failed_notice">未通过:%s</string>
+    <string name="arc_recognize_success_notice">通过:%s</string>
+    <string name="arc_switch_camera_failed">切换相机失败</string>
+    <string name="arc_notice_change_detect_degree">相机已切换，若无法检测到人脸，需要在首页修改视频模式人脸检测角度</string>
+    <string name="arc_camera_error_notice">\n可能的原因：该设备不支持同时打开两个摄像头</string>
+    <string name="arc_camera_rgb">RGB CAMERA</string>
+    <string name="arc_camera_ir">IR CAMERA</string>
+    <string name="arc_actived">人脸引擎已经激活!</string>
+    <string name="arc_please_input_register_name">请填写注册的姓名</string>
+    <string name="arc_no_register">未注册</string>
+    <string name="arc_batch_register">批量人脸注册</string>
+    <string name="arc_batch_process_clear_faces">批量删除全部人脸数据</string>
+    <string name="arc_batch_process_batch_register">批量注册人脸数据</string>
+    <string name="arc_register_face_clearing">注册的人脸数据删除中</string>
+    <string name="arc_batch_process_path_is_not_exists">路径 \n%s\n 不存在</string>
+    <string name="arc_batch_process_path_is_not_dir">路径 \n%s\n 不是文件夹</string>
+    <string name="arc_batch_process_processing_please_wait">处理中，请稍等</string>
+    <!--人脸批量注册进度框-->
+    <string name="arc_progress_dialog_batch_register">进度: %d / %d</string>
+    <string name="arc_progress_dialog_registering_please_wait">注册中，请稍等</string>
+    <string name="arc_batch_process_finished_info">处理完成！\n处理总数 =  %d \n成功数 = %d \n失败数 = %d \n处理失败的图片已保存在文件夹 \' %s \'</string>
+    <string name="arc_not_alive">非活体</string>
+    <string name="arc_register_fail">注册失败!</string>
+    <string name="arc_register_success">注册成功!</string>
+    <string name="check_out">查询</string>
+
+</resources>

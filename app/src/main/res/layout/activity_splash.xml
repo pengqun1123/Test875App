@@ -52,7 +52,7 @@
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/loading" />
+            app:srcCompat="@drawable/icon_loading" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/loadingTv"

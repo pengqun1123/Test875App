@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 
 import com.baselibrary.base.BaseApplication;
 import com.baselibrary.callBack.CardInfoListener;
@@ -15,7 +14,6 @@ import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
 import com.baselibrary.dao.db.IdCardDao;
 import com.baselibrary.pojo.IdCard;
-import com.baselibrary.pojo.User;
 import com.zkteco.android.IDReader.IDPhotoHelper;
 import com.zkteco.android.IDReader.WLTService;
 import com.zkteco.android.biometric.core.device.ParameterHelper;

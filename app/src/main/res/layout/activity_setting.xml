@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.SettingActivity">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/normal_toolbar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_50"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/goToUser"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/user"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/userCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_35"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14"
+                    tools:ignore="RelativeOverlap"
+                    tools:text="235人" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToData"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/data"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToMyDev"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/my_dev"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToEtherNet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/ether_net"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/etherNetConnectStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_35"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14"
+                    tools:ignore="RelativeOverlap"
+                    tools:text="@string/connect" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToWLAN"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/wlan"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/wlanConnectStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_35"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14"
+                    android:visibility="gone"
+                    tools:ignore="RelativeOverlap"
+                    tools:text="@string/connect" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToServer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/server"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/serverConnectStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_35"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14"
+                    tools:ignore="RelativeOverlap"
+                    tools:text="@string/connect" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/show"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="@string/screen_light"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16" />
+
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:max="100"
+                    android:maxHeight="@dimen/dp_8"
+                    android:minHeight="@dimen/dp_8"
+                    android:padding="@dimen/dp_5"
+                    android:progress="55"
+                    android:progressDrawable="@drawable/seekbar_shape"
+                    android:thumb="@drawable/my_seekbar_thumb" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/goToScreenCover"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_45"
+                android:background="@drawable/btn_press_bg">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/screen_cover"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16"
+                    tools:ignore="RelativeOverlap" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:padding="@dimen/dp_5"
+                    app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/voice"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="@string/dev_voice"
+                    android:textColor="@color/black_0"
+                    android:textSize="@dimen/sp_16" />
+
+                <android.support.v7.widget.AppCompatSeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:max="100"
+                    android:maxHeight="@dimen/dp_8"
+                    android:minHeight="@dimen/dp_8"
+                    android:padding="@dimen/dp_5"
+                    android:progress="55"
+                    android:progressDrawable="@drawable/seekbar_shape"
+                    android:thumb="@drawable/my_seekbar_thumb" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/model"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:id="@+id/goToDevModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/devModel"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/serverCheckModel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:text="@string/server_check_model"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToGroupCheckModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/devModel"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/groupCheckModel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="指静脉|人脸|IC卡|密码" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/date_time"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_net_auto_check_date"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openNetCheckTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToSetDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/set_date"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/currentDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="2020年01月30日" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToSetTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/set_time"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/currentTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="16:49" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/door_guard"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_door_guard"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openDoorGuard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToDoorGuardDelayed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/door_guard_delayed"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/doorGuardTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="3S" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_door_guard_fail"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openDoorGuardFail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToGuardDelayed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/guard_delayed"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/guardDelayedTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="3S" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/weigen"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_weigen"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openWeigen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToSetWeigen"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/weigen_count"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/weigenCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="26位" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/guard"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_fanchai_guard"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openFangChaiGuard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_check_fail_guard"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openCheckGuard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToSetCheckFailCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/check_fail_count"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/checkFailCountTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="5次" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/other"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_check_repeat"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openCheckRepeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_0_8"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/reboot"
+                    android:textColor="@color/black_5"
+                    android:textSize="@dimen/sp_14" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/open_fix_reboot"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <com.baselibrary.widget.SwitchButton
+                        android:id="@+id/openFixReboot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        app:switchStatus="open"
+                        tools:ignore="RelativeOverlap" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToRebootCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/reboot_count"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/rebootCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="每天" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/goToRebootTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_0_8"
+                    android:background="@drawable/btn_press_bg">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="@string/reboot_time"
+                        android:textColor="@color/black_0"
+                        android:textSize="@dimen/sp_16"
+                        tools:ignore="RelativeOverlap" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:padding="@dimen/dp_5"
+                        app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/rebootTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp_35"
+                        android:textColor="@color/black_5"
+                        android:textSize="@dimen/sp_14"
+                        tools:ignore="RelativeOverlap"
+                        tools:text="PM 12:00" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

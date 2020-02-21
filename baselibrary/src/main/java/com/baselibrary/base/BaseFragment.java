@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 
 import com.baselibrary.listener.OnceClickListener;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created By pq
  * on 2019/9/30
@@ -17,6 +20,7 @@ import com.baselibrary.listener.OnceClickListener;
 public abstract class BaseFragment extends Fragment {
 
     private View mView;
+    private Unbinder unbinder;
 
     protected abstract Integer contentView();
 
@@ -34,6 +38,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(contentView(), container, false);
+        unbinder = ButterKnife.bind(this, mView);
         initData();
         initView();
         return mView;
@@ -58,5 +63,11 @@ public abstract class BaseFragment extends Fragment {
             view.setOnClickListener(clickListener);
         }
         return (T) view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

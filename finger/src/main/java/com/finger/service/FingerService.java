@@ -10,12 +10,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 
 import com.baselibrary.callBack.FingerVerifyResultListener;
 import com.baselibrary.constant.AppConstant;
 import com.baselibrary.pojo.Finger6;
 import com.baselibrary.util.FingerListManager;
-import com.baselibrary.util.ToastUtils;
 import com.finger.constant.FingerConstant;
 import com.finger.fingerApi.FingerApi;
 import com.orhanobut.logger.Logger;
@@ -39,7 +39,7 @@ public class FingerService extends Service {
     }
 
     private Messenger fingerUtilMessenger;
-    private Activity activity;
+    private static Activity activity;
     private Boolean isLoop = false;
     private FingerVerifyResultListener fingerVerifyResultListener;
 

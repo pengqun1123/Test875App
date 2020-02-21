@@ -12,11 +12,11 @@ import com.baselibrary.pojo.Finger6;
 import com.finger.R;
 import com.finger.callBack.AllFingerData;
 import com.finger.callBack.FingerDevStatusCallBack;
-import com.finger.callBack.FingerRegisterCallBack;
 import com.finger.callBack.OnCancelFingerImg;
 import com.orhanobut.logger.Logger;
 import com.sd.tgfinger.CallBack.CancelImgCallBack;
 import com.sd.tgfinger.CallBack.DevCloseCallBack;
+import com.sd.tgfinger.CallBack.DevFwCallBack;
 import com.sd.tgfinger.CallBack.DevOpenCallBack;
 import com.sd.tgfinger.CallBack.DevStatusCallBack;
 import com.sd.tgfinger.CallBack.FvInitCallBack;
@@ -78,12 +78,28 @@ public class FingerApi {
                         DevOpenCallBack devOpenCallBack, DevStatusCallBack devStatusCallBack) {
         if (!TGBApi.getTGAPI().isDevOpen()) {
             //初始化准备数据
-            TGBApi.getTGAPI().openDev(activity, Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, sound
-                    , false, devOpenCallBack, devStatusCallBack);
+            TGBApi.getTGAPI().openDev(activity, Constant.WORK_BEHIND, Constant.TEMPL_MODEL_6, sound,
+                    false, devOpenCallBack, devStatusCallBack);
         } else {
             Logger.d(activity.getString(R.string.dev_open));
         }
     }
+
+    /**
+     * 获取设备的固件号
+     */
+    public void getFingerDevFW(@NonNull Activity activity, DevFwCallBack devFwCallBack) {
+        TGBApi.getTGAPI().devFw(activity, devFwCallBack);
+    }
+
+//    /**
+//     * 设置声音
+//     *
+//     * @param isSound 指静脉是否播放声音
+//     */
+//    public void setSound(boolean isSound) {
+//        TGBApi.getTGAPI().setSound(isSound);
+//    }
 
     /**
      * 指静脉注册

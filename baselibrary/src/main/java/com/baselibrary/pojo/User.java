@@ -54,6 +54,8 @@ public class User implements Parcelable {
     Finger6 finger6;
     @Property(nameInDb = "faceId")
     Long faceId;
+    @Property(nameInDb = "arcFaceId")
+    Long arcFaceId;
     @ToOne(joinProperty = "faceId")
     Face face;
     @Property(nameInDb = "cardId")
@@ -66,10 +68,11 @@ public class User implements Parcelable {
     /** Used for active entity operations. */
     @Generated(hash = 1507654846)
     private transient UserDao myDao;
-    @Generated(hash = 292060493)
+    @Generated(hash = 311753857)
     public User(Long uId, String name, String age, String sex, String phone,
             String organizName, String section, String workNum, Long pwId,
-            Long finger3Id, Long finger6Id, Long faceId, Long cardId) {
+            Long finger3Id, Long finger6Id, Long faceId, Long arcFaceId,
+            Long cardId) {
         this.uId = uId;
         this.name = name;
         this.age = age;
@@ -82,6 +85,7 @@ public class User implements Parcelable {
         this.finger3Id = finger3Id;
         this.finger6Id = finger6Id;
         this.faceId = faceId;
+        this.arcFaceId = arcFaceId;
         this.cardId = cardId;
     }
     @Generated(hash = 586692638)
@@ -121,6 +125,11 @@ public class User implements Parcelable {
             faceId = null;
         } else {
             faceId = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            arcFaceId = null;
+        } else {
+            arcFaceId = in.readLong();
         }
         if (in.readByte() == 0) {
             cardId = null;
@@ -212,6 +221,12 @@ public class User implements Parcelable {
     }
     public void setFaceId(Long faceId) {
         this.faceId = faceId;
+    }
+    public Long getArcFaceId() {
+        return this.arcFaceId;
+    }
+    public void setArcFaceId(Long arcFaceId) {
+        this.arcFaceId = arcFaceId;
     }
     public Long getCardId() {
         return this.cardId;
@@ -410,50 +425,56 @@ public class User implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (uId == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(uId);
+            dest.writeByte((byte) 1);
+            dest.writeLong(uId);
         }
-        parcel.writeString(name);
-        parcel.writeString(age);
-        parcel.writeString(sex);
-        parcel.writeString(phone);
-        parcel.writeString(organizName);
-        parcel.writeString(section);
-        parcel.writeString(workNum);
+        dest.writeString(name);
+        dest.writeString(age);
+        dest.writeString(sex);
+        dest.writeString(phone);
+        dest.writeString(organizName);
+        dest.writeString(section);
+        dest.writeString(workNum);
         if (pwId == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(pwId);
+            dest.writeByte((byte) 1);
+            dest.writeLong(pwId);
         }
         if (finger3Id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(finger3Id);
+            dest.writeByte((byte) 1);
+            dest.writeLong(finger3Id);
         }
         if (finger6Id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(finger6Id);
+            dest.writeByte((byte) 1);
+            dest.writeLong(finger6Id);
         }
-        parcel.writeParcelable(finger6, i);
+        dest.writeParcelable(finger6, flags);
         if (faceId == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(faceId);
+            dest.writeByte((byte) 1);
+            dest.writeLong(faceId);
+        }
+        if (arcFaceId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(arcFaceId);
         }
         if (cardId == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(cardId);
+            dest.writeByte((byte) 1);
+            dest.writeLong(cardId);
         }
     }
 }

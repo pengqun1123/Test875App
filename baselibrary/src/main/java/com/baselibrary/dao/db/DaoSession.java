@@ -8,6 +8,9 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.baselibrary.pojo.ArcFace;
+import com.baselibrary.pojo.ArcFeMaleFace;
+import com.baselibrary.pojo.ArcMaleFace;
 import com.baselibrary.pojo.Face;
 import com.baselibrary.pojo.Finger3;
 import com.baselibrary.pojo.Finger6;
@@ -17,6 +20,9 @@ import com.baselibrary.pojo.Pw;
 import com.baselibrary.pojo.Student;
 import com.baselibrary.pojo.User;
 
+import com.baselibrary.dao.db.ArcFaceDao;
+import com.baselibrary.dao.db.ArcFeMaleFaceDao;
+import com.baselibrary.dao.db.ArcMaleFaceDao;
 import com.baselibrary.dao.db.FaceDao;
 import com.baselibrary.dao.db.Finger3Dao;
 import com.baselibrary.dao.db.Finger6Dao;
@@ -35,6 +41,9 @@ import com.baselibrary.dao.db.UserDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig arcFaceDaoConfig;
+    private final DaoConfig arcFeMaleFaceDaoConfig;
+    private final DaoConfig arcMaleFaceDaoConfig;
     private final DaoConfig faceDaoConfig;
     private final DaoConfig finger3DaoConfig;
     private final DaoConfig finger6DaoConfig;
@@ -44,6 +53,9 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig studentDaoConfig;
     private final DaoConfig userDaoConfig;
 
+    private final ArcFaceDao arcFaceDao;
+    private final ArcFeMaleFaceDao arcFeMaleFaceDao;
+    private final ArcMaleFaceDao arcMaleFaceDao;
     private final FaceDao faceDao;
     private final Finger3Dao finger3Dao;
     private final Finger6Dao finger6Dao;
@@ -56,6 +68,15 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
+
+        arcFaceDaoConfig = daoConfigMap.get(ArcFaceDao.class).clone();
+        arcFaceDaoConfig.initIdentityScope(type);
+
+        arcFeMaleFaceDaoConfig = daoConfigMap.get(ArcFeMaleFaceDao.class).clone();
+        arcFeMaleFaceDaoConfig.initIdentityScope(type);
+
+        arcMaleFaceDaoConfig = daoConfigMap.get(ArcMaleFaceDao.class).clone();
+        arcMaleFaceDaoConfig.initIdentityScope(type);
 
         faceDaoConfig = daoConfigMap.get(FaceDao.class).clone();
         faceDaoConfig.initIdentityScope(type);
@@ -81,6 +102,9 @@ public class DaoSession extends AbstractDaoSession {
         userDaoConfig = daoConfigMap.get(UserDao.class).clone();
         userDaoConfig.initIdentityScope(type);
 
+        arcFaceDao = new ArcFaceDao(arcFaceDaoConfig, this);
+        arcFeMaleFaceDao = new ArcFeMaleFaceDao(arcFeMaleFaceDaoConfig, this);
+        arcMaleFaceDao = new ArcMaleFaceDao(arcMaleFaceDaoConfig, this);
         faceDao = new FaceDao(faceDaoConfig, this);
         finger3Dao = new Finger3Dao(finger3DaoConfig, this);
         finger6Dao = new Finger6Dao(finger6DaoConfig, this);
@@ -90,6 +114,9 @@ public class DaoSession extends AbstractDaoSession {
         studentDao = new StudentDao(studentDaoConfig, this);
         userDao = new UserDao(userDaoConfig, this);
 
+        registerDao(ArcFace.class, arcFaceDao);
+        registerDao(ArcFeMaleFace.class, arcFeMaleFaceDao);
+        registerDao(ArcMaleFace.class, arcMaleFaceDao);
         registerDao(Face.class, faceDao);
         registerDao(Finger3.class, finger3Dao);
         registerDao(Finger6.class, finger6Dao);
@@ -101,6 +128,9 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
+        arcFaceDaoConfig.clearIdentityScope();
+        arcFeMaleFaceDaoConfig.clearIdentityScope();
+        arcMaleFaceDaoConfig.clearIdentityScope();
         faceDaoConfig.clearIdentityScope();
         finger3DaoConfig.clearIdentityScope();
         finger6DaoConfig.clearIdentityScope();
@@ -109,6 +139,18 @@ public class DaoSession extends AbstractDaoSession {
         pwDaoConfig.clearIdentityScope();
         studentDaoConfig.clearIdentityScope();
         userDaoConfig.clearIdentityScope();
+    }
+
+    public ArcFaceDao getArcFaceDao() {
+        return arcFaceDao;
+    }
+
+    public ArcFeMaleFaceDao getArcFeMaleFaceDao() {
+        return arcFeMaleFaceDao;
+    }
+
+    public ArcMaleFaceDao getArcMaleFaceDao() {
+        return arcMaleFaceDao;
     }
 
     public FaceDao getFaceDao() {

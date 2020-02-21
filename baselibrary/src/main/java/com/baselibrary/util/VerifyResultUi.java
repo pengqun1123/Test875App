@@ -43,4 +43,11 @@ public class VerifyResultUi {
         ToastUtils.showSquareImgToast(activity, tip,
                 ActivityCompat.getDrawable(activity, R.drawable.ic_tick));
     }
+
+    public static void showTvToast(@NonNull Activity activity,String tip){
+        ToastUtils.showSingleToast(activity,tip);
+    }
+    public static void showTvLongToast(@NonNull Activity activity,String tip){
+        ToastUtils.showSingleToast(activity,tip);
+    }
 }

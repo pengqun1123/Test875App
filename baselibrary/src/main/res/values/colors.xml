@@ -53,11 +53,12 @@
     <color name="grey">#EDEEED</color>
     <color name="common_bg_press">#a1a1a1</color>
     <color name="gray">#ababaa</color>
+    <color name="white_gray_f5">#d5d5d5</color>
+    <color name="white_8a">#8a8a8a</color>
     <color name="black_cd">#FFCDCDCD</color>
     <color name="black_dd">#FFDDDDDD</color>
     <color name="white_50">#66FFFFFF</color>
     <color name="white_50_alpha">#35FFFFFF</color>
-
 
     <color name="gold">#FFD700</color>
     <color name="yellow">#FFFF00</color>
@@ -138,6 +139,7 @@
     <color name="plum_23_6A">#6AFFBBFF</color>
     <color name="plum_24">#fbcbfa</color>
 
+    <color name="blue_0">#1D86CE</color>
     <color name="blue_1">#000080</color>
     <color name="blue_2">#0000CD</color>
     <color name="blue_3">#0000FF</color>

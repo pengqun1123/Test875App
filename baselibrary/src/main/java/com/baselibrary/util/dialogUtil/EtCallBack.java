@@ -1,6 +1,6 @@
 package com.baselibrary.util.dialogUtil;
 
-import android.support.v7.app.AlertDialog;
+import android.app.Dialog;
 
 /**
  * Created By pq
@@ -8,5 +8,5 @@ import android.support.v7.app.AlertDialog;
  */
 public interface EtCallBack {
 
-    void etContent(String content, AlertDialog alertDialog);
+    void etContent(String content, Dialog alertDialog);
 }

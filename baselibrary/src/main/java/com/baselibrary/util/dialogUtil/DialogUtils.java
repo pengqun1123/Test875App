@@ -15,7 +15,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.baselibrary.R;
-import com.orhanobut.logger.Logger;
+import com.baselibrary.dialog.DialogCallBack;
+
 
 /**
  * Created by **
@@ -69,13 +70,6 @@ public class DialogUtils {
         return this;
     }
 
-    private Float mDialogH;
-
-    public DialogUtils setDialogH(Float dialogH) {
-        mDialogH = dialogH;
-        return this;
-    }
-
     //设置点击dialog外围是否取消
     private Boolean mIsCancel = false;
 
@@ -96,9 +90,21 @@ public class DialogUtils {
     private Boolean mHasMargin = false;
     //对话框站窗口宽度的比例
     private float rateW = 4 / 5;
+    private float rateH = 4 / 5;
+    private boolean wEqualH = false;
+
+    public DialogUtils setWequalH(boolean isEq) {
+        this.wEqualH = isEq;
+        return this;
+    }
 
     public DialogUtils setRateW(float newRateW) {
         rateW = newRateW;
+        return this;
+    }
+
+    public DialogUtils setRateH(float newRateH) {
+        rateH = newRateH;
         return this;
     }
 
@@ -126,42 +132,99 @@ public class DialogUtils {
         //给dialog设置布局
         alertDialog.setView(mView);
         Window window = alertDialog.getWindow();
-        assert window != null;
-        WindowManager.LayoutParams lp = window.getAttributes();
-        WindowManager windowManager = activity.getWindowManager();
-        Display defaultDisplay = windowManager.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        defaultDisplay.getMetrics(metrics);
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        if (mHasMargin) {
-            lp.width = (int) (metrics.widthPixels * rateW);
-        } else {
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        }
-        window.getDecorView().setPadding(0, 0, 0, 0);
         //从Android 4.1开始向上兼容，对下不兼容
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             if (mRes == null) {
-                window.getDecorView().setBackground(activity.getResources().getDrawable(R.drawable.dialog_top_bg));
+                window.getDecorView().setBackground(activity.getResources()
+                        .getDrawable(R.drawable.dialog_all_5_radiu_bg));
             } else {
                 window.getDecorView().setBackground(activity.getResources().getDrawable(mRes));
             }
         }
-        //设置位置
-        window.setGravity(mGravity);
-        lp.gravity = mGravity;
         //设置window动画
         if (mDialogAnimStyle != null) {
             window.setWindowAnimations(mDialogAnimStyle);
         }
-        window.setAttributes(lp);
         //设置点击外围取消
         alertDialog.setCanceledOnTouchOutside(mIsCancel);
         alertDialog.setCancelable(mIsCancel);
         //展示dialog
         if (!activity.isFinishing()) {
-            Logger.d("展示Dialog");
             alertDialog.show();
+            assert window != null;
+            WindowManager.LayoutParams lp = window.getAttributes();
+            WindowManager windowManager = activity.getWindowManager();
+            Display defaultDisplay = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            defaultDisplay.getMetrics(metrics);
+            if (mHasMargin) {
+                lp.width = (int) (metrics.widthPixels * rateW);
+                if (wEqualH) {
+                    lp.height = (int) (metrics.widthPixels * rateH);
+                } else {
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                }
+                lp.gravity = Gravity.CENTER;
+            } else {
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            }
+            window.getDecorView().setPadding(0, 0, 0, 0);
+            //设置位置
+            window.setGravity(mGravity);
+            window.setAttributes(lp);
+        }
+        return alertDialog;
+    }
+
+    public Dialog GmDialog(Activity activity) {
+        AlertDialog.Builder builder;
+        AlertDialog alertDialog;
+        if (mDialogStyle != null) {
+            builder = new AlertDialog.Builder(activity, mDialogStyle);
+        } else {
+            builder = new AlertDialog.Builder(activity);
+        }
+        alertDialog = builder.create();
+        //给dialog设置布局
+        alertDialog.setView(mView);
+        Window window = alertDialog.getWindow();
+        //从Android 4.1开始向上兼容，对下不兼容
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (mRes == null) {
+                window.getDecorView().setBackground(activity.getResources()
+                        .getDrawable(R.drawable.dialog_all_5_radiu_bg));
+            } else {
+                window.getDecorView().setBackground(activity.getResources().getDrawable(mRes));
+            }
+        }
+        //设置window动画
+        if (mDialogAnimStyle != null) {
+            window.setWindowAnimations(mDialogAnimStyle);
+        }
+        //设置点击外围取消
+        alertDialog.setCanceledOnTouchOutside(mIsCancel);
+        alertDialog.setCancelable(mIsCancel);
+        //展示dialog
+        if (!activity.isFinishing()) {
+            alertDialog.show();
+            assert window != null;
+            WindowManager.LayoutParams lp = window.getAttributes();
+            WindowManager windowManager = activity.getWindowManager();
+            Display defaultDisplay = windowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            defaultDisplay.getMetrics(metrics);
+            if (mHasMargin) {
+                lp.width = (int) (metrics.widthPixels * rateW);
+                lp.gravity = Gravity.CENTER;
+            } else {
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            }
+            window.getDecorView().setPadding(0, 0, 0, 0);
+            //设置位置
+            window.setGravity(mGravity);
+            window.setAttributes(lp);
         }
         return alertDialog;
     }
@@ -185,7 +248,7 @@ public class DialogUtils {
         View decorView = win.getDecorView();
         decorView.setPadding(0, 0, 0, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            decorView.setBackground(activity.getResources().getDrawable(R.drawable.dialog_top_bg));
+            decorView.setBackground(activity.getResources().getDrawable(R.drawable.dialog_top_3_radiu_bg));
         }
         if (mGravity != null) {
             win.setGravity(mGravity);
@@ -194,13 +257,23 @@ public class DialogUtils {
             win.setWindowAnimations(mDialogAnimStyle);
         }
         WindowManager.LayoutParams lp = win.getAttributes();
-        lp.width = outSize.x;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        win.setAttributes(lp);
+        lp.gravity = mGravity;
+        if (mHasMargin) {
+            lp.width = (int) (outSize.x * rateW);
+            if (wEqualH) {
+                lp.height = (int) (outSize.x * rateH);
+            } else {
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            }
+        } else {
+            lp.width = outSize.x;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        }
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(true);
         if (!activity.isFinishing()) {
             dialog.show();
+            win.setAttributes(lp);
         }
         return dialog;
     }
@@ -214,17 +287,21 @@ public class DialogUtils {
 
     public void showNormalAlertDialog(Context context, Integer msg) {
         AlertDialog.Builder builder;
+//        if (mDialogStyle != null) {
+//            builder = new AlertDialog.Builder(context, mDialogStyle);
+//        } else {
         builder = new AlertDialog.Builder(context);
+//        }
         builder.setMessage(msg)
                 .setPositiveButton(context.getString(R.string.confirm), (dialog, which) -> {
                     if (mDialogCallBack != null) {
-                        mDialogCallBack.positiveClick(dialog);
+                        mDialogCallBack.yesCallBack("");
                         dialog.dismiss();
                     }
                 })
                 .setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> {
                     if (mDialogCallBack != null) {
-                        mDialogCallBack.negativeClick(dialog);
+                        mDialogCallBack.noCallBack("");
                         dialog.dismiss();
                     }
                 })

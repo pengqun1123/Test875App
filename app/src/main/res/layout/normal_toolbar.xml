@@ -47,7 +47,7 @@
         android:layout_marginTop="@dimen/dp_33"
         android:background="?android:attr/selectableItemBackground"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_back_last" />
+        app:srcCompat="@drawable/ic_back_left_white" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/rightTv"
@@ -61,4 +61,15 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15"
         android:visibility="gone" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/rightIcon"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_35"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_33"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_check_mark" />
 </RelativeLayout>

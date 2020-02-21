@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="arc_colorPrimary">#008577</color>
+    <color name="arc_colorPrimaryDark">#00574B</color>
+    <color name="arc_colorAccent">#D81B60</color>
+    <color name="arc_color_bg_notification">#80000000</color>
+    <color name="arc_color_bg_name">#80000000</color>
+
+</resources>

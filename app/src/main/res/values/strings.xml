@@ -16,7 +16,7 @@
     <string name="pw_verify_model_tip">
         手动输入密码的方式进行注册及验证!
     </string>
-    <string name="name">用户姓名</string>
+    <string name="name">姓名</string>
     <string name="sex">性  别</string>
     <string name="man">男</string>
     <string name="woman">女</string>
@@ -137,7 +137,7 @@
     <string name="delete_manager">删除管理员</string>
     <string name="delete_user">删除用户</string>
     <string name="pw_register_repeat">密码注册重复!</string>
-    <string name="user_no">用户编号</string>
+    <string name="user_no">工号</string>
     <string name="register_finger">已注册指静脉</string>
     <string name="has_register_face">已注册人脸</string>
     <string name="has_register_card">已注册身份证</string>
@@ -145,6 +145,54 @@
     <string name="no_register">未注册</string>
     <string name="had_register">已注册</string>
     <string name="is_open_face">启用人脸识别:</string>
+    <string name="user">用户</string>
+    <string name="data">数据</string>
+    <string name="my_dev">我的设备</string>
+    <string name="ether_net">以太网</string>
+    <string name="no_connect">未连接</string>
+    <string name="connect">已连接</string>
+    <string name="wlan">WLAN</string>
+    <string name="server">服务器</string>
+    <string name="show">显示</string>
+    <string name="screen_light">屏幕亮度</string>
+    <string name="screen_cover">屏保</string>
+    <string name="voice">声音</string>
+    <string name="dev_voice">设备声音</string>
+    <string name="devModel">设备模式</string>
+    <string name="server_check_model">服务器验证模式</string>
+    <string name="model">模式</string>
+    <string name="date_time">日期与时间</string>
+    <string name="open_net_auto_check_date">开启网络自动校时</string>
+    <string name="set_date">设置日期</string>
+    <string name="set_time">设置时间</string>
+    <string name="door_guard">门禁</string>
+    <string name="open_door_guard">开启门禁</string>
+    <string name="door_guard_delayed">门禁延时</string>
+    <string name="open_door_guard_fail">开启门禁闭合失败警报</string>
+    <string name="guard_delayed">警报延时</string>
+    <string name="weigen">韦根</string>
+    <string name="open_weigen">开启韦根</string>
+    <string name="weigen_count">韦根位数</string>
+    <string name="guard">警报</string>
+    <string name="open_fanchai_guard">开启防拆警报</string>
+    <string name="open_check_fail_guard">开启验证失败警报</string>
+    <string name="check_fail_count">验证失败次数</string>
+    <string name="other">其他</string>
+    <string name="open_check_repeat">开启重复注册验证</string>
+    <string name="reboot">重启</string>
+    <string name="open_fix_reboot">开启定时重启</string>
+    <string name="reboot_count">重启频率</string>
+    <string name="reboot_time">重启时间</string>
+    <string name="all_department">所有部门</string>
+    <string name="department">部门</string>
+    <string name="jurisdiction">权限</string>
+    <string name="finger_1">左食指</string>
+    <string name="finger_2">左中指</string>
+    <string name="finger_3">左无名指</string>
+    <string name="finger_4">右食指</string>
+    <string name="finger_5">右中指</string>
+    <string name="finger_6">右无名指</string>
+    <string name="more_select">更多选项</string>
 
 
 </resources>

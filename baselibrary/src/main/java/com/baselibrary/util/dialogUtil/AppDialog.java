@@ -25,9 +25,9 @@ public class AppDialog {
                 .gMDialog(activity);
     }
 
-    public static void showAskDialog(Context context, Integer msgRes, DialogCallBack dialogCallBack) {
-        DialogUtils.instance()
-                .setDialogCallBack(dialogCallBack)
-                .showNormalAlertDialog(context, msgRes);
-    }
+//    public static void showAskDialog(Context context, Integer msgRes) {
+//        DialogUtils.instance()
+//                .setDialogCallBack()
+//                .showNormalAlertDialog(context, msgRes);
+//    }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="arc_dp_200">200dp</dimen>
+    <dimen name="arc_sp_24">24sp</dimen>
+    <dimen name="arc_sp_34">34sp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+</resources>

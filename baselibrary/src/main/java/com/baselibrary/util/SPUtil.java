@@ -76,6 +76,16 @@ public class SPUtil {
         return instance().getBoolean(AppConstant.FINGER_VERIFY_MODEL, false);
     }
 
+    //标记虹软人脸SDK是否已经激活
+    public static void putArcSoftSDK_Activated(Boolean isActivated) {
+        instance().putBoolean(AppConstant.ARC_FACE_ACTIVATED, isActivated);
+    }
+
+    //获取虹软人脸SDK是否已经激活
+    public static Boolean getArcSoftSDK_Activated() {
+        return instance().getBoolean(AppConstant.ARC_FACE_ACTIVATED, false);
+    }
+
     //存储人脸注册的标记
     public static void putFaceVerifyFlag(Boolean flag) {
         instance().putBoolean(AppConstant.FACE_VERIFY_MODEL, flag);

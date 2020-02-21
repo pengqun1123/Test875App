@@ -17,6 +17,21 @@
         tools:ignore=",AllowBackup,GoogleAppIndexingWarning,RtlEnabled"
         tools:replace="android:name"
         tools:targetApi="donut">
+        <activity android:name=".activity.MyDevActivity"></activity>
+        <activity android:name=".activity.DataActivity" />
+        <activity android:name=".activity.AddDepartmentUserActivity" />
+        <activity android:name=".activity.DepartmentUserActivity" />
+        <activity android:name=".activity.DepartmentActivity" />
+        <activity android:name=".activity.UserActivity">
+
+        </activity>
+        <activity android:name=".activity.SettingActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.AppRegisterActivity"
             android:theme="@style/activityPublicStyle" />
@@ -25,13 +40,7 @@
             android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/activityPublicStyle">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/activityPublicStyle" />
         <activity
             android:name=".activity.ManagerActivity"
             android:theme="@style/activityPublicStyle" />
@@ -41,7 +50,7 @@
         <activity
             android:name=".activity.SearchActivity"
             android:theme="@style/activityPublicStyle" />
-        <activity android:name=".activity.MenuActivity"></activity>
+        <activity android:name=".activity.MenuActivity" />
     </application>
 
 </manifest>

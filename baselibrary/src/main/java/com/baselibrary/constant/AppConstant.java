@@ -25,6 +25,7 @@ public final class AppConstant {
     public static final String MANAGER_PWD = "manager_pwd";
     //可注册的最大管理员数量
     public static final String MAX_MANAGER = "max_manager";
+    public static final String ARC_FACE_ACTIVATED = "activated";
     //指静脉的数据
     public static final String FINGER_DATA = "finger_data";
     public static final String FACE_ID = "faceId";

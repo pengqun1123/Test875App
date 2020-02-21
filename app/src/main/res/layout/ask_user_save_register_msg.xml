@@ -42,9 +42,9 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/cancelBtn"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_70"
+            android:layout_height="@dimen/dp_60"
             android:layout_weight="0.99"
-            android:background="@drawable/wave_border_less_ripple"
+            android:background="@drawable/btn_press_bg"
             android:text="@string/no"
             android:textColor="@color/black_0"
             android:textSize="@dimen/sp_18" />
@@ -57,10 +57,10 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/positiveBtn"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_70"
+            android:layout_height="@dimen/dp_60"
             android:layout_marginStart="@dimen/dp_0_8"
             android:layout_weight="0.999"
-            android:background="@drawable/wave_border_less_ripple"
+            android:background="@drawable/btn_press_bg"
             android:text="@string/yes"
             android:textColor="@color/blue_6"
             android:textSize="@dimen/sp_18" />

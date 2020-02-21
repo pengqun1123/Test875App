@@ -6,7 +6,7 @@
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/blue_5</item>
         <item name="colorPrimaryDark">@color/blue_15</item>
-        <item name="colorAccent">@color/gold</item>
+        <item name="colorAccent">@color/white_grey</item>
     </style>
 
     <!--背景全透明-->
