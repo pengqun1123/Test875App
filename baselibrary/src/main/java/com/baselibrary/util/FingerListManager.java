@@ -61,8 +61,8 @@ public class FingerListManager {
         boolean isEq = false;
         Finger6 removeFinger = null;
         for (Finger6 finger6 : fingerList) {
-            Long uId = finger6.getUId();
-            if (uId.equals(finger.getUId())) {
+            Long uId = finger6.getFingerId();
+            if (uId.equals(finger.getFingerId())) {
                 isEq = true;
                 removeFinger = finger6;
                 break;

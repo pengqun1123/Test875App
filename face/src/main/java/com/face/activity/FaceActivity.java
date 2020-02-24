@@ -52,8 +52,7 @@ public class FaceActivity extends AppCompatActivity {
 
         User user=new User();
         user.setName("张三");
-        user.setAge("22");
-        user.setPwId(pw.getUId());
+        user.setPwId(pw.getPwId());
 
         BaseApplication.getDbUtil().insertOrReplace(user);
 

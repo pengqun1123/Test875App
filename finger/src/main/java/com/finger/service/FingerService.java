@@ -195,7 +195,7 @@ public class FingerService extends Service {
                                 if (msg.getResult() == 1) {
                                     Integer index = msg.getIndex();
                                     Long fingerId = FingerListManager.getInstance()
-                                            .getFingerData().get(index).getUId();
+                                            .getFingerData().get(index).getFingerId();
                                     fingerVerifyResultListener.fingerVerifyResult(1,
                                             msg.getTip(), msg.getScore(), index,
                                             fingerId, msg.getFingerData());

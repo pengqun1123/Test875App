@@ -24,10 +24,10 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property UId = new Property(0, Long.class, "uId", true, "_id");
+        public final static Property CardId = new Property(0, Long.class, "cardId", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Nation = new Property(2, String.class, "nation", false, "NATION");
-        public final static Property Id = new Property(3, String.class, "id", false, "ID");
+        public final static Property CardNo = new Property(3, String.class, "cardNo", false, "CARD_NO");
         public final static Property Sex = new Property(4, String.class, "sex", false, "SEX");
         public final static Property Birthday = new Property(5, String.class, "birthday", false, "BIRTHDAY");
     }
@@ -45,10 +45,10 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ID_CARD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: cardId
                 "\"NAME\" TEXT," + // 1: name
                 "\"NATION\" TEXT," + // 2: nation
-                "\"ID\" TEXT," + // 3: id
+                "\"CARD_NO\" TEXT," + // 3: cardNo
                 "\"SEX\" TEXT," + // 4: sex
                 "\"BIRTHDAY\" TEXT);"); // 5: birthday
     }
@@ -63,9 +63,9 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
     protected final void bindValues(DatabaseStatement stmt, IdCard entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(1, cardId);
         }
  
         String name = entity.getName();
@@ -78,9 +78,9 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
             stmt.bindString(3, nation);
         }
  
-        String id = entity.getId();
-        if (id != null) {
-            stmt.bindString(4, id);
+        String cardNo = entity.getCardNo();
+        if (cardNo != null) {
+            stmt.bindString(4, cardNo);
         }
  
         String sex = entity.getSex();
@@ -98,9 +98,9 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
     protected final void bindValues(SQLiteStatement stmt, IdCard entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(1, cardId);
         }
  
         String name = entity.getName();
@@ -113,9 +113,9 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
             stmt.bindString(3, nation);
         }
  
-        String id = entity.getId();
-        if (id != null) {
-            stmt.bindString(4, id);
+        String cardNo = entity.getCardNo();
+        if (cardNo != null) {
+            stmt.bindString(4, cardNo);
         }
  
         String sex = entity.getSex();
@@ -137,10 +137,10 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
     @Override
     public IdCard readEntity(Cursor cursor, int offset) {
         IdCard entity = new IdCard( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uId
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // cardId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // nation
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // id
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // cardNo
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // sex
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // birthday
         );
@@ -149,24 +149,24 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
      
     @Override
     public void readEntity(Cursor cursor, IdCard entity, int offset) {
-        entity.setUId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setCardId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setNation(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCardNo(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSex(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setBirthday(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override
     protected final Long updateKeyAfterInsert(IdCard entity, long rowId) {
-        entity.setUId(rowId);
+        entity.setCardId(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(IdCard entity) {
         if(entity != null) {
-            return entity.getUId();
+            return entity.getCardId();
         } else {
             return null;
         }
@@ -174,7 +174,7 @@ public class IdCardDao extends AbstractDao<IdCard, Long> {
 
     @Override
     public boolean hasKey(IdCard entity) {
-        return entity.getUId() != null;
+        return entity.getCardId() != null;
     }
 
     @Override

@@ -161,7 +161,6 @@ public class AppRegisterActivity extends BaseActivity {
         }
     }
 
-
     private void queryUser(DBUtil dbUtil, String params) {
         WhereCondition whereCondition = UserDao.Properties.Name.eq(params);
         dbUtil.setDbCallBack(new DbCallBack<User>() {
@@ -282,12 +281,7 @@ public class AppRegisterActivity extends BaseActivity {
                             String companyName, String department, String staffNo) {
         User user = new User();
         user.setName(userName);
-        user.setAge(userAge);
-        user.setSex(sex);
-        user.setPhone(userPhone);
-        user.setOrganizName(companyName);
-        user.setSection(department);
-        user.setWorkNum(staffNo);
+
         return user;
     }
 
@@ -299,7 +293,7 @@ public class AppRegisterActivity extends BaseActivity {
      */
     private void insertUser(User user, Integer type) {
         if (AppRegisterActivity.this.pw != null) {
-            Long pwId = AppRegisterActivity.this.pw.getUId();
+            Long pwId = AppRegisterActivity.this.pw.getPwId();
             user.setPwId(pwId);
             user.setPw(AppRegisterActivity.this.pw);
             DBUtil dbUtil = BaseApplication.getDbUtil();
@@ -344,9 +338,7 @@ public class AppRegisterActivity extends BaseActivity {
             }).insertAsyncSingle(user);
 
         } else if (AppRegisterActivity.this.fg6 != null || AppRegisterActivity.this.fg3 != null) {
-            Long fg6Id = AppRegisterActivity.this.fg6.getUId();
-            user.setFinger6Id(fg6Id);
-            user.setFinger6(AppRegisterActivity.this.fg6);
+            Long fg6Id = AppRegisterActivity.this.fg6.getFingerId();
             DBUtil dbUtil = BaseApplication.getDbUtil();
             dbUtil.setDbCallBack(new DbCallBack<User>() {
                 @Override

@@ -24,6 +24,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ArcFaceDao.createTable(db, ifNotExists);
         ArcFeMaleFaceDao.createTable(db, ifNotExists);
         ArcMaleFaceDao.createTable(db, ifNotExists);
+        DepartmentDao.createTable(db, ifNotExists);
         FaceDao.createTable(db, ifNotExists);
         Finger3Dao.createTable(db, ifNotExists);
         Finger6Dao.createTable(db, ifNotExists);
@@ -32,6 +33,8 @@ public class DaoMaster extends AbstractDaoMaster {
         PwDao.createTable(db, ifNotExists);
         StudentDao.createTable(db, ifNotExists);
         UserDao.createTable(db, ifNotExists);
+        TestIdCardDao.createTable(db, ifNotExists);
+        TestPersonDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -39,6 +42,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ArcFaceDao.dropTable(db, ifExists);
         ArcFeMaleFaceDao.dropTable(db, ifExists);
         ArcMaleFaceDao.dropTable(db, ifExists);
+        DepartmentDao.dropTable(db, ifExists);
         FaceDao.dropTable(db, ifExists);
         Finger3Dao.dropTable(db, ifExists);
         Finger6Dao.dropTable(db, ifExists);
@@ -47,6 +51,8 @@ public class DaoMaster extends AbstractDaoMaster {
         PwDao.dropTable(db, ifExists);
         StudentDao.dropTable(db, ifExists);
         UserDao.dropTable(db, ifExists);
+        TestIdCardDao.dropTable(db, ifExists);
+        TestPersonDao.dropTable(db, ifExists);
     }
 
     /**
@@ -68,6 +74,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ArcFaceDao.class);
         registerDaoClass(ArcFeMaleFaceDao.class);
         registerDaoClass(ArcMaleFaceDao.class);
+        registerDaoClass(DepartmentDao.class);
         registerDaoClass(FaceDao.class);
         registerDaoClass(Finger3Dao.class);
         registerDaoClass(Finger6Dao.class);
@@ -76,6 +83,8 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(PwDao.class);
         registerDaoClass(StudentDao.class);
         registerDaoClass(UserDao.class);
+        registerDaoClass(TestIdCardDao.class);
+        registerDaoClass(TestPersonDao.class);
     }
 
     public DaoSession newSession() {

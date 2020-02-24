@@ -24,7 +24,7 @@ public class PwDao extends AbstractDao<Pw, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property UId = new Property(0, Long.class, "uId", true, "_id");
+        public final static Property PwId = new Property(0, Long.class, "pwId", true, "_id");
         public final static Property Password = new Property(1, String.class, "password", false, "password");
     }
 
@@ -41,7 +41,7 @@ public class PwDao extends AbstractDao<Pw, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"PW\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: pwId
                 "\"password\" TEXT);"); // 1: password
     }
 
@@ -55,9 +55,9 @@ public class PwDao extends AbstractDao<Pw, Long> {
     protected final void bindValues(DatabaseStatement stmt, Pw entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long pwId = entity.getPwId();
+        if (pwId != null) {
+            stmt.bindLong(1, pwId);
         }
  
         String password = entity.getPassword();
@@ -70,9 +70,9 @@ public class PwDao extends AbstractDao<Pw, Long> {
     protected final void bindValues(SQLiteStatement stmt, Pw entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long pwId = entity.getPwId();
+        if (pwId != null) {
+            stmt.bindLong(1, pwId);
         }
  
         String password = entity.getPassword();
@@ -89,7 +89,7 @@ public class PwDao extends AbstractDao<Pw, Long> {
     @Override
     public Pw readEntity(Cursor cursor, int offset) {
         Pw entity = new Pw( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uId
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // pwId
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // password
         );
         return entity;
@@ -97,20 +97,20 @@ public class PwDao extends AbstractDao<Pw, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Pw entity, int offset) {
-        entity.setUId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setPwId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setPassword(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
     
     @Override
     protected final Long updateKeyAfterInsert(Pw entity, long rowId) {
-        entity.setUId(rowId);
+        entity.setPwId(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(Pw entity) {
         if(entity != null) {
-            return entity.getUId();
+            return entity.getPwId();
         } else {
             return null;
         }
@@ -118,7 +118,7 @@ public class PwDao extends AbstractDao<Pw, Long> {
 
     @Override
     public boolean hasKey(Pw entity) {
-        return entity.getUId() != null;
+        return entity.getPwId() != null;
     }
 
     @Override

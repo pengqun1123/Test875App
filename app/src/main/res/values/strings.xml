@@ -193,6 +193,26 @@
     <string name="finger_5">右中指</string>
     <string name="finger_6">右无名指</string>
     <string name="more_select">更多选项</string>
+    <string name="dev_name">设备名称</string>
+    <string name="dev_name_value">身份识别设备</string>
+    <string name="dev_model">设备型号</string>
+    <string name="ue_875">UE875</string>
+    <string name="dev_sn">设备SN</string>
+    <string name="dev_fw">设备FW</string>
+    <string name="android_version">Android版本</string>
+    <string name="finger_sn">指静脉模块SN</string>
+    <string name="finger_fw">指静脉模块FW</string>
+    <string name="reset">恢复出厂设置</string>
+    <string name="system_check">系统自检</string>
+    <string name="dev_pattern">设备模式</string>
+    <string name="dynamic">动态</string>
+    <string name="ip_address">IP地址</string>
+    <string name="mask">掩码</string>
+    <string name="gateway">网关</string>
+    <string name="open_wlan">开启WLAN</string>
+    <string name="port_no">端口号</string>
+    <string name="setting">设置</string>
+    <string name="enther_net">以太网</string>
 
 
 </resources>

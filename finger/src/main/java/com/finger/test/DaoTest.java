@@ -31,13 +31,11 @@ public class DaoTest {
         DBUtil dbUtil = BaseApplication.getDbUtil();
 
         Pw pw = new Pw();
-        pw.setUId(100L);
+        pw.setPwId(100L);
         pw.setPassword("123456");
 
         User user = new User();
         user.setName("里哈哈");
-        user.setSection("小子部门");
-        user.setWorkNum("100");
         user.setPwId(100L);
 
         PwDao pwDao = dbUtil.getDaoSession().getPwDao();

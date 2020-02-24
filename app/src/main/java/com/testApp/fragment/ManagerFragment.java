@@ -10,8 +10,6 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.baselibrary.base.BaseApplication;
@@ -21,11 +19,8 @@ import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.pojo.Manager;
 import com.baselibrary.util.SPUtil;
 import com.baselibrary.util.ToastUtils;
-import com.orhanobut.logger.Logger;
 import com.testApp.R;
 import com.testApp.adapter.ManagerAdapter;
-import com.testApp.adapter.UserManageAdapter;
-import com.testApp.callBack.PositionBtnClickListener;
 import com.testApp.dialog.AskDialog;
 
 import java.text.MessageFormat;

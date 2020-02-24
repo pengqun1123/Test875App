@@ -17,15 +17,24 @@
         tools:ignore=",AllowBackup,GoogleAppIndexingWarning,RtlEnabled"
         tools:replace="android:name"
         tools:targetApi="donut">
-        <activity android:name=".activity.MyDevActivity"></activity>
+        <activity android:name=".test.TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.ScreenCoverActivity" />
+        <activity android:name=".activity.ServerSetActivity" />
+        <activity android:name=".activity.WLANActivity" />
+        <activity android:name=".activity.EntherNetActivity" />
+        <activity android:name=".activity.MyDevActivity" />
         <activity android:name=".activity.DataActivity" />
         <activity android:name=".activity.AddDepartmentUserActivity" />
         <activity android:name=".activity.DepartmentUserActivity" />
         <activity android:name=".activity.DepartmentActivity" />
-        <activity android:name=".activity.UserActivity">
-
-        </activity>
-        <activity android:name=".activity.SettingActivity" >
+        <activity android:name=".activity.UserActivity" />
+        <activity android:name=".activity.SettingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,15 +51,8 @@
             android:name=".activity.SplashActivity"
             android:theme="@style/activityPublicStyle" />
         <activity
-            android:name=".activity.ManagerActivity"
-            android:theme="@style/activityPublicStyle" />
-        <activity
-            android:name=".activity.UserCenterActivity"
-            android:theme="@style/activityPublicStyle" />
-        <activity
             android:name=".activity.SearchActivity"
             android:theme="@style/activityPublicStyle" />
-        <activity android:name=".activity.MenuActivity" />
     </application>
 
 </manifest>

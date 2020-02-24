@@ -268,8 +268,8 @@ public class IDCardActivity extends AppCompatActivity {
             @Override
             public void onGetCardInfo(IdCard cardInfo) {
                 if (cardInfo!=null) {
-                            String s="姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，,身份证号：" + cardInfo.getId();
-                            textView.setText("姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，身份证号：" + cardInfo.getId());
+                            String s="姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，,身份证号：" + cardInfo.getCardId();
+                            textView.setText("姓名：" + cardInfo.getName() + "，民族：" + cardInfo.getNation() + "，身份证号：" + cardInfo.getCardId());
                             Bitmap bitmap = instance.getBitmap();
                             imageView.setImageBitmap(bitmap);
                             showMessage(s);

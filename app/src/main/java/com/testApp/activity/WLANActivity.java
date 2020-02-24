@@ -1,38 +1,34 @@
 package com.testApp.activity;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
-import com.baselibrary.util.SkipActivityUtil;
 import com.testApp.R;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 用户页面
+ * 无线网页面
  */
-public class UserActivity extends BaseActivity {
+public class WLANActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.backBtn)
     AppCompatImageView backBtn;
-    @BindView(R.id.searchUserBtn)
-    AppCompatTextView searchUserBtn;
-    @BindView(R.id.userList)
-    RecyclerView userList;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+    @BindView(R.id.openWLAN)
+    RelativeLayout openWLAN;
+    @BindView(R.id.wlanList)
+    RecyclerView wlanList;
 
     @Override
     protected Integer contentView() {
-        return R.layout.activity_user;
+        return R.layout.activity_wlan;
     }
 
     @Override
@@ -43,8 +39,7 @@ public class UserActivity extends BaseActivity {
     @Override
     protected void initView() {
         backBtn.setVisibility(View.VISIBLE);
-        toolbarTitle.setText(getString(R.string.user));
-
+        toolbarTitle.setText(getString(R.string.wlan));
     }
 
     @Override
@@ -57,20 +52,13 @@ public class UserActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.backBtn, R.id.searchUserBtn, R.id.goToAllDepartment, R.id.fab})
+    @OnClick({R.id.backBtn, R.id.openWLAN})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.backBtn:
                 finish();
                 break;
-            case R.id.searchUserBtn:
-                SkipActivityUtil.skipActivity(this, SearchActivity.class);
-                break;
-            case R.id.goToAllDepartment:
-                SkipActivityUtil.skipActivity(this, DepartmentActivity.class);
-                break;
-            case R.id.fab:
-                SkipActivityUtil.skipActivity(this, AddDepartmentUserActivity.class);
+            case R.id.openWLAN:
                 break;
         }
     }

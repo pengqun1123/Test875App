@@ -1,6 +1,5 @@
 package com.testApp.activity;
 
-import android.content.Intent;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -19,23 +18,20 @@ import android.widget.TextView;
 
 import com.baselibrary.base.BaseActivity;
 import com.baselibrary.base.BaseApplication;
-import com.baselibrary.constant.AppConstant;
 import com.baselibrary.dao.db.DBUtil;
 import com.baselibrary.dao.db.DbCallBack;
-import com.baselibrary.dao.db.UserDao;
 import com.baselibrary.pojo.User;
 import com.baselibrary.util.SoftInputKeyboardUtils;
-import com.baselibrary.util.ToastUtils;
 import com.testApp.R;
-import com.testApp.adapter.UserManageAdapter;
-import com.testApp.callBack.SearchDeleteUser;
-import com.testApp.dialog.AskDialog;
 
 import java.util.List;
 
+/**
+ * 搜索页面
+ */
 public class SearchActivity extends BaseActivity {
 
-    private UserManageAdapter userManageAdapter;
+//    private UserManageAdapter userManageAdapter;
     private AppCompatEditText search_edit;
     private AppCompatTextView noData;
 
@@ -72,9 +68,9 @@ public class SearchActivity extends BaseActivity {
                 OrientationHelper.VERTICAL, false);
         userRv.setLayoutManager(mLayoutManager);
         userRv.setItemAnimator(new DefaultItemAnimator());
-        userManageAdapter = new UserManageAdapter();
-        userManageAdapter.setCallBack(callBack);
-        userRv.setAdapter(userManageAdapter);
+//        userManageAdapter = new UserManageAdapter();
+//        userManageAdapter.setCallBack(callBack);
+//        userRv.setAdapter(userManageAdapter);
 
         search_edit.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_SEARCH) {
@@ -135,7 +131,7 @@ public class SearchActivity extends BaseActivity {
                 if (result != null && result.size() == 0) {
                     noData.setVisibility(View.VISIBLE);
                 } else {
-                    userManageAdapter.setData(result);
+//                    userManageAdapter.setData(result);
                     noData.setVisibility(View.GONE);
                 }
             }
@@ -151,28 +147,28 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition),
-                UserDao.Properties.Name.eq(condition));
+//        dbUtil.queryAsync(User.class, UserDao.Properties.WorkNum.eq(condition),
+//                UserDao.Properties.Name.eq(condition));
     }
 
-    private UserManageAdapter.UserItemCallBack callBack = new UserManageAdapter.UserItemCallBack() {
-        @Override
-        public void userItemCallBack(int position) {
-
-        }
-
-        @Override
-        public void itemLongClickListener(User user, String managerName, int position) {
-            AskDialog.deleteItemDataDialog(SearchActivity.this,
-                    user, null, managerName, flag -> {
-                        if (flag == 1) {
-                            Intent intent = new Intent();
-                            intent.setAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);
-                            intent.putExtra(AppConstant.USER, user);
-                            sendBroadcast(intent);
-                        }
-                    });
-        }
-    };
+//    private UserManageAdapter.UserItemCallBack callBack = new UserManageAdapter.UserItemCallBack() {
+//        @Override
+//        public void userItemCallBack(int position) {
+//
+//        }
+//
+//        @Override
+//        public void itemLongClickListener(User user, String managerName, int position) {
+//            AskDialog.deleteItemDataDialog(SearchActivity.this,
+//                    user, null, managerName, flag -> {
+//                        if (flag == 1) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(AppConstant.USER_MANAGER_BROADCAST_RECEIVER);
+//                            intent.putExtra(AppConstant.USER, user);
+//                            sendBroadcast(intent);
+//                        }
+//                    });
+//        }
+//    };
 
 }

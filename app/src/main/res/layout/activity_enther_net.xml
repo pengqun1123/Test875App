@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.EntherNetActivity">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/normal_toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/devPattern"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/dev_pattern"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            app:srcCompat="@drawable/ic_arrow_drop_down" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/devPatternValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_35"
+            android:text="@string/dynamic"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/ip_address"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/ipAddressValue"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:background="@null"
+            android:gravity="end"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RelativeOverlap"
+            tools:text="1248035803" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/mask"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/maskValue"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:background="@null"
+            android:gravity="end"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RelativeOverlap"
+            tools:text="155:255:12525" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/gateway"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/devModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RelativeOverlap"
+            tools:text="192.168.1.1.1" />
+    </RelativeLayout>
+
+</LinearLayout>

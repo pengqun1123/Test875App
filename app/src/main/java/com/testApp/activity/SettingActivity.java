@@ -124,9 +124,8 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void initView() {
 
-        if (backBtn != null) {
-            backBtn.setVisibility(View.VISIBLE);
-        }
+        backBtn.setVisibility(View.VISIBLE);
+        toolbarTitle.setText(getString(R.string.setting));
 
     }
 
@@ -161,12 +160,16 @@ public class SettingActivity extends BaseActivity {
                 SkipActivityUtil.skipActivity(this, MyDevActivity.class);
                 break;
             case R.id.goToEtherNet:
+                SkipActivityUtil.skipActivity(this, EntherNetActivity.class);
                 break;
             case R.id.goToWLAN:
+                SkipActivityUtil.skipActivity(this, WLANActivity.class);
                 break;
             case R.id.goToServer:
+                SkipActivityUtil.skipActivity(this, ServerSetActivity.class);
                 break;
             case R.id.goToScreenCover:
+                SkipActivityUtil.skipActivity(this, ScreenCoverActivity.class);
                 break;
             case R.id.goToDevModel:
                 break;

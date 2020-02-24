@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.WLANActivity">
+
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/normal_toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/openWLAN"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@drawable/btn_press_bg">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/open_wlan"
+            android:textColor="@color/black_0"
+            android:textSize="@dimen/sp_16"
+            tools:ignore="RelativeOverlap" />
+
+        <!--                <android.support.v7.widget.AppCompatImageView-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_alignParentEnd="true"-->
+        <!--                    android:layout_centerVertical="true"-->
+        <!--                    android:layout_marginEnd="@dimen/dp_10"-->
+        <!--                    android:padding="@dimen/dp_5"-->
+        <!--                    app:srcCompat="@drawable/ic_arrow_drop_down" />-->
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/devNameValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_35"
+            android:text="@string/dev_name_value"
+            android:textColor="@color/black_5"
+            android:textSize="@dimen/sp_14"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/wlanList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_0_8"
+        android:background="@color/white" />
+
+</LinearLayout>

@@ -13,13 +13,13 @@ public class TestApplication extends DemoApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        FingerApi.getInstance().startReStartFinger(this);
+//        FingerApi.getInstance().startReStartFinger(this);
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
-        FingerApi.getInstance().unReStartFinger(this);
+//        FingerApi.getInstance().unReStartFinger(this);
     }
 }
 

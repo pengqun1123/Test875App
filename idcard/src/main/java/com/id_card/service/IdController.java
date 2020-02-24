@@ -112,7 +112,7 @@ public class IdController {
                        IDCardInfo idCardInfo = idCardReader.getLastIDCardInfo();
                        idCard = new IdCard();
                        idCard.setName(idCardInfo.getName());
-                       idCard.setId(idCardInfo.getId());
+                       idCard.setCardNo(idCardInfo.getId());
                        idCard.setNation(idCardInfo.getNation());
                        idCard.setSex(idCardInfo.getSex());
                        idCard.setBirthday(idCardInfo.getBirth());
@@ -130,7 +130,7 @@ public class IdController {
                        idCard = new IdCard();
                        IDPRPCardInfo idprpCardInfo = idCardReader.getLastPRPIDCardInfo();
                        idCard.setName(idprpCardInfo.getCnName());
-                       idCard.setId(idprpCardInfo.getId());
+                       idCard.setCardNo(idprpCardInfo.getId());
                        idCard.setNation(idprpCardInfo.getCountry());
                        idCard.setSex(idprpCardInfo.getSex());
                        idCard.setBirthday(idprpCardInfo.getBirth());
@@ -221,12 +221,12 @@ public class IdController {
                        if (type==1) {
                            //注册
                            if (IdController.this.cardId!=-1) {
-                               idCard.setUId(IdController.this.cardId);
+                               idCard.setCardId(IdController.this.cardId);
                            }
                            dbUtil.insertAsyncSingle(idCard);
                        }else {
-                           String id = idCard.getId();
-                           dbUtil.queryAsync(IdCard.class, IdCardDao.Properties.Id.eq(id));
+                           String id = idCard.getCardNo();
+                           dbUtil.queryAsync(IdCard.class, IdCardDao.Properties.CardId.eq(id));
                        }
                    }
                }

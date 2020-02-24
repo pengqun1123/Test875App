@@ -1,5 +1,6 @@
 package com.baselibrary.dao.db;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -8,6 +9,8 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import com.baselibrary.pojo.Finger6;
 
@@ -24,10 +27,12 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property UId = new Property(0, Long.class, "uId", true, "_id");
-        public final static Property Finger6Feature = new Property(1, byte[].class, "finger6Feature", false, "feature");
+        public final static Property FingerId = new Property(0, Long.class, "fingerId", true, "_id");
+        public final static Property UserId = new Property(1, Long.class, "userId", false, "USER_ID");
+        public final static Property Finger6Feature = new Property(2, byte[].class, "finger6Feature", false, "fingerFeature");
     }
 
+    private Query<Finger6> user_Finger6ListQuery;
 
     public Finger6Dao(DaoConfig config) {
         super(config);
@@ -41,8 +46,9 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"FINGER6\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
-                "\"feature\" BLOB);"); // 1: finger6Feature
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: fingerId
+                "\"USER_ID\" INTEGER," + // 1: userId
+                "\"fingerFeature\" BLOB);"); // 2: finger6Feature
     }
 
     /** Drops the underlying database table. */
@@ -55,14 +61,19 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
     protected final void bindValues(DatabaseStatement stmt, Finger6 entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long fingerId = entity.getFingerId();
+        if (fingerId != null) {
+            stmt.bindLong(1, fingerId);
+        }
+ 
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(2, userId);
         }
  
         byte[] finger6Feature = entity.getFinger6Feature();
         if (finger6Feature != null) {
-            stmt.bindBlob(2, finger6Feature);
+            stmt.bindBlob(3, finger6Feature);
         }
     }
 
@@ -70,14 +81,19 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
     protected final void bindValues(SQLiteStatement stmt, Finger6 entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long fingerId = entity.getFingerId();
+        if (fingerId != null) {
+            stmt.bindLong(1, fingerId);
+        }
+ 
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(2, userId);
         }
  
         byte[] finger6Feature = entity.getFinger6Feature();
         if (finger6Feature != null) {
-            stmt.bindBlob(2, finger6Feature);
+            stmt.bindBlob(3, finger6Feature);
         }
     }
 
@@ -89,28 +105,30 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
     @Override
     public Finger6 readEntity(Cursor cursor, int offset) {
         Finger6 entity = new Finger6( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uId
-            cursor.isNull(offset + 1) ? null : cursor.getBlob(offset + 1) // finger6Feature
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // fingerId
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // userId
+            cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2) // finger6Feature
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, Finger6 entity, int offset) {
-        entity.setUId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setFinger6Feature(cursor.isNull(offset + 1) ? null : cursor.getBlob(offset + 1));
+        entity.setFingerId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setUserId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setFinger6Feature(cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2));
      }
     
     @Override
     protected final Long updateKeyAfterInsert(Finger6 entity, long rowId) {
-        entity.setUId(rowId);
+        entity.setFingerId(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(Finger6 entity) {
         if(entity != null) {
-            return entity.getUId();
+            return entity.getFingerId();
         } else {
             return null;
         }
@@ -118,7 +136,7 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
 
     @Override
     public boolean hasKey(Finger6 entity) {
-        return entity.getUId() != null;
+        return entity.getFingerId() != null;
     }
 
     @Override
@@ -126,4 +144,18 @@ public class Finger6Dao extends AbstractDao<Finger6, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "finger6List" to-many relationship of User. */
+    public List<Finger6> _queryUser_Finger6List(Long userId) {
+        synchronized (this) {
+            if (user_Finger6ListQuery == null) {
+                QueryBuilder<Finger6> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.UserId.eq(null));
+                user_Finger6ListQuery = queryBuilder.build();
+            }
+        }
+        Query<Finger6> query = user_Finger6ListQuery.forCurrentThread();
+        query.setParameter(0, userId);
+        return query.list();
+    }
+
 }

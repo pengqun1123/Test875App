@@ -11,10 +11,11 @@ import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.QueryBuilder;
 
-import com.baselibrary.pojo.Face;
-import com.baselibrary.pojo.Finger3;
-import com.baselibrary.pojo.Finger6;
+import com.baselibrary.pojo.ArcFace;
+import com.baselibrary.pojo.Department;
 import com.baselibrary.pojo.IdCard;
 import com.baselibrary.pojo.Pw;
 
@@ -34,23 +35,19 @@ public class UserDao extends AbstractDao<User, Long> {
      */
     public static class Properties {
         public final static Property UId = new Property(0, Long.class, "uId", true, "_id");
-        public final static Property Name = new Property(1, String.class, "name", false, "name");
-        public final static Property Age = new Property(2, String.class, "age", false, "age");
-        public final static Property Sex = new Property(3, String.class, "sex", false, "sex");
-        public final static Property Phone = new Property(4, String.class, "phone", false, "phone");
-        public final static Property OrganizName = new Property(5, String.class, "organizName", false, "organizName");
-        public final static Property Section = new Property(6, String.class, "section", false, "section");
-        public final static Property WorkNum = new Property(7, String.class, "workNum", false, "workNum");
-        public final static Property PwId = new Property(8, Long.class, "pwId", false, "pwId");
-        public final static Property Finger3Id = new Property(9, Long.class, "finger3Id", false, "finger3Id");
-        public final static Property Finger6Id = new Property(10, Long.class, "finger6Id", false, "finger6Id");
-        public final static Property FaceId = new Property(11, Long.class, "faceId", false, "faceId");
-        public final static Property ArcFaceId = new Property(12, Long.class, "arcFaceId", false, "arcFaceId");
-        public final static Property CardId = new Property(13, Long.class, "cardId", false, "cardId");
+        public final static Property UserId = new Property(1, Long.class, "userId", false, "USER_ID");
+        public final static Property Name = new Property(2, String.class, "name", false, "username");
+        public final static Property JobNumber = new Property(3, String.class, "jobNumber", false, "jobNumber");
+        public final static Property DepartmentId = new Property(4, Long.class, "departmentId", false, "DEPARTMENT_ID");
+        public final static Property PermissionType = new Property(5, int.class, "permissionType", false, "PERMISSION_TYPE");
+        public final static Property FaceId = new Property(6, Long.class, "faceId", false, "FACE_ID");
+        public final static Property CardId = new Property(7, Long.class, "cardId", false, "CARD_ID");
+        public final static Property PwId = new Property(8, Long.class, "pwId", false, "PW_ID");
     }
 
     private DaoSession daoSession;
 
+    private Query<User> department_UserListQuery;
 
     public UserDao(DaoConfig config) {
         super(config);
@@ -66,19 +63,14 @@ public class UserDao extends AbstractDao<User, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"USER\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
-                "\"name\" TEXT," + // 1: name
-                "\"age\" TEXT," + // 2: age
-                "\"sex\" TEXT," + // 3: sex
-                "\"phone\" TEXT," + // 4: phone
-                "\"organizName\" TEXT," + // 5: organizName
-                "\"section\" TEXT," + // 6: section
-                "\"workNum\" TEXT," + // 7: workNum
-                "\"pwId\" INTEGER," + // 8: pwId
-                "\"finger3Id\" INTEGER," + // 9: finger3Id
-                "\"finger6Id\" INTEGER," + // 10: finger6Id
-                "\"faceId\" INTEGER," + // 11: faceId
-                "\"arcFaceId\" INTEGER," + // 12: arcFaceId
-                "\"cardId\" INTEGER);"); // 13: cardId
+                "\"USER_ID\" INTEGER," + // 1: userId
+                "\"username\" TEXT NOT NULL ," + // 2: name
+                "\"jobNumber\" TEXT NOT NULL UNIQUE ," + // 3: jobNumber
+                "\"DEPARTMENT_ID\" INTEGER," + // 4: departmentId
+                "\"PERMISSION_TYPE\" INTEGER NOT NULL ," + // 5: permissionType
+                "\"FACE_ID\" INTEGER," + // 6: faceId
+                "\"CARD_ID\" INTEGER," + // 7: cardId
+                "\"PW_ID\" INTEGER);"); // 8: pwId
     }
 
     /** Drops the underlying database table. */
@@ -96,69 +88,32 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(1, uId);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(2, userId);
+        }
+        stmt.bindString(3, entity.getName());
+        stmt.bindString(4, entity.getJobNumber());
+ 
+        Long departmentId = entity.getDepartmentId();
+        if (departmentId != null) {
+            stmt.bindLong(5, departmentId);
+        }
+        stmt.bindLong(6, entity.getPermissionType());
+ 
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(7, faceId);
         }
  
-        String age = entity.getAge();
-        if (age != null) {
-            stmt.bindString(3, age);
-        }
- 
-        String sex = entity.getSex();
-        if (sex != null) {
-            stmt.bindString(4, sex);
-        }
- 
-        String phone = entity.getPhone();
-        if (phone != null) {
-            stmt.bindString(5, phone);
-        }
- 
-        String organizName = entity.getOrganizName();
-        if (organizName != null) {
-            stmt.bindString(6, organizName);
-        }
- 
-        String section = entity.getSection();
-        if (section != null) {
-            stmt.bindString(7, section);
-        }
- 
-        String workNum = entity.getWorkNum();
-        if (workNum != null) {
-            stmt.bindString(8, workNum);
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(8, cardId);
         }
  
         Long pwId = entity.getPwId();
         if (pwId != null) {
             stmt.bindLong(9, pwId);
-        }
- 
-        Long finger3Id = entity.getFinger3Id();
-        if (finger3Id != null) {
-            stmt.bindLong(10, finger3Id);
-        }
- 
-        Long finger6Id = entity.getFinger6Id();
-        if (finger6Id != null) {
-            stmt.bindLong(11, finger6Id);
-        }
- 
-        Long faceId = entity.getFaceId();
-        if (faceId != null) {
-            stmt.bindLong(12, faceId);
-        }
- 
-        Long arcFaceId = entity.getArcFaceId();
-        if (arcFaceId != null) {
-            stmt.bindLong(13, arcFaceId);
-        }
- 
-        Long cardId = entity.getCardId();
-        if (cardId != null) {
-            stmt.bindLong(14, cardId);
         }
     }
 
@@ -171,69 +126,32 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindLong(1, uId);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
+        Long userId = entity.getUserId();
+        if (userId != null) {
+            stmt.bindLong(2, userId);
+        }
+        stmt.bindString(3, entity.getName());
+        stmt.bindString(4, entity.getJobNumber());
+ 
+        Long departmentId = entity.getDepartmentId();
+        if (departmentId != null) {
+            stmt.bindLong(5, departmentId);
+        }
+        stmt.bindLong(6, entity.getPermissionType());
+ 
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(7, faceId);
         }
  
-        String age = entity.getAge();
-        if (age != null) {
-            stmt.bindString(3, age);
-        }
- 
-        String sex = entity.getSex();
-        if (sex != null) {
-            stmt.bindString(4, sex);
-        }
- 
-        String phone = entity.getPhone();
-        if (phone != null) {
-            stmt.bindString(5, phone);
-        }
- 
-        String organizName = entity.getOrganizName();
-        if (organizName != null) {
-            stmt.bindString(6, organizName);
-        }
- 
-        String section = entity.getSection();
-        if (section != null) {
-            stmt.bindString(7, section);
-        }
- 
-        String workNum = entity.getWorkNum();
-        if (workNum != null) {
-            stmt.bindString(8, workNum);
+        Long cardId = entity.getCardId();
+        if (cardId != null) {
+            stmt.bindLong(8, cardId);
         }
  
         Long pwId = entity.getPwId();
         if (pwId != null) {
             stmt.bindLong(9, pwId);
-        }
- 
-        Long finger3Id = entity.getFinger3Id();
-        if (finger3Id != null) {
-            stmt.bindLong(10, finger3Id);
-        }
- 
-        Long finger6Id = entity.getFinger6Id();
-        if (finger6Id != null) {
-            stmt.bindLong(11, finger6Id);
-        }
- 
-        Long faceId = entity.getFaceId();
-        if (faceId != null) {
-            stmt.bindLong(12, faceId);
-        }
- 
-        Long arcFaceId = entity.getArcFaceId();
-        if (arcFaceId != null) {
-            stmt.bindLong(13, arcFaceId);
-        }
- 
-        Long cardId = entity.getCardId();
-        if (cardId != null) {
-            stmt.bindLong(14, cardId);
         }
     }
 
@@ -252,19 +170,14 @@ public class UserDao extends AbstractDao<User, Long> {
     public User readEntity(Cursor cursor, int offset) {
         User entity = new User( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // age
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // sex
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // phone
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // organizName
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // section
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // workNum
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // pwId
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // finger3Id
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // finger6Id
-            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // faceId
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // arcFaceId
-            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // cardId
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // userId
+            cursor.getString(offset + 2), // name
+            cursor.getString(offset + 3), // jobNumber
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // departmentId
+            cursor.getInt(offset + 5), // permissionType
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // faceId
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // cardId
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // pwId
         );
         return entity;
     }
@@ -272,19 +185,14 @@ public class UserDao extends AbstractDao<User, Long> {
     @Override
     public void readEntity(Cursor cursor, User entity, int offset) {
         entity.setUId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setAge(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setSex(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setPhone(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setOrganizName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setSection(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setWorkNum(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setUserId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setName(cursor.getString(offset + 2));
+        entity.setJobNumber(cursor.getString(offset + 3));
+        entity.setDepartmentId(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setPermissionType(cursor.getInt(offset + 5));
+        entity.setFaceId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setCardId(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
         entity.setPwId(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
-        entity.setFinger3Id(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
-        entity.setFinger6Id(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
-        entity.setFaceId(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
-        entity.setArcFaceId(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
-        entity.setCardId(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
      }
     
     @Override
@@ -312,6 +220,20 @@ public class UserDao extends AbstractDao<User, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "userList" to-many relationship of Department. */
+    public List<User> _queryDepartment_UserList(Long userId) {
+        synchronized (this) {
+            if (department_UserListQuery == null) {
+                QueryBuilder<User> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.UserId.eq(null));
+                department_UserListQuery = queryBuilder.build();
+            }
+        }
+        Query<User> query = department_UserListQuery.forCurrentThread();
+        query.setParameter(0, userId);
+        return query.list();
+    }
+
     private String selectDeep;
 
     protected String getSelectDeep() {
@@ -319,21 +241,18 @@ public class UserDao extends AbstractDao<User, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getPwDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getDepartmentDao().getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T1", daoSession.getFinger3Dao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T1", daoSession.getArcFaceDao().getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T2", daoSession.getFinger6Dao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T2", daoSession.getIdCardDao().getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T3", daoSession.getFaceDao().getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T4", daoSession.getIdCardDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T3", daoSession.getPwDao().getAllColumns());
             builder.append(" FROM USER T");
-            builder.append(" LEFT JOIN PW T0 ON T.\"pwId\"=T0.\"_id\"");
-            builder.append(" LEFT JOIN FINGER3 T1 ON T.\"finger3Id\"=T1.\"_id\"");
-            builder.append(" LEFT JOIN FINGER6 T2 ON T.\"finger6Id\"=T2.\"_id\"");
-            builder.append(" LEFT JOIN FACE T3 ON T.\"faceId\"=T3.\"_id\"");
-            builder.append(" LEFT JOIN ID_CARD T4 ON T.\"cardId\"=T4.\"_id\"");
+            builder.append(" LEFT JOIN DEPARTMENT T0 ON T.\"DEPARTMENT_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN ARC_FACE T1 ON T.\"FACE_ID\"=T1.\"_id\"");
+            builder.append(" LEFT JOIN ID_CARD T2 ON T.\"CARD_ID\"=T2.\"_id\"");
+            builder.append(" LEFT JOIN PW T3 ON T.\"PW_ID\"=T3.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -344,24 +263,20 @@ public class UserDao extends AbstractDao<User, Long> {
         User entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        Pw pw = loadCurrentOther(daoSession.getPwDao(), cursor, offset);
-        entity.setPw(pw);
-        offset += daoSession.getPwDao().getAllColumns().length;
+        Department department = loadCurrentOther(daoSession.getDepartmentDao(), cursor, offset);
+        entity.setDepartment(department);
+        offset += daoSession.getDepartmentDao().getAllColumns().length;
 
-        Finger3 finger3 = loadCurrentOther(daoSession.getFinger3Dao(), cursor, offset);
-        entity.setFinger3(finger3);
-        offset += daoSession.getFinger3Dao().getAllColumns().length;
-
-        Finger6 finger6 = loadCurrentOther(daoSession.getFinger6Dao(), cursor, offset);
-        entity.setFinger6(finger6);
-        offset += daoSession.getFinger6Dao().getAllColumns().length;
-
-        Face face = loadCurrentOther(daoSession.getFaceDao(), cursor, offset);
-        entity.setFace(face);
-        offset += daoSession.getFaceDao().getAllColumns().length;
+        ArcFace arcFace = loadCurrentOther(daoSession.getArcFaceDao(), cursor, offset);
+        entity.setArcFace(arcFace);
+        offset += daoSession.getArcFaceDao().getAllColumns().length;
 
         IdCard idCard = loadCurrentOther(daoSession.getIdCardDao(), cursor, offset);
         entity.setIdCard(idCard);
+        offset += daoSession.getIdCardDao().getAllColumns().length;
+
+        Pw pw = loadCurrentOther(daoSession.getPwDao(), cursor, offset);
+        entity.setPw(pw);
 
         return entity;    
     }

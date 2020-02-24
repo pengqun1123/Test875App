@@ -10,15 +10,12 @@ import android.widget.LinearLayout;
 
 import com.baselibrary.listener.OnceClickListener;
 import com.baselibrary.pojo.Manager;
-import com.orhanobut.logger.Logger;
 import com.testApp.R;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.testApp.adapter.UserManageAdapter.TYPE_FOOTER;
-import static com.testApp.adapter.UserManageAdapter.TYPE_NORMAL;
 
 /**
  * Created By pq
@@ -78,7 +75,7 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if (footerView != null && i == TYPE_FOOTER) {
+        if (footerView != null && i == AdapterType.TYPE_FOOTER) {
             return new RvHolder(footerView);
         } else {
             return new Holder(LayoutInflater.from(viewGroup.getContext()).inflate(
@@ -89,7 +86,7 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
-        if (getItemViewType(i) == TYPE_FOOTER && holder instanceof RvHolder) {
+        if (getItemViewType(i) == AdapterType.TYPE_FOOTER && holder instanceof RvHolder) {
             RvHolder footerHolder = (RvHolder) holder;
             footerHolder.showAllData.setText(footerHolder.itemView.getContext()
                     .getString(R.string.show_all_data));
@@ -100,7 +97,7 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             return;
         }
-        if (getItemViewType(i) == TYPE_NORMAL && holder instanceof Holder) {
+        if (getItemViewType(i) == AdapterType.TYPE_NORMAL && holder instanceof Holder) {
             Holder normalHolder = (Holder) holder;
             normalHolder.managerNo.setText(MessageFormat.format("{0}{1}",
                     holder.itemView.getContext().getString(R.string.manager), i));
@@ -127,12 +124,14 @@ public class ManagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         if (footerView != null && position == getItemCount() - 1) {
-            return TYPE_FOOTER;
+            //到底了
+            return AdapterType.TYPE_FOOTER;
         }
         if (footerView == null) {
-            return TYPE_NORMAL;
+            //正常的item
+            return AdapterType.TYPE_NORMAL;
         }
-        return TYPE_NORMAL;
+        return AdapterType.TYPE_NORMAL;
     }
 
     @Override

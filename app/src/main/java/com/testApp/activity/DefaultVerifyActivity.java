@@ -173,7 +173,7 @@ public class DefaultVerifyActivity extends BaseActivity implements FingerDevStat
     protected void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.homeMenu:
-                SkipActivityUtil.skipActivity(this, MenuActivity.class);
+//                SkipActivityUtil.skipActivity(this, MenuActivity.class);
                 finish();
                 break;
             case R.id.defaultOut:

@@ -76,31 +76,31 @@ public class AskDialog {
         AppCompatTextView userCompany = dialogView.findViewById(R.id.userCompany);
         AppCompatButton cancelBtn = dialogView.findViewById(R.id.cancelBtn);
         AppCompatButton positionBtn = dialogView.findViewById(R.id.positionBtn);
-        if (user != null) {
-            Face face = user.getFace();
-            String imagePath = null;
-            if (face != null) {
-                imagePath = face.getImagePath();
-            }
-            title.setText(activity.getString(R.string.delete_user));
-            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
-                    imagePath, userAvatar);
-            userName.setText(user.getName());
-            userSection.setText(user.getSection());
-            userSex.setText(user.getSex());
-            userAge.setText(user.getAge());
-            userCompany.setText(user.getOrganizName());
-        }
-        if (manager != null) {
-            userSex.setVisibility(View.GONE);
-            userAge.setVisibility(View.GONE);
-            userCompany.setVisibility(View.GONE);
-            userSection.setText(MessageFormat.format("密码:{0}", manager.getManage_pw()));
-            userName.setText(managerName);
-            title.setText(activity.getString(R.string.delete_manager));
-            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
-                    ActivityCompat.getDrawable(activity, R.drawable.ic_default_user_avatar), userAvatar);
-        }
+//        if (user != null) {
+//            Face face = user.getFace();
+//            String imagePath = null;
+//            if (face != null) {
+//                imagePath = face.getImagePath();
+//            }
+//            title.setText(activity.getString(R.string.delete_user));
+//            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
+//                    imagePath, userAvatar);
+//            userName.setText(user.getName());
+//            userSection.setText(user.getSection());
+//            userSex.setText(user.getSex());
+//            userAge.setText(user.getAge());
+//            userCompany.setText(user.getOrganizName());
+//        }
+//        if (manager != null) {
+//            userSex.setVisibility(View.GONE);
+//            userAge.setVisibility(View.GONE);
+//            userCompany.setVisibility(View.GONE);
+//            userSection.setText(MessageFormat.format("密码:{0}", manager.getManage_pw()));
+//            userName.setText(managerName);
+//            title.setText(activity.getString(R.string.delete_manager));
+//            GlideUtil.loadCircleImage(activity, R.drawable.ic_default_user_avatar,
+//                    ActivityCompat.getDrawable(activity, R.drawable.ic_default_user_avatar), userAvatar);
+//        }
         Dialog dialog = AppDialog.gmDialog(activity, dialogView, false);
         cancelBtn.setOnClickListener(new OnceClickListener() {
             @Override
@@ -623,7 +623,7 @@ public class AskDialog {
             @Override
             public void onSuccess(List<Pw> result) {
                 if (result.size() > 0) {
-                    callBack.userPwdVerifyCallBack(result.get(0).getUId());
+                    callBack.userPwdVerifyCallBack(result.get(0).getPwId());
 
                 } else {
                     callBack.userPwdVerifyCallBack(null);

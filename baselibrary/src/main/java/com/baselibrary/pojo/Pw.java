@@ -1,5 +1,8 @@
 package com.baselibrary.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -11,15 +14,24 @@ import org.greenrobot.greendao.annotation.Property;
  * 通过uId与User唯一对应
  */
 @Entity
-public class Pw {
-    @Id(autoincrement = true)
-    Long uId;
+public class Pw implements Parcelable {
+    @Id
+    private Long pwId;
     @Property(nameInDb = "password")
-    String password;
+    private String password;
 
-    @Generated(hash = 576425409)
-    public Pw(Long uId, String password) {
-        this.uId = uId;
+    protected Pw(Parcel in) {
+        if (in.readByte() == 0) {
+            pwId = null;
+        } else {
+            pwId = in.readLong();
+        }
+        password = in.readString();
+    }
+
+    @Generated(hash = 742592676)
+    public Pw(Long pwId, String password) {
+        this.pwId = pwId;
         this.password = password;
     }
 
@@ -27,12 +39,40 @@ public class Pw {
     public Pw() {
     }
 
-    public Long getUId() {
-        return this.uId;
+    public static final Creator<Pw> CREATOR = new Creator<Pw>() {
+        @Override
+        public Pw createFromParcel(Parcel in) {
+            return new Pw(in);
+        }
+
+        @Override
+        public Pw[] newArray(int size) {
+            return new Pw[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setUId(Long uId) {
-        this.uId = uId;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (pwId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(pwId);
+        }
+        dest.writeString(password);
+    }
+
+    public Long getPwId() {
+        return this.pwId;
+    }
+
+    public void setPwId(Long pwId) {
+        this.pwId = pwId;
     }
 
     public String getPassword() {
@@ -41,13 +81,5 @@ public class Pw {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "Pw{" +
-                "uId=" + uId +
-                ", password='" + password + '\'' +
-                '}';
     }
 }

@@ -24,7 +24,7 @@ public class ArcFaceDao extends AbstractDao<ArcFace, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property UId = new Property(0, Long.class, "uId", true, "_id");
+        public final static Property FaceId = new Property(0, Long.class, "faceId", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property FaceFeature = new Property(2, byte[].class, "faceFeature", false, "FACE_FEATURE");
         public final static Property HeadImg = new Property(3, byte[].class, "headImg", false, "HEAD_IMG");
@@ -43,10 +43,10 @@ public class ArcFaceDao extends AbstractDao<ArcFace, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ARC_FACE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: uId
-                "\"NAME\" TEXT," + // 1: name
-                "\"FACE_FEATURE\" BLOB," + // 2: faceFeature
-                "\"HEAD_IMG\" BLOB);"); // 3: headImg
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: faceId
+                "\"NAME\" TEXT NOT NULL ," + // 1: name
+                "\"FACE_FEATURE\" BLOB NOT NULL ," + // 2: faceFeature
+                "\"HEAD_IMG\" BLOB NOT NULL );"); // 3: headImg
     }
 
     /** Drops the underlying database table. */
@@ -59,50 +59,26 @@ public class ArcFaceDao extends AbstractDao<ArcFace, Long> {
     protected final void bindValues(DatabaseStatement stmt, ArcFace entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(1, faceId);
         }
- 
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
-        }
- 
-        byte[] faceFeature = entity.getFaceFeature();
-        if (faceFeature != null) {
-            stmt.bindBlob(3, faceFeature);
-        }
- 
-        byte[] headImg = entity.getHeadImg();
-        if (headImg != null) {
-            stmt.bindBlob(4, headImg);
-        }
+        stmt.bindString(2, entity.getName());
+        stmt.bindBlob(3, entity.getFaceFeature());
+        stmt.bindBlob(4, entity.getHeadImg());
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, ArcFace entity) {
         stmt.clearBindings();
  
-        Long uId = entity.getUId();
-        if (uId != null) {
-            stmt.bindLong(1, uId);
+        Long faceId = entity.getFaceId();
+        if (faceId != null) {
+            stmt.bindLong(1, faceId);
         }
- 
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(2, name);
-        }
- 
-        byte[] faceFeature = entity.getFaceFeature();
-        if (faceFeature != null) {
-            stmt.bindBlob(3, faceFeature);
-        }
- 
-        byte[] headImg = entity.getHeadImg();
-        if (headImg != null) {
-            stmt.bindBlob(4, headImg);
-        }
+        stmt.bindString(2, entity.getName());
+        stmt.bindBlob(3, entity.getFaceFeature());
+        stmt.bindBlob(4, entity.getHeadImg());
     }
 
     @Override
@@ -113,32 +89,32 @@ public class ArcFaceDao extends AbstractDao<ArcFace, Long> {
     @Override
     public ArcFace readEntity(Cursor cursor, int offset) {
         ArcFace entity = new ArcFace( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // uId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2), // faceFeature
-            cursor.isNull(offset + 3) ? null : cursor.getBlob(offset + 3) // headImg
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // faceId
+            cursor.getString(offset + 1), // name
+            cursor.getBlob(offset + 2), // faceFeature
+            cursor.getBlob(offset + 3) // headImg
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, ArcFace entity, int offset) {
-        entity.setUId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setFaceFeature(cursor.isNull(offset + 2) ? null : cursor.getBlob(offset + 2));
-        entity.setHeadImg(cursor.isNull(offset + 3) ? null : cursor.getBlob(offset + 3));
+        entity.setFaceId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setName(cursor.getString(offset + 1));
+        entity.setFaceFeature(cursor.getBlob(offset + 2));
+        entity.setHeadImg(cursor.getBlob(offset + 3));
      }
     
     @Override
     protected final Long updateKeyAfterInsert(ArcFace entity, long rowId) {
-        entity.setUId(rowId);
+        entity.setFaceId(rowId);
         return rowId;
     }
     
     @Override
     public Long getKey(ArcFace entity) {
         if(entity != null) {
-            return entity.getUId();
+            return entity.getFaceId();
         } else {
             return null;
         }
@@ -146,7 +122,7 @@ public class ArcFaceDao extends AbstractDao<ArcFace, Long> {
 
     @Override
     public boolean hasKey(ArcFace entity) {
-        return entity.getUId() != null;
+        return entity.getFaceId() != null;
     }
 
     @Override
